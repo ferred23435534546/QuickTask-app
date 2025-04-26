@@ -1,0 +1,46 @@
+# quicktask-project/.gitignore
+
+# Dependencias de Node.js (¡nunca subirlas!)
+node_modules/
+**/node_modules/
+
+# Archivos de build/compilación
+dist/
+**/dist/
+*.js.map
+*.js
+
+# Archivos de entorno (¡Contienen secretos!)
+.env
+backend/.env
+db/.env
+frontend/.env # Si tuvieras uno para el frontend
+
+# Logs y archivos temporales
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos de editores
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Archivos de caché de Angular/Tests
+.angular/
+coverage/

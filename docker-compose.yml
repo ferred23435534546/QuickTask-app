@@ -1,0 +1,61 @@
+    # quicktask-project/docker-compose.yml
+    # Define los servicios que componen la aplicación QuickTask para ejecución local
+
+    services:
+      # --- Servicio Backend (Node.js/Express API) ---
+      backend:
+        container_name: quicktask_backend
+        build:
+          context: ./backend
+          dockerfile: Dockerfile
+        restart: unless-stopped
+        env_file: ./backend/.env
+        ports:
+          - "3000:3000"
+        volumes:
+          - ./backend:/usr/src/app
+          - /usr/src/app/node_modules
+        depends_on:
+          - db
+        networks:
+          - quicktask_network
+
+      # --- Servicio Frontend (Angular servido por Nginx) ---
+      frontend:
+        container_name: quicktask_frontend_nginx
+        build:
+          context: ./frontend
+          dockerfile: Dockerfile
+        restart: unless-stopped
+        ports:
+          - "8080:80"
+        depends_on:
+          - backend
+        networks:
+          - quicktask_network
+
+      # --- Servicio Base de Datos (MySQL) ---
+      db:
+        container_name: quicktask_db
+        image: mysql:8.0
+        restart: unless-stopped
+        env_file: ./db/.env
+        ports:
+          - "3306:3306"
+        volumes:
+          - quicktask_db_data:/var/lib/mysql
+          # (Opcional) Script de inicialización:
+          # - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+        networks:
+          - quicktask_network
+
+    # --- Redes ---
+    networks:
+      quicktask_network:
+        driver: bridge
+
+    # --- Volúmenes ---
+    volumes:
+      quicktask_db_data:
+        driver: local
+    

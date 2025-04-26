@@ -1,0 +1,17 @@
+// quicktask-project/backend/tsconfig.json
+{
+    "compilerOptions": {
+      "target": "ES2016", // O ES2020, ES2022...
+      "module": "CommonJS",
+      "outDir": "./dist", // Carpeta para el JS compilado
+      "rootDir": "./src", // Carpeta raíz del código TS
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true
+      // Puedes añadir "sourceMap": true si quieres generar sourcemaps para depuración
+    },
+    "include": ["src/**/*"], // Incluye solo archivos TS dentro de src
+    "exclude": ["node_modules", "**/*.spec.ts"] // Excluye dependencias y tests
+  }
