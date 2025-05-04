@@ -1,0 +1,310 @@
+// --- Variables Básicas (Opcional) ---
+$primary-color: #007bff; // Azul para botones principales/enlaces
+$secondary-color: #6c757d; // Gris para botones secundarios
+$success-color: #28a745; // Verde para botón de búsqueda
+$border-color: #dee2e6; // Gris claro para bordes
+$card-bg: #ffffff; // Fondo blanco para tarjetas
+$body-bg: #f8f9fa; // Fondo general muy claro
+$text-color: #212529; // Color de texto principal
+$text-muted: #6c757d; // Color de texto secundario/apagado
+$spacing-unit: 1rem; // Unidad de espaciado base (ej: 16px)
+
+// --- Estilos Base y Layout ---
+:host {
+  display: block;
+  background-color: $body-bg;
+  min-height: 100vh; // Asegura que ocupe al menos toda la pantalla
+}
+
+.app-header {
+  // --- Estilos base del header (ya los tenías) ---
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-unit;
+  border-bottom: 1px solid $border-color;
+  background-color: $card-bg; // Fondo blanco para el header también
+
+  // --- Contenedor para Logo, Icono de Búsqueda y Campo de Búsqueda ---
+  .logo-search-container {
+    display: flex;          // Alinea logo, icono, input horizontalmente
+    align-items: center;    // Centra verticalmente los items
+    gap: $spacing-unit * 0.75; // Espacio entre logo, icono, input
+    // flex-grow: 1;        // Opcional: permite que este contenedor crezca si necesita espacio
+  }
+
+  // Estilo específico para el logo (ya lo tenías)
+  .logo {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: $text-color;
+  }
+
+  // --- Botón/Icono de Búsqueda ---
+  .search-icon-button {
+    background: none;
+    border: none;
+    font-size: 1.25rem; // Ajusta este tamaño para el icono <i> de FontAwesome
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    color: $text-color; // O $primary-color si prefieres
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  // --- Campo de Búsqueda (cuando es visible) ---
+  .header-search-input {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid $border-color;
+    border-radius: 1rem; // Redondeado
+    min-width: 200px;    // Ancho mínimo (ajústalo)
+    font-size: 0.9rem;
+    // Puedes añadir transiciones aquí si quieres
+  }
+
+
+  // --- Navegación Principal ---
+  .main-nav {
+     display: flex;        // Asegura que los items de nav estén en línea (horizontal)
+     align-items: center;  // Centra verticalmente 'Home' y el icono de perfil
+
+     // Estilo para enlaces de texto (como Home)
+     // Usamos :not() para darle estilo solo a los 'a' que NO sean el del perfil
+     a:not(.profile-link) {
+        margin-left: $spacing-unit;
+        text-decoration: none;
+        color: $primary-color;
+        font-size: 1rem;
+        &:hover {
+          text-decoration: underline;
+        }
+     }
+
+     // --- Enlace Contenedor del Icono de Perfil ---
+     .profile-link {
+        display: inline-flex; // Ayuda a alinear bien el icono <i> dentro
+        vertical-align: middle; // Alinea el enlace con el texto de 'Home'
+        margin-left: $spacing-unit; // Espacio desde 'Home'
+        text-decoration: none;
+        &:hover {
+          text-decoration: none; // Quita el subrayado al pasar el ratón por el icono
+          opacity: 0.8;
+        }
+
+        // --- Icono de Perfil (Font Awesome <i>) ---
+        // Anidado dentro de .profile-link para especificidad
+        .profile-icon {
+           font-size: 2rem; // Tamaño del icono (ajústalo si quieres)
+           color: $secondary-color; // Color del icono (gris)
+           vertical-align: middle; // Re-asegura alineación vertical
+           line-height: 1;         // Evita espaciado vertical extra
+           // Quita estilos que eran para <img> si los tenías antes para .profile-icon
+           // border: none;
+           // border-radius: 0;
+        }
+     } // Fin .profile-link
+
+  } // Fin .main-nav
+} // Fin .app-header
+
+.main-content-area {
+  display: flex;
+  flex-wrap: wrap; // Permite que las columnas se apilen en pantallas pequeñas
+  padding: $spacing-unit * 1.5;
+  gap: $spacing-unit * 1.5; // Espacio entre columnas
+}
+
+.left-column {
+  flex: 1; // Ocupa 1 parte del espacio disponible
+  min-width: 250px; // Ancho mínimo para que no se comprima demasiado
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-unit * 1.5; // Espacio entre tarjetas en la columna
+  // --- AÑADIR ESTAS LÍNEAS ---
+  position: sticky;
+  // 'top' define a qué distancia del borde superior del contenedor se quedará pegada.
+  // Usamos la misma variable que el padding del contenedor para alinearla bien.
+  top: $spacing-unit * 1.5;
+  // 'align-self' evita que la columna se estire verticalmente si la otra es más alta,
+  // permitiendo que 'sticky' funcione correctamente con su altura natural.
+  align-self: flex-start;
+  // Opcional: Si el contenido DENTRO de la columna izquierda pudiera crecer mucho,
+  // podrías limitar su altura y hacerla scrolleable internamente, pero
+  // para los filtros y el post task no suele ser necesario.
+  // max-height: calc(100vh - #{$spacing-unit * 3} - 50px); // Ejemplo: 100% viewport - padding superior/inferior - altura header aprox
+  // overflow-y: auto; // Si usas max-height
+  // --- FIN DE LÍNEAS A AÑADIR ---
+}
+
+.right-column {
+  flex: 2.5; // Ocupa 2.5 partes (más ancho que la izquierda)
+  min-width: 300px; // Ancho mínimo
+}
+
+// --- Estilos Comunes ---
+.card {
+  border: 1px solid $border-color;
+  border-radius: 0.375rem; // Bordes redondeados
+  padding: $spacing-unit * 1.25;
+  background-color: $card-bg;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); // Sombra sutil
+}
+
+h2, h3, h4 {
+  margin-top: 0;
+  margin-bottom: $spacing-unit * 0.75;
+  color: $text-color;
+  font-weight: 500; // Un poco menos grueso que bold
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: $spacing-unit;
+  color: $text-muted;
+  line-height: 1.5;
+}
+
+button {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: opacity 0.2s ease-in-out;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+// --- Estilos Específicos ---
+.filters-section {
+  // Estilos para los elementos de formulario dentro de .form-group
+.form-group {
+    margin-bottom: $spacing-unit;
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+      font-size: 0.9em;
+    }
+  
+    // --- REGLA COMBINADA PARA INPUT Y SELECT ---
+    input[type="text"],
+    select {
+      display: block;           // Asegura que ocupen su propia línea
+      width: 100%;              // Forzar a ocupar todo el ancho del contenedor padre (.form-group)
+      padding: 0.5rem 0.75rem;  // Espaciado interno consistente
+      font-size: 1rem;          // Tamaño de fuente consistente
+      font-family: inherit;     // Usa la misma fuente que el resto del cuerpo
+      line-height: 1.5;         // Altura de línea consistente (ayuda a la altura vertical)
+      color: $text-color;       // Color de texto
+      background-color: #fff;   // Fondo blanco
+      border: 1px solid $border-color; // Borde consistente
+      border-radius: 0.25rem;   // Redondez de borde consistente
+      box-sizing: border-box;   // Asegura que width incluye padding y border
+  
+      // Opcional: Para un control estético MÁXIMO (pero más complejo)
+      // podrías quitar la apariencia nativa del navegador.
+      // ¡PERO OJO! Si haces esto, tendrás que añadir tu propia flecha
+      // para el desplegable usando CSS adicional (::after, background-image, etc.)
+      // Por ahora, lo dejamos comentado para mantener la simplicidad.
+      // -webkit-appearance: none;
+      // -moz-appearance: none;
+      // appearance: none;
+    }
+    // --- FIN REGLA COMBINADA ---
+  
+    // Puedes añadir reglas específicas si son necesarias después, por ejemplo:
+    // select {
+    //   background-image: url('ruta/a/tu/flecha.svg'); // Si usas appearance: none
+    //   background-repeat: no-repeat;
+    //   background-position: right 0.75rem center;
+    //   padding-right: 2.5rem; // Espacio para la flecha custom
+    // }
+  }
+  .search-button {
+    background-color: $success-color;
+    color: white;
+    width: 100%;
+    margin-top: $spacing-unit * 0.5;
+    font-weight: 500;
+  }
+}
+
+.post-task-section {
+  .get-started-button {
+    background-color: $primary-color;
+    color: white;
+    font-weight: 500;
+  }
+}
+
+.right-column {
+  h2 {
+    padding-bottom: $spacing-unit * 0.5;
+    border-bottom: 1px solid $border-color;
+  }
+}
+
+.task-item {
+  margin-bottom: $spacing-unit * 1.25;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; // Alinea items al inicio verticalmente
+
+  .task-info {
+    flex-grow: 1; // Permite que la info ocupe el espacio restante
+    margin-right: $spacing-unit; // Espacio antes del botón
+    h4 { font-size: 1.15rem; margin-bottom: 0.3rem; }
+    p { font-size: 0.9rem; margin-bottom: 0.5rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.25em 0.6em;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: $text-muted;
+      background-color: #e9ecef; // Fondo gris claro para badges
+      border-radius: 10rem; // Muy redondeado
+    }
+    // Estilos adicionales para los badges dentro de task-info
+    .task-info .badges {
+    margin-top: $spacing-unit * 0.5; // Espacio sobre los badges
+    }
+  
+    .task-info .badge {
+    margin-right: $spacing-unit * 0.5; // Espacio a la derecha de cada badge
+    &:last-child {
+      margin-right: 0; // El último badge no necesita margen a la derecha
+    }
+  
+    // Opcional: Colores distintos para diferenciar (descomenta si quieres)
+    // &.category-badge { background-color: #cfe2ff; color: #0a58ca; } // Ejemplo azulado
+    // &.location-badge { background-color: #d1e7dd; color: #146c43; } // Ejemplo verdoso
+    }
+  }
+
+  .view-button {
+    background-color: $secondary-color;
+    color: white;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    white-space: nowrap; // Evita que "View" se parta
+    align-self: center; // Centra el botón verticalmente si el texto es largo
+  }
+}
+
+// --- Media Query Básica para Responsive ---
+@media (max-width: 768px) {
+  .main-content-area {
+    flex-direction: column;
+  }
+  // En pantallas pequeñas, las columnas ocupan todo el ancho
+  .left-column, .right-column {
+    flex-basis: 100%;
+  }
+}

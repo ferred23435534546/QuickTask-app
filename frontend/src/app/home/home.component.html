@@ -1,6 +1,173 @@
-<div style="padding: 20px;">
-    <h1>¡Mi Página de Inicio de QuickTask!</h1>
-    <p>¡La aplicación Angular funciona y muestra mi componente Home!</p>
-    <hr>
-    <p>Fecha y hora actual (ejemplo de Angular): {{ fechaActual }}</p>
+<header class="app-header">
+    <div class="logo-search-container">
+       <div class="logo">QuickTask</div>
+       <button class="search-icon-button" (click)="toggleSearch()" title="Search Tasks" aria-label="Toggle search input">
+         <i class="fas fa-search"></i>
+       </button>
+       <input
+         *ngIf="isSearchVisible"
+         type="search"
+         class="header-search-input"
+         id="header-search-input"
+         placeholder="Search tasks..."
+         aria-label="Search tasks input">
+    </div>
+  
+    <nav class="main-nav">
+      <a href="#">Home</a>
+      <a href="#" class="profile-link" title="Profile" aria-label="User profile">
+        <i class="fas fa-user-circle profile-icon"></i>
+      </a>
+    </nav>
+  </header>
+  
+  <div class="main-content-area">
+    <aside class="left-column">
+        <section class="filters-section card">
+            <h3>Filters</h3>
+            <div class="form-group">
+              <label for="keyword">Keyword</label>
+              <input type="text" id="keyword" name="keyword">
+            </div>
+            <div class="form-group">
+              <label for="category">Category</label>
+              <select id="category" name="category">
+                <option value="">-- Select a Category --</option>
+                <option value="cleaning">Cleaning</option>
+                <option value="gardening">Gardening</option>
+                <option value="delivery">Delivery</option>
+                <option value="moving">Moving Help</option>
+                <option value="translation">Translation</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <button class="search-button">Search</button>
+          </section>
+
+      <section class="post-task-section card">
+        <h3>Post a Task</h3>
+        <p>Describe the task you holy with set a budget</p>
+        <button class="get-started-button">Get Started</button>
+      </section>
+    </aside>
+  
+    <section class="right-column">
+        <h2>Latest Tasks</h2>
+    
+        <div class="task-item card">
+          <div class="task-info">
+            <h4>Task Title 1</h4>
+            <p>Description text for the first task goes here. It might be a bit longer to test wrapping.</p>
+            <div class="badges">
+              <span class="badge category-badge">Category: Cleaning</span>
+              <span class="badge location-badge">Location: Downtown</span>
+            </div>
+          </div>
+          <button class="view-button">View</button>
+        </div>
+    
+        <div class="task-item card">
+          <div class="task-info">
+             <h4>Task Title 2</h4>
+             <p>Another description text for the second task example, maybe related to gardening.</p>
+             <div class="badges">
+              <span class="badge category-badge">Category: Gardening</span>
+              <span class="badge location-badge">Location: Suburbs</span>
+            </div>
+          </div>
+          <button class="view-button">View</button>
+        </div>
+    
+         <div class="task-item card">
+          <div class="task-info">
+             <h4>Task Title 3</h4>
+             <p>Description for the third task which might be shorter.</p>
+             <div class="badges">
+              <span class="badge category-badge">Category: Delivery</span>
+              <span class="badge location-badge">Location: Old Town</span>
+            </div>
+          </div>
+          <button class="view-button">View</button>
+        </div>
+    
+        <div class="task-item card">
+          <div class="task-info">
+            <h4>Task Title 4 - Need help moving boxes</h4>
+            <p>Looking for someone strong to help move boxes this Saturday morning for about 2 hours.</p>
+            <div class="badges">
+              <span class="badge category-badge">Category: Moving Help</span>
+              <span class="badge location-badge">Location: North District</span>
+            </div>
+          </div>
+          <button class="view-button">View</button>
+        </div>
+    
+        <div class="task-item card">
+          <div class="task-info">
+            <h4>Task Title 5 - Urgent translation</h4>
+            <p>Need an English to Spanish translation of a short document, urgently needed by tomorrow.</p>
+            <div class="badges">
+              <span class="badge category-badge">Category: Translation</span>
+              <span class="badge location-badge">Location: Remote</span>
+            </div>
+          </div>
+          <button class="view-button">View</button>
+        </div>
+    
+         <div class="task-item card">
+          <div class="task-info">
+            <h4>Task Title 6</h4>
+            <p>Just another task item to make the list look fuller.</p>
+             <div class="badges">
+              <span class="badge category-badge">Category: Other</span>
+              <span class="badge location-badge">Location: City Center</span>
+            </div>
+          </div>
+          <button class="view-button">View</button>
+        </div>
+        <div class="task-item card">
+            <div class="task-info">
+              <h4>Task Title 7</h4>
+              <p>Just another task item to make the list look fuller.</p>
+               <div class="badges">
+                <span class="badge category-badge">Category: Other</span>
+                <span class="badge location-badge">Location: City Center</span>
+              </div>
+            </div>
+            <button class="view-button">View</button>
+        </div>
+        <div class="task-item card">
+            <div class="task-info">
+              <h4>Task Title 8</h4>
+              <p>Just another task item to make the list look fuller.</p>
+               <div class="badges">
+                <span class="badge category-badge">Category: Other</span>
+                <span class="badge location-badge">Location: City Center</span>
+              </div>
+            </div>
+            <button class="view-button">View</button>
+        </div>
+          <div class="task-item card">
+            <div class="task-info">
+              <h4>Task Title 9</h4>
+              <p>Just another task item to make the list look fuller.</p>
+               <div class="badges">
+                <span class="badge category-badge">Category: Other</span>
+                <span class="badge location-badge">Location: City Center</span>
+              </div>
+            </div>
+            <button class="view-button">View</button>
+        </div>
+        <div class="task-item card">
+            <div class="task-info">
+              <h4>Task Title 10</h4>
+              <p>Just another task item to make the list look fuller.</p>
+               <div class="badges">
+                <span class="badge category-badge">Category: Other</span>
+                <span class="badge location-badge">Location: City Center</span>
+              </div>
+            </div>
+            <button class="view-button">View</button>
+        </div>
+      </section>
   </div>
