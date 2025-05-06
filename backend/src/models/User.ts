@@ -4,8 +4,8 @@ import { Model, DataTypes, Sequelize } from 'sequelize';
 import sequelizeConnection from '../config/database';
 
 // Define los atributos del modelo User (corresponden a las columnas de la tabla)
-interface UserAttributes {
-  user_id: number;
+export interface UserAttributes {
+  id: number;
   email: string;
   password_hash: string; // Guardaremos el hash de la contraseña, no la contraseña en texto plano
   name: string;
@@ -19,7 +19,7 @@ interface UserAttributes {
 class User extends Model<UserAttributes> implements UserAttributes {
   // Definición explícita de los atributos públicos de la clase
   // (Necesario para que TypeScript los reconozca)
-  public user_id!: number;
+  public id!: number;
   public email!: string;
   public password_hash!: string;
   public name!: string;
@@ -42,7 +42,7 @@ class User extends Model<UserAttributes> implements UserAttributes {
 User.init(
   {
     // Define las columnas de la tabla 'users'
-    user_id: {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true, // Clave primaria
