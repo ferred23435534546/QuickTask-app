@@ -8,13 +8,17 @@ node_modules/
 dist/
 **/dist/
 *.js.map
-*.js
+# Comentamos *.js por si algún archivo JS es necesario y no está en dist/node_modules
+# *.js
 
-# Archivos de entorno (¡Contienen secretos!)
-#.env
-#backend/.env
-#db/.env
-#frontend/.env # Si tuvieras uno para el frontend
+# Archivos de entorno
+# Los siguientes archivos .env SÍ se compartirán para este proyecto de clase:
+# backend/.env
+# db/.env
+# Ignoramos un .env genérico en la raíz (si existiera)
+.env
+# Ignoramos un .env del frontend (si se creara)
+frontend/.env
 
 # Logs y archivos temporales
 logs
@@ -33,7 +37,12 @@ pids
 Thumbs.db
 
 # Archivos de editores
-.vscode/
+# Ignorar todo en .vscode por defecto...
+.vscode/*
+# ...excepto los archivos de configuración que queremos compartir:
+!.vscode/extensions.json
+!.vscode/settings.json
+# Ignorar otras carpetas de editores comunes
 .idea/
 *.suo
 *.ntvs*
@@ -44,3 +53,6 @@ Thumbs.db
 # Archivos de caché de Angular/Tests
 .angular/
 coverage/
+
+# Archivos específicos de Docker si no los quieres en el repo (opcional)
+# .dockerignore # Si usas un .dockerignore separado, podrías ignorarlo aquí.
