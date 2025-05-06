@@ -11,9 +11,9 @@ dist/
 *.js
 
 # Archivos de entorno (¡Contienen secretos!)
-.env
-backend/.env
-db/.env
+#.env
+#backend/.env
+#db/.env
 frontend/.env # Si tuvieras uno para el frontend
 
 # Logs y archivos temporales
