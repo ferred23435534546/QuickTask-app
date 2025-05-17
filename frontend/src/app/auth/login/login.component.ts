@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router'; // <<< --- 1. IMPORTAR Router
+import { Router, RouterModule } from '@angular/router'; // <<< --- 1. IMPORTAR Router
 import { AuthService, AuthResponseData } from '../../services/auth.service'; // <<< --- 2. IMPORTAR AuthService y AuthResponseData
 import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-login',
   standalone: true, // <<< --- ASEGÚRATE DE QUE ESTA LÍNEA ESTÉ
   imports: [
     CommonModule,        // <<< --- Y ESTE ARRAY 'imports' CON ESTOS MÓDULOS
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss' // o styleUrls

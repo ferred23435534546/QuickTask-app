@@ -1,0 +1,136 @@
+// En src/app/auth/register/register.component.scss
+
+// src/app/auth/register/register.component.scss
+
+// Variables (puedes ajustarlas o definirlas globalmente si prefieres)
+$primary-color: #007bff;
+$text-color: #333;
+$label-color: #555;
+$border-color: #ccc;
+$input-background: #fff;
+$container-background: #f9f9f9;
+$button-text-color: #fff;
+$font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$error-color: #dc3545;
+$success-color-text: #155724;
+$success-color-bg: #d4edda;
+$success-color-border: #c3e6cb;
+$danger-color-text: #721c24;
+$danger-color-bg: #f8d7da;
+$danger-color-border: #f5c6cb;
+
+.register-container {
+  font-family: $font-family;
+  max-width: 500px; // Un poco más ancho para más campos
+  margin: 40px auto;
+  padding: 30px;
+  background-color: $container-background;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: $text-color;
+  // border: 10px solid red !important; // Puedes comentar o quitar esto una vez que los estilos funcionen
+
+  h2 {
+    text-align: center;
+    color: $primary-color;
+    margin-bottom: 25px;
+    font-size: 26px; // Un poco más pequeño que el login si prefieres
+    font-weight: 500;
+  }
+
+  .form-group {
+    margin-bottom: 18px; // Un poco menos de margen si hay muchos campos
+
+    label {
+      display: block;
+      color: $label-color;
+      margin-bottom: 6px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px; // Un poco menos de padding
+      border: 1px solid $border-color;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 15px;
+      background-color: $input-background;
+      color: $text-color;
+
+      &:focus {
+        border-color: $primary-color;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+      }
+    }
+  }
+
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: $primary-color;
+    color: $button-text-color;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+
+    &:disabled {
+      background-color: lighten($primary-color, 20%);
+      cursor: not-allowed;
+    }
+  }
+
+  .login-link { // Nombre de clase para el enlace de login
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+      font-weight: 600;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .error-message {
+    color: $error-color;
+    font-size: 0.875em;
+    margin-top: 5px;
+  }
+
+  .alert {
+    padding: 12px 15px; // Un poco menos de padding
+    margin-bottom: 18px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.9em;
+  }
+
+  .alert-success {
+    color: $success-color-text;
+    background-color: $success-color-bg;
+    border-color: $success-color-border;
+  }
+
+  .alert-danger {
+    color: $danger-color-text;
+    background-color: $danger-color-bg;
+    border-color: $danger-color-border;
+  }
+}

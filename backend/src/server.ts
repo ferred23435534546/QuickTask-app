@@ -39,7 +39,9 @@ app.get('/api', (req: Request, res: Response) => {
 
 // POST /api/auth/register
 app.post('/api/auth/register', (async (req: Request, res: Response) => {
+  console.log('BACKEND (/api/auth/register): req.body recibido:', req.body);
   const { email, password, name, role } = req.body; // Añadido name y role si quieres registrarlos también
+  console.log(`BACKEND (/api/auth/register): Datos extraídos -> Email: ${email}, Password (plano): '${password}', Name: ${name}, Role: ${role}`);
 
   // Validación (mejorada un poco)
   if (!email || !password || !name) { // Añadido name como requerido
@@ -64,7 +66,9 @@ app.post('/api/auth/register', (async (req: Request, res: Response) => {
     }
 
     // --- PASO 4: Hashear contraseña ---
+    console.log(`BACKEND (/api/auth/register): Password recibido para hashear: '${password}'`);
     const hashedPassword = await bcrypt.hash(password, saltRounds); // Ahora 'password' está declarada
+    console.log(`BACKEND (/api/auth/register): Password hasheado: '${hashedPassword}'`);
 
     // --- PASO 5: Crear objeto de atributos ---
     const newUserAttributes = {
@@ -74,6 +78,9 @@ app.post('/api/auth/register', (async (req: Request, res: Response) => {
       role: (role || 'client') as 'client' | 'worker' | 'both' | 'admin',
       is_active: true
     };
+
+    console.log('BACKEND (/api/auth/register): Atributos para crear nuevo usuario:', newUserAttributes);
+    // --------------------------------
 
     // --- PASO 6: Crear usuario ---
     const newUser = await User.create(newUserAttributes as any); // Sin 'as any'

@@ -15,7 +15,17 @@ export interface AuthResponseData {
     role: string;
   };
 }
-
+export interface RegisterPayload {
+  name: string;
+  email: string;
+  password: string;
+  role?: 'client' | 'worker' | 'both' | 'admin'; // Role es opcional y con tipos definidos
+}
+// --- NUEVA INTERFAZ para la respuesta del registro ---
+export interface RegisterResponseData {
+  message: string;
+  userId: number;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -29,20 +39,9 @@ export class AuthService {
 
   login(credentials: { email: string, password: string }): Observable<AuthResponseData> {
     return this.http.post<AuthResponseData>(`${this.apiUrl}/login`, credentials);
-    // El <AuthResponseData> le dice a HttpClient qué tipo de respuesta esperamos.
-    // Esto nos dará un tipado más fuerte en el componente que se suscriba.
-
-    // Más adelante, podríamos querer hacer algo con la respuesta aquí,
-    // como guardar el token, usando el operador `tap` de RxJS:
-    // return this.http.post<AuthResponseData>(`${this.apiUrl}/login`, credentials)
-    //   .pipe(
-    //     tap(response => {
-    //       // Por ejemplo, guardar el token en localStorage
-    //       localStorage.setItem('authToken', response.token);
-    //       console.log('Token guardado!', response.token);
-    //     })
-    //   );
   }
-
+  register(userData: RegisterPayload): Observable<RegisterResponseData> {
+    return this.http.post<RegisterResponseData>(`${this.apiUrl}/register`, userData);
+  }
   // Aquí podríamos añadir métodos para register, logout, getToken, isAuthenticated, etc.
 }
