@@ -4,6 +4,9 @@ import { bootstrapApplication } from '@angular/platform-browser'; // Para arranc
 import { AppComponent } from './app/app.component';       // Tu componente raíz autónomo
 import { AppModule } from './app/app.module';           // Importaremos configuraciones desde aquí
 import { importProvidersFrom } from '@angular/core';      // Para usar proveedores de NgModules existentes
+import { provideRouter } from '@angular/router';
+import { routes } from './app/app-routing.module';
+import { provideHttpClient } from '@angular/common/http';
 
 // Opción de configuración de la aplicación.
 // Usaremos importProvidersFrom(AppModule) para tomar las configuraciones
@@ -11,7 +14,9 @@ import { importProvidersFrom } from '@angular/core';      // Para usar proveedor
 // y hacerlas disponibles para nuestra aplicación autónoma.
 const appConfig = {
   providers: [
-    importProvidersFrom(AppModule)
+    importProvidersFrom(AppModule),
+    provideRouter(routes),
+    provideHttpClient()
   ]
 };
 

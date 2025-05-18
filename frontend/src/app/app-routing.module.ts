@@ -7,7 +7,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { BlogPageComponent } from './blog-page/blog-page.component';
 import { CreateTaskComponent } from './create-task/create-task.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'edit-profile', component: EditProfileComponent },
   { path: 'login', component: LoginComponent },
