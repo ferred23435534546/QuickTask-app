@@ -1,0 +1,193 @@
+body {
+    font-family: sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #fff;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+header nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+header nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: #555;
+    font-weight: bold;
+}
+
+.container {
+    display: flex;
+    gap: 20px;
+}
+
+.sidebar {
+    flex: 0 0 300px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.sidebar h3 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 5px;
+}
+
+.filters .filter-group {
+    margin-bottom: 15px;
+}
+
+.filters label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 0.9em;
+}
+
+.filters input[type="text"],
+.filters select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+}
+
+.filters .search-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.filters .search-button:hover {
+    background-color: #45a049;
+}
+
+.post-task {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+
+.post-task h3 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
+}
+
+.post-task p {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.post-task .get-started-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.post-task .get-started-button:hover {
+    background-color: #0056b3;
+}
+
+.blog-posts {
+    flex: 1;
+}
+
+.blog-posts h2 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.blog-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.blog-card h3 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.blog-card .meta {
+    color: #777;
+    font-size: 0.85em;
+    margin-bottom: 10px;
+}
+
+.blog-card p {
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.blog-card .read-more-button {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.blog-card .read-more-button:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 30px;
+    border-top: 1px solid #ddd;
+    color: #777;
+    font-size: 0.9em;
+}
