@@ -4,10 +4,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RegisterComponent } from './auth/register/register.component';
+import { CategoriesComponent } from './blog-page/categories/categories.component';
+import { AuthorsComponent } from './blog-page/authors/authors.component';
+import { AboutComponent } from './blog-page/about/about.component';
 
 @NgModule({
   declarations: [
-    RegisterComponent
+    RegisterComponent,
+    CategoriesComponent,
+    AuthorsComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,

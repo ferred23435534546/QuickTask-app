@@ -1,26 +1,13 @@
 export interface Task {
-    id: number;                 // ID único de la tarea
-    title: string;             // Título de la tarea
-    description: string;       // Descripción detallada
-    category: TaskCategory;    // Categoría de la tarea
-    location: string;          // Ubicación donde se realizará
-    budget: {
-        amount: number;        // Cantidad del presupuesto
-        currency: string;      // Tipo de moneda (EUR, USD, etc.)
-    };
-    status: TaskStatus;        // Estado de la tarea
-    dateCreated: Date;        // Fecha de creación
-    dateNeeded: Date;         // Fecha para cuando se necesita
-    author: {
-        id: number;           // ID del autor
-        name: string;         // Nombre del autor
-        rating: number;       // Valoración del autor
-    };
-    requirements?: string[];   // Requisitos específicos (opcional)
-    attachments?: string[];    // URLs de archivos adjuntos (opcional)
-    urgency: TaskUrgency;     // Nivel de urgencia
-    views: number;            // Número de veces que se ha visto la tarea
-    applications: number;      // Número de personas que se han postulado
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    location: string;
+    budget?: number;
+    createdAt: Date;
+    status: 'open' | 'in-progress' | 'completed';
+    userId: string;
 }
 
 // Enums para las propiedades que tienen valores específicos

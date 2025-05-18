@@ -1,0 +1,69 @@
+<div class="category-detail">
+    <button class="back-button" routerLink="/blog/categories">
+        <i class="fas fa-arrow-left"></i> Volver
+    </button>
+
+    <header class="category-header">
+        <h2>{{categoryName}}</h2>
+        <p class="post-count">{{posts.length}} publicaciones</p>
+    </header>
+
+    <div class="posts-container" [class.expanded-view]="expandedPost">
+        <article class="post-card" *ngFor="let post of posts" [class.hidden]="expandedPost && expandedPost.id !== post.id">
+            <div class="post-header">
+                <h3>{{post.title}}</h3>
+                <div class="post-meta">
+                    <span class="author">Por {{post.author}}</span>
+                    <span class="date">{{post.date | date:'dd/MM/yyyy'}}</span>
+                    <span class="read-time" *ngIf="post.readTime">
+                        <i class="far fa-clock"></i> {{post.readTime}}
+                    </span>
+                </div>
+            </div>
+            
+            <p class="post-content">{{post.content}}</p>
+            
+            <div class="post-tags" *ngIf="post.tags && post.tags.length > 0">
+                <span class="tag" *ngFor="let tag of post.tags">{{tag}}</span>
+            </div>
+
+            <div class="card-footer">
+                <button class="read-more" (click)="expandPost(post)">
+                    <span>Leer más</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </article>
+    </div>
+
+    <!-- Vista expandida -->
+    <div class="expanded-post" *ngIf="expandedPost">
+        <button class="back-button" (click)="closeExpandedPost()">
+            <i class="fas fa-arrow-left"></i> Volver
+        </button>
+        <div class="expanded-post-content">
+            <div class="post-header">
+                <h2>{{expandedPost.title}}</h2>
+                <div class="post-meta">
+                    <span class="author">Por {{expandedPost.author}}</span>
+                    <span class="date">{{expandedPost.date | date:'dd/MM/yyyy'}}</span>
+                    <span class="read-time" *ngIf="expandedPost.readTime">
+                        <i class="far fa-clock"></i> {{expandedPost.readTime}}
+                    </span>
+                </div>
+            </div>
+            
+            <div class="post-image" *ngIf="expandedPost.imageUrl">
+                <img [src]="expandedPost.imageUrl" [alt]="expandedPost.title">
+            </div>
+
+            <div class="post-content">
+                <p>{{expandedPost.content}}</p>
+            </div>
+
+            <div class="post-tags" *ngIf="expandedPost.tags && expandedPost.tags.length > 0">
+                <span class="tag" *ngFor="let tag of expandedPost.tags">{{tag}}</span>
+            </div>
+        </div>
+    </div>
+</div> 

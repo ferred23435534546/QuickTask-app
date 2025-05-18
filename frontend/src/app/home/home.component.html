@@ -51,8 +51,8 @@
       </section>
 
       <section class="post-task-section card">
-        <h3>QuickTask Blog</h3>
-        <p>Anuncios de QuickTask</p>
+        <h3>MyQuickSpace</h3>
+        <p>Lee las novedades en nuestro blog</p>
         <button class="get-started-button" routerLink="/blog">Acceder</button>
       </section>
     </aside>
@@ -60,64 +60,17 @@
     <section class="right-column">
         <h2>Últimas Tareas</h2>
     
-        <div class="task-item card">
+        <div class="task-item card" *ngFor="let task of tasks">
           <div class="task-info">
-            <h4>Tarea 1</h4>
-            <p>Texto descriptivo para la primera tarea. Puede ser un poco más largo para probar el ajuste de texto.</p>
+            <h4>{{task.title}}</h4>
+            <p>{{task.description}}</p>
             <div class="badges">
-              <span class="badge category-badge">Categoría: Limpieza</span>
-              <span class="badge location-badge">Ubicación: Centro</span>
+              <span class="badge category-badge">Categoría: {{task.category}}</span>
+              <span class="badge location-badge">Ubicación: {{task.location}}</span>
+              <span class="badge budget-badge" *ngIf="task.budget">Presupuesto: {{task.budget}}€</span>
             </div>
           </div>
-          <button class="view-button">Ver</button>
-        </div>
-    
-        <div class="task-item card">
-          <div class="task-info">
-             <h4>Tarea 2</h4>
-             <p>Otro texto descriptivo para la segunda tarea, tal vez relacionado con jardinería.</p>
-             <div class="badges">
-              <span class="badge category-badge">Categoría: Jardinería</span>
-              <span class="badge location-badge">Ubicación: Afueras</span>
-            </div>
-          </div>
-          <button class="view-button">Ver</button>
-        </div>
-    
-         <div class="task-item card">
-          <div class="task-info">
-             <h4>Tarea 3</h4>
-             <p>Descripción para la tercera tarea que podría ser más corta.</p>
-             <div class="badges">
-              <span class="badge category-badge">Categoría: Entrega</span>
-              <span class="badge location-badge">Ubicación: Casco Antiguo</span>
-            </div>
-          </div>
-          <button class="view-button">Ver</button>
-        </div>
-    
-        <div class="task-item card">
-          <div class="task-info">
-            <h4>Tarea 4 - Necesito ayuda para mover cajas</h4>
-            <p>Busco a alguien fuerte para ayudar a mover cajas este sábado por la mañana durante aproximadamente 2 horas.</p>
-            <div class="badges">
-              <span class="badge category-badge">Categoría: Ayuda con Mudanza</span>
-              <span class="badge location-badge">Ubicación: Distrito Norte</span>
-            </div>
-          </div>
-          <button class="view-button">Ver</button>
-        </div>
-    
-        <div class="task-item card">
-          <div class="task-info">
-            <h4>Tarea 5 - Traducción urgente</h4>
-            <p>Necesito una traducción de inglés a español de un documento corto, se necesita urgentemente para mañana.</p>
-            <div class="badges">
-              <span class="badge category-badge">Categoría: Traducción</span>
-              <span class="badge location-badge">Ubicación: Remoto</span>
-            </div>
-          </div>
-          <button class="view-button">Ver</button>
+          <button class="view-button" [routerLink]="['/task', task.id]">Ver</button>
         </div>
 
         <div class="pagination">
@@ -135,5 +88,5 @@
   </div>
 
   <footer>
-    <p>&copy; 2024 QuickTask Blog. Todos los derechos reservados.</p>
+    <p>&copy; 2025 QuickTask. Todos los derechos reservados.</p>
   </footer>

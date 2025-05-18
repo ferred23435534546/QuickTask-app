@@ -1,0 +1,59 @@
+<header class="app-header">
+  <div class="logo-search-container">
+    <div class="logo">QuickTask</div>
+  </div>
+
+  <nav class="main-nav">
+    <a routerLink="/">Inicio</a>
+    <a routerLink="/edit-profile" class="profile-link" title="Perfil" aria-label="Perfil de usuario">
+      <i class="fas fa-user-circle profile-icon"></i>
+    </a>
+  </nav>
+</header>
+
+<div class="main-content-area">
+  <div class="task-detail-container" *ngIf="task">
+    <div class="task-header card">
+      <h1>{{task.title}}</h1>
+      <span class="status-badge" [class]="task.status">{{task.status === 'open' ? 'Abierta' : 'Cerrada'}}</span>
+    </div>
+    
+    <div class="task-info-section card">
+      <div class="info-group">
+        <label>Categoría:</label>
+        <span class="badge category-badge">{{task.category}}</span>
+      </div>
+      <div class="info-group">
+        <label>Ubicación:</label>
+        <span class="badge location-badge">{{task.location}}</span>
+      </div>
+      <div class="info-group" *ngIf="task.budget">
+        <label>Presupuesto:</label>
+        <span class="badge budget-badge">{{task.budget}}€</span>
+      </div>
+      <div class="info-group">
+        <label>Fecha de creación:</label>
+        <span>{{task.createdAt | date:'dd/MM/yyyy'}}</span>
+      </div>
+    </div>
+
+    <div class="task-description card">
+      <h2>Descripción</h2>
+      <p>{{task.description}}</p>
+    </div>
+
+    <div class="action-buttons card">
+      <button class="apply-button">Postularme</button>
+      <button class="contact-button">Contactar</button>
+      <button class="back-button" routerLink="/">Volver</button>
+    </div>
+  </div>
+
+  <div class="loading card" *ngIf="!task">
+    Cargando detalles de la tarea...
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2025 QuickTask. Todos los derechos reservados.</p>
+</footer> 

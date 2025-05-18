@@ -1,0 +1,212 @@
+// Variables
+$primary-color: #007bff;
+$text-primary: #333;
+$text-secondary: #666;
+$border-color: #dee2e6;
+$light-bg: #f8f9fa;
+$card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+// Hero Section
+.hero-section {
+    text-align: center;
+    margin-bottom: 60px;
+
+    h2 {
+        font-size: 2.5rem;
+        color: $text-primary;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
+
+    .lead {
+        font-size: 1.25rem;
+        color: $text-secondary;
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+}
+
+// Mission Section
+.mission-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.mission-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: $card-shadow;
+
+    .icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 20px;
+        background: rgba($primary-color, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        i {
+            font-size: 24px;
+            color: $primary-color;
+        }
+    }
+
+    h3 {
+        color: $text-primary;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    p {
+        color: $text-secondary;
+        line-height: 1.6;
+        margin: 0;
+    }
+}
+
+// Features Section
+.features-section {
+    margin-bottom: 60px;
+
+    h3 {
+        text-align: center;
+        font-size: 2rem;
+        color: $text-primary;
+        margin-bottom: 40px;
+        font-weight: 600;
+    }
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.feature {
+    text-align: center;
+    padding: 20px;
+
+    i {
+        font-size: 2.5rem;
+        color: $primary-color;
+        margin-bottom: 20px;
+    }
+
+    h4 {
+        color: $text-primary;
+        margin-bottom: 15px;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    p {
+        color: $text-secondary;
+        margin: 0;
+        line-height: 1.5;
+    }
+}
+
+// Stats Section
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+    background: $light-bg;
+    padding: 40px;
+    border-radius: 12px;
+}
+
+.stat-card {
+    text-align: center;
+
+    .stat-number {
+        font-size: 2.5rem;
+        color: $primary-color;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .stat-label {
+        color: $text-secondary;
+        font-size: 1.1rem;
+    }
+}
+
+// Contact Section
+.contact-section {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: $card-shadow;
+
+    h3 {
+        font-size: 2rem;
+        color: $text-primary;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+
+    p {
+        color: $text-secondary;
+        margin-bottom: 30px;
+        font-size: 1.1rem;
+    }
+
+    .contact-button {
+        background: $primary-color;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            background-color: darken($primary-color, 10%);
+        }
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .hero-section {
+        h2 {
+            font-size: 2rem;
+        }
+
+        .lead {
+            font-size: 1.1rem;
+        }
+    }
+
+    .mission-section,
+    .features-grid,
+    .stats-section {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+        .stat-number {
+            font-size: 2rem;
+        }
+    }
+}

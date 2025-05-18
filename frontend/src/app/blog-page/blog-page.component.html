@@ -3,66 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog de QuickTask</title>
+    <title>MyQuickSpace</title>
 </head>
 <body>
     <header>
-        <h1>Blog de QuickTask</h1>
+        <h1 class="brand-title">MyQuickSpace</h1>
         <nav>
             <ul>
                 <li><a routerLink="/">Inicio</a></li>
-                <li><a routerLink="/categories">Categorías</a></li>
-                <li><a routerLink="/authors">Autores</a></li>
-                <li><a routerLink="/about">Sobre nosotros</a></li>
+                <li><a routerLink="/blog/categories" routerLinkActive="active">Categorías</a></li>
+                <li><a routerLink="/blog/authors" routerLinkActive="active">Autores</a></li>
+                <li><a routerLink="/blog/about" routerLinkActive="active">Sobre nosotros</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="container">
         <aside class="sidebar">
-            <div class="filters">
-                <h3>Filtros</h3>
-                <div class="filter-group">
-                    <label for="keyword">Palabra clave:</label>
-                    <input type="text" id="keyword" name="keyword">
-                </div>
-                <div class="filter-group">
-                    <label for="category">Categoría:</label>
-                    <select id="category" name="category">
-                        <option value="">-- Seleccionar Categoría --</option>
-                        <option value="categoria1">Categoría 1</option>
-                        <option value="categoria2">Categoría 2</option>
-                    </select>
-                </div>
-                <button class="search-button">Buscar</button>
-            </div>
-            <div class="post-task">
-                <h3>Publicar una Tarea</h3>
-                <p>Describe la tarea que quieres con un presupuesto.</p>
-                <button class="get-started-button" routerLink="/create-task">Comenzar</button>
+            <div class="create-post-form">
+                <h3>Publicar Nueva Entrada</h3>
+                <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label for="title">Título:</label>
+                        <input type="text" id="title" formControlName="title" placeholder="Escribe un título atractivo">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Categoría:</label>
+                        <select id="category" formControlName="category">
+                            <option value="">-- Seleccionar Categoría --</option>
+                            <option value="hogar">Hogar</option>
+                            <option value="tecnologia">Tecnología</option>
+                            <option value="educacion">Educación</option>
+                            <option value="mudanzas">Mudanzas</option>
+                            <option value="reformas">Reformas</option>
+                            <option value="limpieza">Limpieza</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content">Contenido:</label>
+                        <textarea id="content" formControlName="content" rows="4" 
+                                placeholder="Escribe el contenido de tu entrada"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tags">Etiquetas:</label>
+                        <input type="text" id="tags" formControlName="tags" 
+                               placeholder="Separadas por comas (ej: hogar, limpieza, consejos)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Imagen:</label>
+                        <input type="file" id="image" formControlName="image" accept="image/*">
+                    </div>
+
+                    <button type="submit" class="publish-button" [disabled]="!postForm.valid">
+                        <i class="fas fa-paper-plane"></i> Publicar
+                    </button>
+                </form>
             </div>
         </aside>
 
-        <main class="blog-posts">
-            <h2>Últimas Entradas</h2>
-            <article class="blog-card">
-                <h3>Título de la Entrada 1</h3>
-                <p class="meta">Categoría: [Nombre de la Categoría] | Fecha: [Fecha]</p>
-                <p>Breve descripción o extracto de la entrada del blog. Puede tener algunas líneas de texto.</p>
-                <a href="#" class="read-more-button">Leer más</a>
-            </article>
-
-            <article class="blog-card">
-                <h3>Título de la Entrada 2</h3>
-                <p class="meta">Categoría: [Nombre de la Categoría] | Fecha: [Fecha]</p>
-                <p>Otro breve extracto de una entrada diferente del blog.</p>
-                <a href="#" class="read-more-button">Leer más</a>
-            </article>
+        <main class="blog-content">
+            <router-outlet></router-outlet>
         </main>
     </div>
 
     <footer>
-        <p>&copy; 2024 QuickTask Blog. Todos los derechos reservados.</p>
+        <p>&copy; 2025 QuickTask. Todos los derechos reservados.</p>
     </footer>
 </body>
 </html>

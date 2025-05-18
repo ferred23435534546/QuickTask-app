@@ -1,0 +1,105 @@
+// Variables
+$primary-color: #007bff;
+$text-primary: #333;
+$text-secondary: #666;
+$border-color: #dee2e6;
+$card-shadow: 0 2px 4px rgba(0,0,0,0.1);
+$transition-speed: 0.3s;
+
+.authors-container {
+    h2 {
+        margin-bottom: 30px;
+        color: $text-primary;
+        font-weight: 600;
+        font-size: 1.75rem;
+    }
+}
+
+.authors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.author-card {
+    background: white;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    transition: transform $transition-speed ease, box-shadow $transition-speed ease;
+    cursor: pointer;
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .author-image {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        
+        i {
+            font-size: 80px;
+            color: $primary-color;
+            opacity: 0.8;
+        }
+    }
+
+    h3 {
+        color: $text-primary;
+        margin: 0 0 10px;
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .role {
+        display: inline-block;
+        padding: 5px 12px;
+        background-color: rgba($primary-color, 0.1);
+        color: $primary-color;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 15px;
+    }
+
+    p {
+        color: $text-secondary;
+        margin: 0 0 20px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .stats {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+
+        span {
+            display: flex;
+            align-items: center;
+            color: $text-secondary;
+            font-size: 0.9rem;
+
+            i {
+                color: $primary-color;
+                margin-right: 5px;
+            }
+        }
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .authors-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .author-card {
+        &:hover {
+            transform: none;
+        }
+    }
+}
