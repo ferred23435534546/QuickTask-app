@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Blog</title></head>
+    <title>Blog de QuickTask</title>
+</head>
 <body>
     <header>
-        <h1>QuickTask Blog</h1>
+        <h1>Blog de QuickTask</h1>
         <nav>
             <ul>
-                <li><a href="#">Inicio</a></li>
-                <li><a href="#">Categorías</a></li>
-                <li><a href="#">Autores</a></li>
-                <li><a href="#">Sobre nosotros</a></li>
+                <li><a routerLink="/">Inicio</a></li>
+                <li><a routerLink="/categories">Categorías</a></li>
+                <li><a routerLink="/authors">Autores</a></li>
+                <li><a routerLink="/about">Sobre nosotros</a></li>
             </ul>
         </nav>
     </header>
@@ -38,7 +39,7 @@
             <div class="post-task">
                 <h3>Publicar una Tarea</h3>
                 <p>Describe la tarea que quieres con un presupuesto.</p>
-                <button class="get-started-button">Comenzar</button>
+                <button class="get-started-button" routerLink="/create-task">Comenzar</button>
             </div>
         </aside>
 
@@ -61,10 +62,9 @@
     </div>
 
     <footer>
-        <p>&copy; 2025 Mi Blog. Todos los derechos reservados.</p>
+        <p>&copy; 2024 QuickTask Blog. Todos los derechos reservados.</p>
     </footer>
-
-    <script src="script.js"></script> </body>
+</body>
 </html>
 
 

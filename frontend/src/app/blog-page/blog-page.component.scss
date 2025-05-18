@@ -39,7 +39,10 @@ header nav ul li a {
 
 .container {
     display: flex;
-    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    gap: 30px;
 }
 
 .sidebar {
@@ -58,6 +61,18 @@ header nav ul li a {
     padding-bottom: 5px;
 }
 
+.filters {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+}
+
+.filters h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
 .filters .filter-group {
     margin-bottom: 15px;
 }
@@ -65,66 +80,59 @@ header nav ul li a {
 .filters label {
     display: block;
     margin-bottom: 5px;
-    color: #555;
-    font-size: 0.9em;
+    color: #333;
 }
 
 .filters input[type="text"],
 .filters select {
     width: 100%;
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #ced4da;
     border-radius: 4px;
-    box-sizing: border-box;
-    font-size: 0.9em;
 }
 
 .filters .search-button {
-    background-color: #4CAF50;
+    width: 100%;
+    padding: 8px;
+    background-color: #28a745;
     color: white;
-    padding: 10px 15px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 1em;
-    width: 100%;
-    margin-top: 10px;
 }
 
 .filters .search-button:hover {
-    background-color: #45a049;
+    background-color: #218838;
 }
 
 .post-task {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 4px;
     margin-top: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border: 1px solid #eee;
-    border-radius: 5px;
+    border: 1px solid #dee2e6;
 }
 
 .post-task h3 {
-    color: #333;
     margin-top: 0;
     margin-bottom: 10px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 5px;
+    font-size: 1.2rem;
+    color: #333;
 }
 
 .post-task p {
-    font-size: 0.9em;
     color: #666;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .post-task .get-started-button {
     background-color: #007bff;
     color: white;
-    padding: 10px 15px;
     border: none;
+    padding: 8px 16px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1rem;
 }
 
 .post-task .get-started-button:hover {

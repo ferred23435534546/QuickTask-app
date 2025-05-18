@@ -1,7 +1,7 @@
 <header class="app-header">
     <div class="logo-search-container">
        <div class="logo">QuickTask</div>
-       <button class="search-icon-button" (click)="toggleSearch()" title="Search Tasks" aria-label="Toggle search input">
+       <button class="search-icon-button" (click)="toggleSearch()" title="Buscar Tareas" aria-label="Alternar campo de búsqueda">
          <i class="fas fa-search"></i>
        </button>
        <input
@@ -9,13 +9,13 @@
          type="search"
          class="header-search-input"
          id="header-search-input"
-         placeholder="Search tasks..."
-         aria-label="Search tasks input">
+         placeholder="Buscar tareas..."
+         aria-label="Campo de búsqueda de tareas">
     </div>
   
     <nav class="main-nav">
-      <a href="#">Home</a>
-      <a href="#" class="profile-link" title="Profile" aria-label="User profile">
+      <a routerLink="/">Inicio</a>
+      <a routerLink="/edit-profile" class="profile-link" title="Perfil" aria-label="Perfil de usuario">
         <i class="fas fa-user-circle profile-icon"></i>
       </a>
     </nav>
@@ -24,150 +24,116 @@
   <div class="main-content-area">
     <aside class="left-column">
         <section class="filters-section card">
-            <h3>Filters</h3>
+            <h3>Filtros</h3>
             <div class="form-group">
-              <label for="keyword">Keyword</label>
+              <label for="keyword">Palabra clave</label>
               <input type="text" id="keyword" name="keyword">
             </div>
             <div class="form-group">
-              <label for="category">Category</label>
+              <label for="category">Categoría</label>
               <select id="category" name="category">
-                <option value="">-- Select a Category --</option>
-                <option value="cleaning">Cleaning</option>
-                <option value="gardening">Gardening</option>
-                <option value="delivery">Delivery</option>
-                <option value="moving">Moving Help</option>
-                <option value="translation">Translation</option>
-                <option value="other">Other</option>
+                <option value="">-- Seleccionar Categoría --</option>
+                <option value="cleaning">Limpieza</option>
+                <option value="gardening">Jardinería</option>
+                <option value="delivery">Entrega</option>
+                <option value="moving">Ayuda con Mudanza</option>
+                <option value="translation">Traducción</option>
+                <option value="other">Otros</option>
               </select>
             </div>
-            <button class="search-button">Search</button>
+            <button class="search-button">Buscar</button>
           </section>
 
       <section class="post-task-section card">
-        <h3>Post a Task</h3>
-        <p>Describe the task you holy with set a budget</p>
-        <button class="get-started-button">Get Started</button>
+        <h3>Publicar Tarea</h3>
+        <p>Describe la tarea que necesitas con un presupuesto</p>
+        <button class="get-started-button" routerLink="/create-task">Comenzar</button>
+      </section>
+
+      <section class="post-task-section card">
+        <h3>QuickTask Blog</h3>
+        <p>Anuncios de QuickTask</p>
+        <button class="get-started-button" routerLink="/blog">Acceder</button>
       </section>
     </aside>
   
     <section class="right-column">
-        <h2>Latest Tasks</h2>
+        <h2>Últimas Tareas</h2>
     
         <div class="task-item card">
           <div class="task-info">
-            <h4>Task Title 1</h4>
-            <p>Description text for the first task goes here. It might be a bit longer to test wrapping.</p>
+            <h4>Tarea 1</h4>
+            <p>Texto descriptivo para la primera tarea. Puede ser un poco más largo para probar el ajuste de texto.</p>
             <div class="badges">
-              <span class="badge category-badge">Category: Cleaning</span>
-              <span class="badge location-badge">Location: Downtown</span>
+              <span class="badge category-badge">Categoría: Limpieza</span>
+              <span class="badge location-badge">Ubicación: Centro</span>
             </div>
           </div>
-          <button class="view-button">View</button>
+          <button class="view-button">Ver</button>
         </div>
     
         <div class="task-item card">
           <div class="task-info">
-             <h4>Task Title 2</h4>
-             <p>Another description text for the second task example, maybe related to gardening.</p>
+             <h4>Tarea 2</h4>
+             <p>Otro texto descriptivo para la segunda tarea, tal vez relacionado con jardinería.</p>
              <div class="badges">
-              <span class="badge category-badge">Category: Gardening</span>
-              <span class="badge location-badge">Location: Suburbs</span>
+              <span class="badge category-badge">Categoría: Jardinería</span>
+              <span class="badge location-badge">Ubicación: Afueras</span>
             </div>
           </div>
-          <button class="view-button">View</button>
+          <button class="view-button">Ver</button>
         </div>
     
          <div class="task-item card">
           <div class="task-info">
-             <h4>Task Title 3</h4>
-             <p>Description for the third task which might be shorter.</p>
+             <h4>Tarea 3</h4>
+             <p>Descripción para la tercera tarea que podría ser más corta.</p>
              <div class="badges">
-              <span class="badge category-badge">Category: Delivery</span>
-              <span class="badge location-badge">Location: Old Town</span>
+              <span class="badge category-badge">Categoría: Entrega</span>
+              <span class="badge location-badge">Ubicación: Casco Antiguo</span>
             </div>
           </div>
-          <button class="view-button">View</button>
+          <button class="view-button">Ver</button>
         </div>
     
         <div class="task-item card">
           <div class="task-info">
-            <h4>Task Title 4 - Need help moving boxes</h4>
-            <p>Looking for someone strong to help move boxes this Saturday morning for about 2 hours.</p>
+            <h4>Tarea 4 - Necesito ayuda para mover cajas</h4>
+            <p>Busco a alguien fuerte para ayudar a mover cajas este sábado por la mañana durante aproximadamente 2 horas.</p>
             <div class="badges">
-              <span class="badge category-badge">Category: Moving Help</span>
-              <span class="badge location-badge">Location: North District</span>
+              <span class="badge category-badge">Categoría: Ayuda con Mudanza</span>
+              <span class="badge location-badge">Ubicación: Distrito Norte</span>
             </div>
           </div>
-          <button class="view-button">View</button>
+          <button class="view-button">Ver</button>
         </div>
     
         <div class="task-item card">
           <div class="task-info">
-            <h4>Task Title 5 - Urgent translation</h4>
-            <p>Need an English to Spanish translation of a short document, urgently needed by tomorrow.</p>
+            <h4>Tarea 5 - Traducción urgente</h4>
+            <p>Necesito una traducción de inglés a español de un documento corto, se necesita urgentemente para mañana.</p>
             <div class="badges">
-              <span class="badge category-badge">Category: Translation</span>
-              <span class="badge location-badge">Location: Remote</span>
+              <span class="badge category-badge">Categoría: Traducción</span>
+              <span class="badge location-badge">Ubicación: Remoto</span>
             </div>
           </div>
-          <button class="view-button">View</button>
+          <button class="view-button">Ver</button>
         </div>
-    
-         <div class="task-item card">
-          <div class="task-info">
-            <h4>Task Title 6</h4>
-            <p>Just another task item to make the list look fuller.</p>
-             <div class="badges">
-              <span class="badge category-badge">Category: Other</span>
-              <span class="badge location-badge">Location: City Center</span>
-            </div>
-          </div>
-          <button class="view-button">View</button>
-        </div>
-        <div class="task-item card">
-            <div class="task-info">
-              <h4>Task Title 7</h4>
-              <p>Just another task item to make the list look fuller.</p>
-               <div class="badges">
-                <span class="badge category-badge">Category: Other</span>
-                <span class="badge location-badge">Location: City Center</span>
-              </div>
-            </div>
-            <button class="view-button">View</button>
-        </div>
-        <div class="task-item card">
-            <div class="task-info">
-              <h4>Task Title 8</h4>
-              <p>Just another task item to make the list look fuller.</p>
-               <div class="badges">
-                <span class="badge category-badge">Category: Other</span>
-                <span class="badge location-badge">Location: City Center</span>
-              </div>
-            </div>
-            <button class="view-button">View</button>
-        </div>
-          <div class="task-item card">
-            <div class="task-info">
-              <h4>Task Title 9</h4>
-              <p>Just another task item to make the list look fuller.</p>
-               <div class="badges">
-                <span class="badge category-badge">Category: Other</span>
-                <span class="badge location-badge">Location: City Center</span>
-              </div>
-            </div>
-            <button class="view-button">View</button>
-        </div>
-        <div class="task-item card">
-            <div class="task-info">
-              <h4>Task Title 10</h4>
-              <p>Just another task item to make the list look fuller.</p>
-               <div class="badges">
-                <span class="badge category-badge">Category: Other</span>
-                <span class="badge location-badge">Location: City Center</span>
-              </div>
-            </div>
-            <button class="view-button">View</button>
+
+        <div class="pagination">
+          <button class="page-button" [class.active]="currentPage === 1" (click)="onPageChange(1)">1</button>
+          <button *ngFor="let page of pages.slice(1)" class="page-button" [class.active]="currentPage === page" (click)="onPageChange(page)">
+            {{page}}
+          </button>
+          <button *ngIf="totalPages > pages[pages.length - 1]" class="page-button">...</button>
+          <button *ngIf="totalPages > pages[pages.length - 1]" class="page-button" (click)="onPageChange(totalPages)">{{totalPages}}</button>
+          <button class="page-button next" [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
+            <i class="fas fa-chevron-right"></i>
+          </button>
         </div>
       </section>
   </div>
+
+  <footer>
+    <p>&copy; 2024 QuickTask Blog. Todos los derechos reservados.</p>
+  </footer>

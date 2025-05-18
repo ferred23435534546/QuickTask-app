@@ -1,0 +1,112 @@
+// Variables (puedes ajustarlas o definirlas globalmente si prefieres)
+$primary-color: #007bff; // Un azul similar al de los títulos en la imagen
+$text-color: #333;
+$label-color: #555;
+$border-color: #ccc;
+$input-background: #fff;
+$container-background: #f9f9f9; // Un fondo muy sutil para el contenedor
+$button-text-color: #fff;
+$font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; // Fuente genérica limpia
+
+.login-container {
+  font-family: $font-family;
+  max-width: 450px; // Ancho máximo del formulario
+  margin: 50px auto; // Centrado en la página con margen superior/inferior
+  padding: 30px;
+  background-color: $container-background;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // Sombra sutil como en la imagen
+  color: $text-color;
+
+  h2 {
+    text-align: center;
+    color: $primary-color; // Color del título principal
+    margin-bottom: 25px;
+    font-size: 28px;
+    font-weight: 500;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      color: $label-color;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid $border-color;
+      border-radius: 5px;
+      box-sizing: border-box; // Para que el padding no afecte el ancho total
+      font-size: 16px;
+      background-color: $input-background;
+      color: $text-color;
+
+      &:focus {
+        border-color: $primary-color;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+      }
+    }
+  }
+
+  .submit-button {
+    width: 100%;
+    padding: 12px;
+    background-color: $primary-color;
+    color: $button-text-color;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  .register-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+
+    a {
+      color: $primary-color;
+      text-decoration: none;
+      font-weight: 600;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Estilos para placeholders (opcional, pero da un toque profesional)
+input::placeholder {
+  color: #aaa;
+  opacity: 1; // Firefox
+}
+
+input:-ms-input-placeholder { // Internet Explorer 10-11
+  color: #aaa;
+}
+
+input::-ms-input-placeholder { // Microsoft Edge
+  color: #aaa;
+}
+
+//Estilo para mensajes de error
+.error-message {
+    color: #dc3545; // Un color rojo típico para errores
+    font-size: 0.875em; // Un poco más pequeño que el texto normal
+    margin-top: 5px;
+  }

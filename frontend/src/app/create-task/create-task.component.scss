@@ -1,0 +1,245 @@
+.post-task-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+
+  h3 {
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem 0;
+    color: #333;
+    font-weight: 600;
+  }
+
+  p {
+    color: #666;
+    margin: 0 0 1.5rem 0;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .get-started-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.create-task-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  border: 1px solid #dee2e6;
+
+  h2 {
+    color: #333;
+    margin: 0 0 10px 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .subtitle {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 16px;
+  }
+}
+
+.task-form {
+  .form-group {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 500;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #dee2e6;
+      border-radius: 4px;
+      font-size: 14px;
+      background-color: #fff;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+      &:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+      }
+
+      &:hover {
+        border-color: #b8bfc6;
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+  }
+
+  .form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+
+    .form-group.half {
+      flex: 1;
+      margin-bottom: 0;
+    }
+  }
+
+  .budget-input {
+    display: flex;
+    gap: 10px;
+
+    input {
+      flex: 3;
+    }
+
+    select {
+      flex: 1;
+    }
+  }
+
+  .submit-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled) {
+      background-color: #007bff;
+      
+      &:hover {
+        background-color: #0056b3;
+      }
+      
+      &:active {
+        background-color: #004085;
+      }
+    }
+  }
+}
+
+// Estilos para mensajes de error
+.error-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+// Añadir sombra y borde a los campos de entrada
+input, select, textarea {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  
+  &:hover {
+    border-color: #b8bfc6;
+  }
+}
+
+// Estilo para el contenedor principal
+.container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+// Estilos para la paginación
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  gap: 0.5rem;
+
+  .page-button {
+    min-width: 40px;
+    height: 40px;
+    border: 1px solid #dee2e6;
+    background-color: white;
+    color: #333;
+    border-radius: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+
+    &:hover {
+      background-color: #f8f9fa;
+      border-color: #007bff;
+      color: #007bff;
+    }
+
+    &.active {
+      background-color: #007bff;
+      border-color: #007bff;
+      color: white;
+    }
+
+    &.next {
+      padding: 0 1rem;
+    }
+
+    i {
+      font-size: 0.8rem;
+    }
+  }
+} 

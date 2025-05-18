@@ -1,0 +1,102 @@
+<div class="container">
+  <div class="create-task-content">
+    <h2>Publicar una Tarea</h2>
+    <p class="subtitle">Describe la tarea que quieres con un presupuesto.</p>
+
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="task-form">
+      <div class="form-group">
+        <label for="title">Título de la tarea *</label>
+        <input type="text" id="title" formControlName="title" placeholder="Ej: Necesito ayuda con mudanza">
+        <div *ngIf="taskForm.get('title')?.touched && taskForm.get('title')?.invalid" class="error-message">
+          <span *ngIf="taskForm.get('title')?.errors?.['required']">El título es obligatorio</span>
+          <span *ngIf="taskForm.get('title')?.errors?.['minlength']">El título debe tener al menos 5 caracteres</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descripción detallada *</label>
+        <textarea id="description" formControlName="description" rows="4" 
+          placeholder="Describe los detalles de la tarea que necesitas realizar"></textarea>
+        <div *ngIf="taskForm.get('description')?.touched && taskForm.get('description')?.invalid" class="error-message">
+          <span *ngIf="taskForm.get('description')?.errors?.['required']">La descripción es obligatoria</span>
+          <span *ngIf="taskForm.get('description')?.errors?.['minlength']">La descripción debe tener al menos 20 caracteres</span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group half">
+          <label for="category">Categoría *</label>
+          <select id="category" formControlName="category">
+            <option value="">Selecciona una categoría</option>
+            <option *ngFor="let category of categories" [value]="category">
+              {{category}}
+            </option>
+          </select>
+          <div *ngIf="taskForm.get('category')?.touched && taskForm.get('category')?.invalid" class="error-message">
+            <span *ngIf="taskForm.get('category')?.errors?.['required']">La categoría es obligatoria</span>
+          </div>
+        </div>
+
+        <div class="form-group half">
+          <label for="location">Ubicación *</label>
+          <input type="text" id="location" formControlName="location" placeholder="Ej: Centro de la ciudad">
+          <div *ngIf="taskForm.get('location')?.touched && taskForm.get('location')?.invalid" class="error-message">
+            <span *ngIf="taskForm.get('location')?.errors?.['required']">La ubicación es obligatoria</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group half" formGroupName="budget">
+          <label for="amount">Presupuesto *</label>
+          <div class="budget-input">
+            <input type="number" id="amount" formControlName="amount" placeholder="Cantidad">
+            <select id="currency" formControlName="currency">
+              <option value="EUR">€</option>
+              <option value="USD">$</option>
+            </select>
+          </div>
+          <div *ngIf="taskForm.get('budget.amount')?.touched && taskForm.get('budget.amount')?.invalid" class="error-message">
+            <span *ngIf="taskForm.get('budget.amount')?.errors?.['required']">El presupuesto es obligatorio</span>
+            <span *ngIf="taskForm.get('budget.amount')?.errors?.['min']">El presupuesto debe ser mayor que 0</span>
+          </div>
+        </div>
+
+        <div class="form-group half">
+          <label for="urgency">Nivel de urgencia *</label>
+          <select id="urgency" formControlName="urgency">
+            <option value="">Selecciona la urgencia</option>
+            <option *ngFor="let level of urgencyLevels" [value]="level">
+              {{level}}
+            </option>
+          </select>
+          <div *ngIf="taskForm.get('urgency')?.touched && taskForm.get('urgency')?.invalid" class="error-message">
+            <span *ngIf="taskForm.get('urgency')?.errors?.['required']">El nivel de urgencia es obligatorio</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dateNeeded">Fecha necesaria *</label>
+        <input type="date" id="dateNeeded" formControlName="dateNeeded">
+        <div *ngIf="taskForm.get('dateNeeded')?.touched && taskForm.get('dateNeeded')?.invalid" class="error-message">
+          <span *ngIf="taskForm.get('dateNeeded')?.errors?.['required']">La fecha es obligatoria</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="requirements">Requisitos específicos (opcional)</label>
+        <textarea id="requirements" formControlName="requirements" rows="3"
+          placeholder="Añade cualquier requisito específico para la tarea"></textarea>
+      </div>
+
+      <button type="submit" class="submit-button" [disabled]="taskForm.invalid">
+        Crear
+      </button>
+
+      <p class="required-fields" *ngIf="taskForm.invalid">
+        * Los campos marcados con asterisco son obligatorios
+      </p>
+    </form>
+  </div>
+</div> 
