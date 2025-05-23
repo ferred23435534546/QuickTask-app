@@ -11,12 +11,14 @@ import { CategoriesComponent } from './blog-page/categories/categories.component
 import { AuthorsComponent } from './blog-page/authors/authors.component';
 import { AboutComponent } from './blog-page/about/about.component';
 import { CategoryDetailComponent } from './blog-page/categories/category-detail/category-detail.component';
+import { TaskBoardComponent } from './task-board/task-board.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'edit-profile', component: EditProfileComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'task-board', component: TaskBoardComponent},
   { 
     path: 'blog', 
     component: BlogPageComponent,

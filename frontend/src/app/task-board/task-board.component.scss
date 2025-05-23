@@ -1,0 +1,145 @@
+/* Variables de color */
+$color-principal: #343a40; // Gris oscuro para el header/footer
+$color-secundario: #f8f9fa; // Gris claro para el fondo
+$color-azul-principal: #007bff;
+$color-azul-hover: #0056b3;
+$color-texto-principal: #212529;
+$color-texto-secundario: #6c757d;
+$color-accento: #ffc107; // Amarillo para las estrellas
+$color-error: #dc3545;
+
+body {
+    font-family: sans-serif;
+    background-color: $color-secundario;
+    color: $color-texto-principal;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: $color-principal;
+    color: white;
+    padding: 1em 0;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+main {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+#formulario-valoracion {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    h2 {
+        margin-top: 0;
+        color: $color-texto-principal;
+        margin-bottom: 15px;
+    }
+
+    .campo-formulario {
+        margin-bottom: 15px;
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: $color-texto-principal;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: calc(100% - 12px);
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .rating {
+            display: inline-block;
+
+            input {
+                display: none;
+            }
+
+            label {
+                float: right;
+                color: #ddd;
+                font-size: 2em;
+                padding: 5px;
+                text-decoration: none;
+                cursor: pointer;
+
+                &:hover,
+                &:hover ~ label,
+                input:checked ~ & {
+                    color: $color-accento;
+                }
+            }
+        }
+
+        .error-message {
+            color: $color-error;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        /* Estilo específico para las etiquetas de los checkboxes */
+        input[type="checkbox"] + label {
+            display: inline-block;
+            margin-left: 5px;
+            color: $color-texto-principal; /* Aseguramos que el color del texto sea el principal */
+            font-weight: normal; /* O el peso de fuente que desees */
+        }
+
+        /* Ajuste para que los checkboxes y las etiquetas estén en la misma línea */
+        input[type="checkbox"] {
+            vertical-align: middle;
+            margin-top: -2px; /* Pequeño ajuste vertical */
+        }
+    }
+
+    .boton-azul {
+        background-color: $color-azul-principal;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+
+        &:hover {
+            background-color: $color-azul-hover;
+        }
+    }
+}
+
+#mensaje-valoracion {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+footer {
+    background-color: $color-principal;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+    margin-top: 20px;
+}
