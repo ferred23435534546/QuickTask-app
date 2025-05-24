@@ -52,10 +52,22 @@ export interface AuthResponseData {
 
 export interface RegisterPayload { /* ... */ }
 export interface RegisterResponseData {
-  message: string; // <<<--- ASEGÚRATE DE QUE ESTA LÍNEA EXISTA
+  message: string; 
   userId: number;
 }
-// --- FIN DE INTERFACES ---
+
+// --- LA NUEVA INTERFAZ ChangePasswordPayload ---
+export interface ChangePasswordPayload { 
+  currentPassword: string;
+  newPassword: string;
+}
+
+// --- LA NUEVA INTERFAZ ChangePasswordResponse ---
+export interface ChangePasswordResponse { 
+  message: string;
+}
+// --- FIN DE LAS DEFINICIONES DE INTERFAZ ---
+
 
 @Injectable({
   providedIn: 'root'
@@ -128,4 +140,21 @@ export class AuthService {
     return this.http.get<UserProfileResponse>(`${this.profileApiUrl}/me`, { headers: headers });
   }
   // --- FIN DEL MÉTODO getUserProfile ---
+  
+  // --- AQUÍ VA EL NUEVO MÉTODO changePassword ---
+  changePassword(payload: ChangePasswordPayload): Observable<ChangePasswordResponse> {
+    const token = this.getToken();
+    if (!token) {
+      console.error('AuthService (changePassword): No se encontró token.');
+      return throwError(() => new Error('Token no disponible. Por favor, inicia sesión.'));
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<ChangePasswordResponse>(`${this.authApiUrl}/change-password`, payload, { headers: headers });
+  }
+  // --- FIN DEL MÉTODO changePassword ---
+
 }

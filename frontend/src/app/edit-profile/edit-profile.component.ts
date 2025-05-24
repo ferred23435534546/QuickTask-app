@@ -1,18 +1,25 @@
 //src/app/edit-profile/edit-profile.component.ts
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControl } from '@angular/forms'; // Quitamos AbstractControl y ValidationErrors si passwordMatchValidator se mueve o no se usa aún para el profileForm
+import { FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControl } from '@angular/forms'; 
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 // --- 1. IMPORTA AuthService, UserData y las NUEVAS interfaces ---
-import { AuthService, UserData, UserProfileResponse, ProfileData, RegisterResponseData } from '../services/auth.service'; // Ajusta la ruta si es necesario
+import { 
+    AuthService, 
+    UserData, 
+    UserProfileResponse, 
+    ProfileData, 
+    ChangePasswordPayload, 
+    ChangePasswordResponse  
+} from '../services/auth.service';
 // Interface for profile data (la que tenías)
 interface UserProfileFormData {
   nombre: string | null;
   email: string | null;
   telefono?: string | null;
   fotoUrl?: string | null;
-  descripcion?: string | null;       // <<< Campo de la tabla profiles
+  descripcion?: string | null;     // <<< Campo de la tabla profiles
   location_zone?: string | null;   // <<< Campo de la tabla profiles
   // ... (habilidades, experiencia, etc., que ya tenías y coinciden con ProfileData)
   habilidades?: string[] | null;
@@ -40,7 +47,9 @@ export class EditProfileComponent implements OnInit {
 
   isLoading: boolean = true; // Para mostrar un indicador de carga (opcional)
   profileErrorMessage: string | null = null; // Para errores al cargar el perfil
-
+  
+    passwordChangeErrorMessage: string | null = null;
+  passwordChangeSuccessMessage: string | null = null;
   // --- 3. INYECTA AuthService en el constructor ---
   constructor(
     private fb: FormBuilder,
@@ -125,14 +134,46 @@ export class EditProfileComponent implements OnInit {
     }
   }
 
-  // Tu método onPasswordSubmit (sin cambios por ahora)
+
+  
+  // --- MÉTODO onPasswordSubmit CORRECTO (solo debe haber UNO con este nombre) ---
   onPasswordSubmit(): void {
+    this.passwordChangeErrorMessage = null;
+    this.passwordChangeSuccessMessage = null;
+
     if (this.passwordForm.valid) {
-      console.log('Password change data:', this.passwordForm.value);
-      alert('Contraseña cambiada con éxito! (simulado)');
-      this.passwordForm.reset();
+      const payload: ChangePasswordPayload = {
+        currentPassword: this.passwordForm.value.currentPassword,
+        newPassword: this.passwordForm.value.newPassword
+      };
+
+      console.log('EditProfileComponent: Enviando datos para cambiar contraseña:', payload);
+
+      this.authService.changePassword(payload).subscribe({
+        next: (response: ChangePasswordResponse) => {
+          console.log('EditProfileComponent: Contraseña cambiada con éxito!', response);
+          this.passwordChangeSuccessMessage = response.message || '¡Contraseña actualizada exitosamente!';
+          this.passwordForm.reset(); 
+        },
+        error: (errorResponse) => {
+          console.error('EditProfileComponent: Error al cambiar la contraseña:', errorResponse);
+          if (errorResponse.error && errorResponse.error.message) {
+            this.passwordChangeErrorMessage = errorResponse.error.message;
+          } else if (errorResponse.status === 401) { 
+            this.passwordChangeErrorMessage = 'La contraseña actual que has introducido es incorrecta.';
+          } else {
+            this.passwordChangeErrorMessage = 'Error al intentar cambiar la contraseña. Por favor, inténtalo más tarde.';
+          }
+        }
+      });
+    } else {
+      console.log('EditProfileComponent: Formulario de cambio de contraseña no válido.');
+      this.passwordForm.markAllAsTouched();
+      this.passwordChangeErrorMessage = 'Por favor, completa todos los campos correctamente y asegúrate de que las nuevas contraseñas coincidan.';
     }
   }
+  // --- FIN DEL ÚNICO MÉTODO onPasswordSubmit ---
+  
 
   // Tu método onFileSelected (sin cambios por ahora)
   onFileSelected(event: Event): void {
@@ -143,4 +184,5 @@ export class EditProfileComponent implements OnInit {
       console.log('File selected:', file.name);
     }
   }
+  
 }

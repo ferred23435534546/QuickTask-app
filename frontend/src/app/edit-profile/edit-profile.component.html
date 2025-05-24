@@ -96,18 +96,26 @@
       <div class="form-group">
         <label for="currentPassword">Contraseña Actual</label>
         <input type="password" id="currentPassword" formControlName="currentPassword" class="form-control">
-      </div>
+        </div>
       <div class="form-group">
         <label for="newPassword">Nueva Contraseña</label>
         <input type="password" id="newPassword" formControlName="newPassword" class="form-control">
-      </div>
+        </div>
       <div class="form-group">
         <label for="confirmPassword">Confirmar Nueva Contraseña</label>
         <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control">
-        <div *ngIf="passwordForm.errors?.['mismatch'] && passwordForm.get('confirmPassword')?.touched"
+        <div *ngIf="passwordForm.errors?.['mismatch'] && (passwordForm.get('confirmPassword')?.dirty || passwordForm.get('confirmPassword')?.touched)"
           class="alert alert-danger mt-1">
           Las contraseñas no coinciden.
         </div>
+      </div>
+
+      <div *ngIf="passwordChangeSuccessMessage" class="alert alert-success mt-2 mb-3">
+        {{ passwordChangeSuccessMessage }}
+      </div>
+
+      <div *ngIf="passwordChangeErrorMessage && !passwordChangeSuccessMessage" class="alert alert-danger mt-2 mb-3">
+        {{ passwordChangeErrorMessage }}
       </div>
       <button type="submit" class="btn btn-warning" [disabled]="passwordForm.invalid">Cambiar Contraseña</button>
     </form>

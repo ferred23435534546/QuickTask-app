@@ -16,9 +16,9 @@ import Profile from './models/Profile';
 // --- LLAMA A LAS ASOCIACIONES AQUÍ ---
 const models = { User, Profile /*, OtroModelo */ };
 Object.values(models).forEach((model: any) => { // 'any' aquí porque no tenemos una interfaz común para modelos con 'associate'
-    if (model.associate) {
-        model.associate(models); // Pasa todos los modelos para que puedan referenciarse entre sí
-    }
+  if (model.associate) {
+    model.associate(models); // Pasa todos los modelos para que puedan referenciarse entre sí
+  }
 });
 
 // dotenv.config(); // No es necesario si ya se carga en database.ts
@@ -177,140 +177,193 @@ app.post('/api/auth/login', (async (req: Request, res: Response) => {
 
 // --- RUTA PARA OBTENER EL PERFIL DEL USUARIO LOGUEADO ---
 app.get('/api/profile/me', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-    // Si llegamos aquí, el middleware authenticateToken ya verificó el JWT
-    // y req.user contiene el payload del token (ej: { id, email, role })
+  // Si llegamos aquí, el middleware authenticateToken ya verificó el JWT
+  // y req.user contiene el payload del token (ej: { id, email, role })
 
-    if (!req.user) {
-        // Esto no debería suceder si authenticateToken funciona bien, pero es una doble verificación
-        res.status(401).json({ message: 'Acceso denegado o usuario no autenticado.' });
-        return;
+  if (!req.user) {
+    // Esto no debería suceder si authenticateToken funciona bien, pero es una doble verificación
+    res.status(401).json({ message: 'Acceso denegado o usuario no autenticado.' });
+    return;
+  }
+
+  try {
+    const userId = req.user.id; // Obtenemos el ID del usuario desde el token
+
+    // Buscamos al usuario y su perfil asociado usando "include"
+    // Esto hace un JOIN entre la tabla 'users' y 'profiles'
+    const userWithProfile = await User.findByPk(userId, {
+      include: [{
+        model: Profile,
+        as: 'profile' // El alias que definimos en la asociación User.hasOne(Profile, { as: 'profile' })
+      }],
+      // No queremos devolver el password_hash
+      attributes: { exclude: ['password_hash'] }
+    });
+
+    if (!userWithProfile) {
+      // Esto sería raro si el token es válido, pero podría pasar si el usuario fue borrado después de emitir el token
+      res.status(404).json({ message: 'Usuario no encontrado.' });
+      return;
     }
 
-    try {
-        const userId = req.user.id; // Obtenemos el ID del usuario desde el token
+    // userWithProfile contendrá los datos de User y, anidado, los datos de Profile si existen
+    // Ejemplo: userWithProfile.profile contendría los datos de la tabla 'profiles'
+    // Si el usuario no tiene un registro en la tabla 'profiles', userWithProfile.profile será null
 
-        // Buscamos al usuario y su perfil asociado usando "include"
-        // Esto hace un JOIN entre la tabla 'users' y 'profiles'
-        const userWithProfile = await User.findByPk(userId, {
-            include: [{
-                model: Profile,
-                as: 'profile' // El alias que definimos en la asociación User.hasOne(Profile, { as: 'profile' })
-            }],
-            // No queremos devolver el password_hash
-            attributes: { exclude: ['password_hash'] }
-        });
+    res.status(200).json(userWithProfile);
 
-        if (!userWithProfile) {
-            // Esto sería raro si el token es válido, pero podría pasar si el usuario fue borrado después de emitir el token
-            res.status(404).json({ message: 'Usuario no encontrado.' });
-            return;
-        }
-
-        // userWithProfile contendrá los datos de User y, anidado, los datos de Profile si existen
-        // Ejemplo: userWithProfile.profile contendría los datos de la tabla 'profiles'
-        // Si el usuario no tiene un registro en la tabla 'profiles', userWithProfile.profile será null
-
-        res.status(200).json(userWithProfile);
-
-    } catch (error) {
-        console.error("Error al obtener el perfil del usuario:", error);
-        res.status(500).json({ message: 'Error interno del servidor al obtener el perfil.' });
-    }
+  } catch (error) {
+    console.error("Error al obtener el perfil del usuario:", error);
+    res.status(500).json({ message: 'Error interno del servidor al obtener el perfil.' });
+  }
 });
 
 // --- NUEVA RUTA PARA ACTUALIZAR EL PERFIL DEL USUARIO LOGUEADO ---
 app.put('/api/profile/me', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-    if (!req.user) {
-        // Redundante si authenticateToken funciona bien, pero es una salvaguarda
-        res.status(401).json({ message: 'Acceso denegado.' });
-        return;
+  if (!req.user) {
+    // Redundante si authenticateToken funciona bien, pero es una salvaguarda
+    res.status(401).json({ message: 'Acceso denegado.' });
+    return;
+  }
+
+  const userId = req.user.id;
+  const {
+    name, // Para la tabla 'users'
+    // Campos para la tabla 'profiles'
+    telefono,
+    fotoUrl,
+    descripcion,
+    location_zone,
+    habilidades,    // Array de strings
+    experiencia,
+    categoriasServicio, // Array de strings
+    disponibilidad,
+    notificacionesActivas // Booleano
+  } = req.body;
+
+  try {
+    // 1. Actualizar la tabla 'users' (por ejemplo, el nombre)
+    const userToUpdate = await User.findByPk(userId);
+    if (!userToUpdate) {
+      res.status(404).json({ message: 'Usuario no encontrado para actualizar.' });
+      return;
     }
 
-    const userId = req.user.id;
-    const {
-        name, // Para la tabla 'users'
-        // Campos para la tabla 'profiles'
-        telefono,
-        fotoUrl,
-        descripcion,
-        location_zone,
-        habilidades,    // Array de strings
-        experiencia,
-        categoriasServicio, // Array de strings
-        disponibilidad,
-        notificacionesActivas // Booleano
-    } = req.body;
-
-    try {
-        // 1. Actualizar la tabla 'users' (por ejemplo, el nombre)
-        const userToUpdate = await User.findByPk(userId);
-        if (!userToUpdate) {
-            res.status(404).json({ message: 'Usuario no encontrado para actualizar.' });
-            return;
-        }
-
-        if (name !== undefined && name !== userToUpdate.name) { // Solo actualiza si se envió 'name' y es diferente
-            userToUpdate.name = name;
-            await userToUpdate.save(); // Guarda los cambios en el usuario
-        }
-
-        // 2. Actualizar o Crear en la tabla 'profiles'
-        // Preparamos los datos para la tabla 'profiles'
-        const profileDataToUpdateOrInsert = {
-            user_id: userId, // Muy importante para la relación
-            phone_number: telefono,
-            profile_picture_url: fotoUrl,
-            description: descripcion,
-            location_zone: location_zone,
-            // Para campos array como habilidades y categoriasServicio, Sequelize los maneja bien si el tipo de columna es JSON o TEXT.
-            // Si son tablas de unión separadas, la lógica sería más compleja aquí.
-            // Por ahora, asumimos que tu modelo Profile y la tabla profiles pueden manejar arrays directamente
-            // (ej. si la columna es de tipo JSON o si guardas strings separados por comas y lo manejas en el modelo/app).
-            // En tu migración, `habilidades` y `categoriasServicio` no estaban en la tabla `profiles` directamente,
-            // estaban en el formulario del frontend. Si quieres guardarlos, necesitarías pensar cómo (¿campos de texto, JSON, tablas de unión?).
-            // Por simplicidad, me enfocaré en los campos que sí están en tu migración de `profiles`:
-            // `avg_rating` y `rating_count` usualmente no se actualizan directamente por el usuario.
-            // `last_seen` tampoco.
-        };
-
-        // Quitamos las propiedades undefined para que no sobreescriban con null si no se envían
-        Object.keys(profileDataToUpdateOrInsert).forEach(key => 
-            (profileDataToUpdateOrInsert as any)[key] === undefined && delete (profileDataToUpdateOrInsert as any)[key]
-        );
-        
-        // Usamos findOrCreate para el perfil, y luego actualizamos. O podrías usar upsert si tu dialecto y versión de Sequelize lo soportan bien.
-        const [profile, created] = await Profile.findOrCreate({
-            where: { user_id: userId },
-            defaults: profileDataToUpdateOrInsert // Solo se usan estos defaults si se CREA
-        });
-
-        if (!created && Object.keys(profileDataToUpdateOrInsert).length > 1) { // Si no se creó y hay datos para actualizar (más que solo user_id)
-            // Si el perfil ya existía, actualizamos solo los campos enviados que no sean user_id
-            const { user_id, ...dataToUpdate } = profileDataToUpdateOrInsert; // Excluimos user_id de la actualización directa
-            if (Object.keys(dataToUpdate).length > 0) {
-                 await profile.update(dataToUpdate);
-            }
-        } else if (created) {
-            // Si se creó y los defaults no eran suficientes (ej. si profileDataToUpdateOrInsert tenía más campos que user_id)
-            // podríamos necesitar un profile.update() aquí también si los defaults no cubren todo.
-            // Pero con la forma en que findOrCreate y defaults funcionan, esto podría ser suficiente.
-        }
-
-
-        // 3. Devolver el perfil actualizado (opcional, pero bueno para confirmar)
-        const updatedUserWithProfile = await User.findByPk(userId, {
-            include: [{ model: Profile, as: 'profile' }],
-            attributes: { exclude: ['password_hash'] }
-        });
-
-        res.status(200).json({ message: 'Perfil actualizado con éxito.', user: updatedUserWithProfile });
-
-    } catch (error) {
-        console.error("Error al actualizar el perfil:", error);
-        res.status(500).json({ message: 'Error interno del servidor al actualizar el perfil.' });
+    if (name !== undefined && name !== userToUpdate.name) { // Solo actualiza si se envió 'name' y es diferente
+      userToUpdate.name = name;
+      await userToUpdate.save(); // Guarda los cambios en el usuario
     }
+
+    // 2. Actualizar o Crear en la tabla 'profiles'
+    // Preparamos los datos para la tabla 'profiles'
+    const profileDataToUpdateOrInsert = {
+      user_id: userId, // Muy importante para la relación
+      phone_number: telefono,
+      profile_picture_url: fotoUrl,
+      description: descripcion,
+      location_zone: location_zone,
+      // Para campos array como habilidades y categoriasServicio, Sequelize los maneja bien si el tipo de columna es JSON o TEXT.
+      // Si son tablas de unión separadas, la lógica sería más compleja aquí.
+      // Por ahora, asumimos que tu modelo Profile y la tabla profiles pueden manejar arrays directamente
+      // (ej. si la columna es de tipo JSON o si guardas strings separados por comas y lo manejas en el modelo/app).
+      // En tu migración, `habilidades` y `categoriasServicio` no estaban en la tabla `profiles` directamente,
+      // estaban en el formulario del frontend. Si quieres guardarlos, necesitarías pensar cómo (¿campos de texto, JSON, tablas de unión?).
+      // Por simplicidad, me enfocaré en los campos que sí están en tu migración de `profiles`:
+      // `avg_rating` y `rating_count` usualmente no se actualizan directamente por el usuario.
+      // `last_seen` tampoco.
+    };
+
+    // Quitamos las propiedades undefined para que no sobreescriban con null si no se envían
+    Object.keys(profileDataToUpdateOrInsert).forEach(key =>
+      (profileDataToUpdateOrInsert as any)[key] === undefined && delete (profileDataToUpdateOrInsert as any)[key]
+    );
+
+    // Usamos findOrCreate para el perfil, y luego actualizamos. O podrías usar upsert si tu dialecto y versión de Sequelize lo soportan bien.
+    const [profile, created] = await Profile.findOrCreate({
+      where: { user_id: userId },
+      defaults: profileDataToUpdateOrInsert // Solo se usan estos defaults si se CREA
+    });
+
+    if (!created && Object.keys(profileDataToUpdateOrInsert).length > 1) { // Si no se creó y hay datos para actualizar (más que solo user_id)
+      // Si el perfil ya existía, actualizamos solo los campos enviados que no sean user_id
+      const { user_id, ...dataToUpdate } = profileDataToUpdateOrInsert; // Excluimos user_id de la actualización directa
+      if (Object.keys(dataToUpdate).length > 0) {
+        await profile.update(dataToUpdate);
+      }
+    } else if (created) {
+      // Si se creó y los defaults no eran suficientes (ej. si profileDataToUpdateOrInsert tenía más campos que user_id)
+      // podríamos necesitar un profile.update() aquí también si los defaults no cubren todo.
+      // Pero con la forma en que findOrCreate y defaults funcionan, esto podría ser suficiente.
+    }
+
+
+    // 3. Devolver el perfil actualizado (opcional, pero bueno para confirmar)
+    const updatedUserWithProfile = await User.findByPk(userId, {
+      include: [{ model: Profile, as: 'profile' }],
+      attributes: { exclude: ['password_hash'] }
+    });
+
+    res.status(200).json({ message: 'Perfil actualizado con éxito.', user: updatedUserWithProfile });
+
+  } catch (error) {
+    console.error("Error al actualizar el perfil:", error);
+    res.status(500).json({ message: 'Error interno del servidor al actualizar el perfil.' });
+  }
 });
-// --- FIN DE LA NUEVA RUTA DE ACTUALIZAR PERFIL ---
+
+// --- AÑADIR NUEVA RUTA PARA CAMBIAR CONTRASEÑA ---
+app.post('/api/auth/change-password', authenticateToken, async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  if (!req.user) {
+    res.status(401).json({ message: 'Acceso denegado.' });
+    return;
+  }
+
+  const userId = req.user.id;
+  const { currentPassword, newPassword } = req.body;
+
+  // Validación básica de entrada
+  if (!currentPassword || !newPassword) {
+    res.status(400).json({ message: 'La contraseña actual y la nueva contraseña son requeridas.' });
+    return;
+  }
+
+  if (newPassword.length < 6) { // Asumiendo una longitud mínima de 6, igual que en el frontend
+    res.status(400).json({ message: 'La nueva contraseña debe tener al menos 6 caracteres.' });
+    return;
+  }
+
+  try {
+    const user = await User.findByPk(userId);
+
+    if (!user || !user.password_hash) {
+      // Esto no debería pasar si el token es válido y el usuario existe, pero es una salvaguarda
+      res.status(404).json({ message: 'Usuario no encontrado o datos corruptos.' });
+      return;
+    }
+
+    // 1. Verificar la contraseña actual
+    const isCurrentPasswordMatch = await bcrypt.compare(currentPassword, user.password_hash);
+    if (!isCurrentPasswordMatch) {
+      console.log(`Intento de cambio de contraseña fallido para user ID ${userId}: Contraseña actual incorrecta.`);
+      res.status(401).json({ message: 'La contraseña actual es incorrecta.' });
+      return;
+    }
+
+    // 2. Hashear la nueva contraseña
+    const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+
+    // 3. Actualizar la contraseña en la base de datos
+    user.password_hash = hashedNewPassword;
+    await user.save();
+
+    console.log(`Contraseña actualizada exitosamente para user ID ${userId}`);
+    res.status(200).json({ message: 'Contraseña actualizada exitosamente.' });
+
+  } catch (error) {
+    console.error("Error al cambiar la contraseña:", error);
+    res.status(500).json({ message: 'Error interno del servidor al cambiar la contraseña.' });
+  }
+});
 
 // --- Función para iniciar el servidor (Sin Cambios) ---
 const startServer = async () => {
