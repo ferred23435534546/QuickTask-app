@@ -1,106 +1,115 @@
 <div class="edit-profile-container card">
-    <h2>Editar Perfil</h2>
-  
-    <form [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()">
-      <section class="profile-section">
-        <h3>Información Personal</h3>
-        <div class="form-group">
-          <label for="nombre">Nombre Completo</label>
-          <input type="text" id="nombre" formControlName="nombre" class="form-control">
-          <div *ngIf="profileForm.get('nombre')?.invalid && (profileForm.get('nombre')?.dirty || profileForm.get('nombre')?.touched)" class="alert alert-danger">
-            El nombre es requerido.
-          </div>
-        </div>
-  
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" [value]="currentUser.email" class="form-control" readonly>
-          <small class="form-text text-muted">El email no se puede cambiar desde aquí.</small>
-        </div>
-  
-        <div class="form-group">
-          <label for="telefono">Teléfono (opcional)</label>
-          <input type="tel" id="telefono" formControlName="telefono" class="form-control">
-        </div>
-  
-        <div class="form-group">
-          <label for="fotoUrl">Foto de Perfil (URL o Subir)</label>
-          <input type="text" id="fotoUrl" formControlName="fotoUrl" class="form-control" placeholder="http://ejemplo.com/imagen.jpg">
-          <input type="file" (change)="onFileSelected($event)" accept="image/*" class="form-control-file mt-2">
-          <img *ngIf="profileForm.get('fotoUrl')?.value" [src]="profileForm.get('fotoUrl')?.value" alt="Vista previa de la foto" class="profile-image-preview">
-        </div>
-      </section>
-  
-      <section class="profile-section worker-details">
-          <h3>Detalles Profesionales (Trabajador)</h3>
-          <p class="text-muted"><small>Esta sección es para usuarios con rol de trabajador.</small></p>
-  
-          <div class="form-group">
-              <label for="categoriasServicio">Categorías de Servicios Ofrecidos</label>
-              <select multiple id="categoriasServicio" formControlName="categoriasServicio" class="form-control">
-                  <option *ngFor="let categoria of availableCategories" [value]="categoria">{{ categoria }}</option>
-              </select>
-              <small class="form-text text-muted">Mantén presionada la tecla Ctrl (o Cmd en Mac) para seleccionar múltiples opciones.</small>
-          </div>
-  
-          <div class="form-group">
-              <label for="habilidades">Habilidades (opcional, separadas por coma si es texto, o selección múltiple)</label>
-               <input type="text" id="habilidades_text" placeholder="Ej: Fontanería, Electricidad" class="form-control mb-2">
-              <label for="habilidades_select">O selecciona de la lista:</label>
-              <select multiple id="habilidades_select" formControlName="habilidades" class="form-control">
-                  <option *ngFor="let habilidad of availableSkills" [value]="habilidad">{{ habilidad }}</option>
-              </select>
-          </div>
-  
-          <div class="form-group">
-              <label for="experiencia">Experiencia (breve descripción)</label>
-              <textarea id="experiencia" formControlName="experiencia" class="form-control" rows="3"></textarea>
-          </div>
-  
-          <div class="form-group">
-              <label for="zonaTrabajo">Zona de Trabajo Preferida</label>
-              <input type="text" id="zonaTrabajo" formControlName="zonaTrabajo" class="form-control" placeholder="Ej: Almería Capital y alrededores">
-          </div>
-  
-          <div class="form-group">
-              <label for="disponibilidad">Disponibilidad General</label>
-              <input type="text" id="disponibilidad" formControlName="disponibilidad" class="form-control" placeholder="Ej: Lunes a Viernes (tardes), Fines de semana (completo)">
-          </div>
-           </section>
-  
-  
-      <section class="profile-section">
-        <h3>Configuración</h3>
-        <div class="form-group form-check">
-          <input type="checkbox" id="notificacionesActivas" formControlName="notificacionesActivas" class="form-check-input">
-          <label for="notificacionesActivas" class="form-check-label">Recibir notificaciones</label>
-        </div>
-      </section>
-  
-      <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid">Guardar Cambios de Perfil</button>
-    </form>
-  
-    <hr class="my-4">
-  
+  <h2>Editar Perfil</h2>
+
+  <form [formGroup]="profileForm" (ngSubmit)="onProfileSubmit()">
     <section class="profile-section">
-      <h3>Cambiar Contraseña</h3>
-      <form [formGroup]="passwordForm" (ngSubmit)="onPasswordSubmit()">
-        <div class="form-group">
-          <label for="currentPassword">Contraseña Actual</label>
-          <input type="password" id="currentPassword" formControlName="currentPassword" class="form-control">
+      <h3>Información Personal</h3>
+      <div class="form-group">
+        <label for="nombre">Nombre Completo</label>
+        <input type="text" id="nombre" formControlName="nombre" class="form-control">
+        <div
+          *ngIf="profileForm.get('nombre')?.invalid && (profileForm.get('nombre')?.dirty || profileForm.get('nombre')?.touched)"
+          class="alert alert-danger">
+          El nombre es requerido.
         </div>
-        <div class="form-group">
-          <label for="newPassword">Nueva Contraseña</label>
-          <input type="password" id="newPassword" formControlName="newPassword" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="confirmPassword">Confirmar Nueva Contraseña</label>
-          <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control">
-          <div *ngIf="passwordForm.errors?.['mismatch'] && passwordForm.get('confirmPassword')?.touched" class="alert alert-danger mt-1">
-              Las contraseñas no coinciden.
-          </div>
-        </div>
-        <button type="submit" class="btn btn-warning" [disabled]="passwordForm.invalid">Cambiar Contraseña</button>
-      </form>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" formControlName="email" class="form-control">
+        <small class="form-text text-muted">El email no se puede cambiar desde aquí.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="telefono">Teléfono (opcional)</label>
+        <input type="tel" id="telefono" formControlName="telefono" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label for="fotoUrl">Foto de Perfil (URL o Subir)</label>
+        <input type="text" id="fotoUrl" formControlName="fotoUrl" class="form-control"
+          placeholder="http://ejemplo.com/imagen.jpg">
+        <input type="file" (change)="onFileSelected($event)" accept="image/*" class="form-control-file mt-2">
+        <img *ngIf="profileForm.get('fotoUrl')?.value" [src]="profileForm.get('fotoUrl')?.value"
+          alt="Vista previa de la foto" class="profile-image-preview">
+      </div>
     </section>
-  </div>
+
+    <section class="profile-section worker-details">
+      <h3>Detalles Profesionales (Trabajador)</h3>
+      <p class="text-muted"><small>Esta sección es para usuarios con rol de trabajador.</small></p>
+
+      <div class="form-group">
+        <label for="categoriasServicio">Categorías de Servicios Ofrecidos</label>
+        <select multiple id="categoriasServicio" formControlName="categoriasServicio" class="form-control">
+          <option *ngFor="let categoria of availableCategories" [value]="categoria">{{ categoria }}</option>
+        </select>
+        <small class="form-text text-muted">Mantén presionada la tecla Ctrl (o Cmd en Mac) para seleccionar múltiples
+          opciones.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="habilidades">Habilidades (opcional, separadas por coma si es texto, o selección múltiple)</label>
+        <input type="text" id="habilidades_text" placeholder="Ej: Fontanería, Electricidad" class="form-control mb-2">
+        <label for="habilidades_select">O selecciona de la lista:</label>
+        <select multiple id="habilidades_select" formControlName="habilidades" class="form-control">
+          <option *ngFor="let habilidad of availableSkills" [value]="habilidad">{{ habilidad }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="experiencia">Experiencia (breve descripción)</label>
+        <textarea id="experiencia" formControlName="experiencia" class="form-control" rows="3"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="zonaTrabajo">Zona de Trabajo Preferida</label>
+        <input type="text" id="zonaTrabajo" formControlName="zonaTrabajo" class="form-control"
+          placeholder="Ej: Almería Capital y alrededores">
+      </div>
+
+      <div class="form-group">
+        <label for="disponibilidad">Disponibilidad General</label>
+        <input type="text" id="disponibilidad" formControlName="disponibilidad" class="form-control"
+          placeholder="Ej: Lunes a Viernes (tardes), Fines de semana (completo)">
+      </div>
+    </section>
+
+
+    <section class="profile-section">
+      <h3>Configuración</h3>
+      <div class="form-group form-check">
+        <input type="checkbox" id="notificacionesActivas" formControlName="notificacionesActivas"
+          class="form-check-input">
+        <label for="notificacionesActivas" class="form-check-label">Recibir notificaciones</label>
+      </div>
+    </section>
+
+    <button type="submit" class="btn btn-primary" [disabled]="profileForm.invalid">Guardar Cambios de Perfil</button>
+  </form>
+
+  <hr class="my-4">
+
+  <section class="profile-section">
+    <h3>Cambiar Contraseña</h3>
+    <form [formGroup]="passwordForm" (ngSubmit)="onPasswordSubmit()">
+      <div class="form-group">
+        <label for="currentPassword">Contraseña Actual</label>
+        <input type="password" id="currentPassword" formControlName="currentPassword" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="newPassword">Nueva Contraseña</label>
+        <input type="password" id="newPassword" formControlName="newPassword" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+        <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control">
+        <div *ngIf="passwordForm.errors?.['mismatch'] && passwordForm.get('confirmPassword')?.touched"
+          class="alert alert-danger mt-1">
+          Las contraseñas no coinciden.
+        </div>
+      </div>
+      <button type="submit" class="btn btn-warning" [disabled]="passwordForm.invalid">Cambiar Contraseña</button>
+    </form>
+  </section>
+</div>

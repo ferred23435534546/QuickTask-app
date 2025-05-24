@@ -133,4 +133,33 @@ $danger-color-border: #f5c6cb;
     background-color: $danger-color-bg;
     border-color: $danger-color-border;
   }
+
+  .role-options {
+  display: flex; // Coloca los radio buttons en línea (horizontal)
+  flex-wrap: wrap; // Permite que pasen a la siguiente línea si no hay espacio
+  gap: 20px;       // Espacio entre las opciones de rol (ej: Cliente | Trabajador)
+  margin-top: 5px;   // Un pequeño margen superior
+  margin-bottom: 10px; // Un pequeño margen inferior antes del siguiente form-group
+}
+
+.role-option {
+  display: flex;        // Para alinear el input y el label
+  align-items: center;  // Alinea verticalmente el radio button y su etiqueta
+
+  label { // Estilo específico para las etiquetas de los radio buttons
+    margin-left: 5px;   // Espacio entre el círculo del radio y el texto de la etiqueta
+    font-weight: normal; // Evita que la etiqueta del radio sea negrita si las otras labels lo son
+    margin-bottom: 0;   // Elimina el margen inferior por defecto de las etiquetas
+    cursor: pointer;    // Cambia el cursor al pasar por encima, indicando que es clickeable
+  }
+
+  input[type="radio"] {
+    width: auto; // Para que el radio button no intente ocupar todo el ancho disponible
+    margin-right: 0; // Ajusta si es necesario, margin-left en label ya da espacio
+    cursor: pointer;
+    // Los navegadores suelen aplicar sus propios estilos a los radio buttons,
+    // personalizarlos mucho puede ser complejo y requerir ocultar el input original
+    // y estilizar un pseudo-elemento. Por ahora, nos enfocamos en la disposición.
+  }
+}
 }

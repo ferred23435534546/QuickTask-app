@@ -46,11 +46,29 @@ export class LoginComponent implements OnInit {
           // Login exitoso
           console.log('Login exitoso!', response);
 
+          if (response.token) {
+            localStorage.setItem('authToken', response.token);
+            console.log('LoginComponent: authToken guardado en localStorage.');
+          } else {
+            console.error('LoginComponent: No se recibió token en la respuesta.');
+          }
+
+          if (response.user) { // VERIFICA SI response.user EXISTE
+            localStorage.setItem('currentUser', JSON.stringify(response.user));
+            // --- ESTOS LOGS SON ÚTILES PARA LA PRUEBA ---
+            console.log('LoginComponent: currentUser guardado en localStorage:', localStorage.getItem('currentUser'));
+            console.log('LoginComponent: Objeto user que se intentó guardar:', response.user);
+            // ------------------------------------------
+          } else {
+            console.error('LoginComponent: No se recibió el objeto user en la respuesta del backend.');
+            localStorage.removeItem('currentUser'); // Limpiar por si acaso
+          }
+          
           // Guardar el token (por ejemplo, en localStorage)
           localStorage.setItem('authToken', response.token);
 
           // Opcional: guardar datos del usuario si los necesitas globalmente de inmediato
-          // localStorage.setItem('currentUser', JSON.stringify(response.user));
+         localStorage.setItem('currentUser', JSON.stringify(response.user));
           // (Más adelante podríamos usar un servicio de estado para esto)
 
           // Redirigir a la página principal

@@ -1,114 +1,146 @@
+//src/app/edit-profile/edit-profile.component.ts
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // For reactive forms
+import { FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControl } from '@angular/forms'; // Quitamos AbstractControl y ValidationErrors si passwordMatchValidator se mueve o no se usa aún para el profileForm
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms'; // Import ReactiveFormsModule
+import { ReactiveFormsModule } from '@angular/forms';
 
-// Interface for profile data (optional but good practice)
-interface UserProfile {
-  nombre: string;
-  email: string; // Assuming email is present and perhaps read-only on this form
-  telefono?: string;
-  fotoUrl?: string;
-  // Worker-specific fields - adapt as needed based on your user roles
-  habilidades?: string[];
-  experiencia?: string;
-  categoriasServicio?: string[];
-  zonaTrabajo?: string;
-  disponibilidad?: string; // Could be a more complex object or string
-  // General settings
-  notificacionesActivas: boolean;
+// --- 1. IMPORTA AuthService, UserData y las NUEVAS interfaces ---
+import { AuthService, UserData, UserProfileResponse, ProfileData, RegisterResponseData } from '../services/auth.service'; // Ajusta la ruta si es necesario
+// Interface for profile data (la que tenías)
+interface UserProfileFormData {
+  nombre: string | null;
+  email: string | null;
+  telefono?: string | null;
+  fotoUrl?: string | null;
+  descripcion?: string | null;       // <<< Campo de la tabla profiles
+  location_zone?: string | null;   // <<< Campo de la tabla profiles
+  // ... (habilidades, experiencia, etc., que ya tenías y coinciden con ProfileData)
+  habilidades?: string[] | null;
+  experiencia?: string | null;
+  categoriasServicio?: string[] | null;
+  zonaTrabajo?: string | null; // Este podría ser location_zone
+  disponibilidad?: string | null;
+  notificacionesActivas?: boolean | null;
 }
 
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [ CommonModule, ReactiveFormsModule ], // Add ReactiveFormsModule
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss']
 })
+
 export class EditProfileComponent implements OnInit {
   profileForm!: FormGroup;
-  // Example categories - you would fetch these from a service or define them as needed
+  passwordForm!: FormGroup; // Mantienes tu passwordForm
+
   availableCategories: string[] = ['Limpieza', 'Fontanería', 'Electricidad', 'Clases de Matemáticas', 'Clases de Idiomas', 'Cuidado de Niños', 'Cuidado de Mayores'];
-  // Example skills - could be dynamically fetched or pre-defined
   availableSkills: string[] = ['Wordpress', 'SEO', 'Diseño Gráfico', 'Redacción Creativa'];
 
+  isLoading: boolean = true; // Para mostrar un indicador de carga (opcional)
+  profileErrorMessage: string | null = null; // Para errores al cargar el perfil
 
-  // Placeholder for current user data - you would fetch this from a service
-  currentUser: UserProfile = {
-    nombre: 'Usuario Ejemplo',
-    email: 'usuario@ejemplo.com',
-    telefono: '123456789',
-    notificacionesActivas: true,
-    // Example worker data
-    habilidades: ['SEO'],
-    experiencia: '5 años de experiencia en marketing digital.',
-    categoriasServicio: ['Clases de Idiomas'],
-    zonaTrabajo: 'Almería Capital',
-    disponibilidad: 'L-V Tardes'
-  };
-
-  // Placeholder for password change form
-  passwordForm!: FormGroup;
-
-  constructor(private fb: FormBuilder) {}
+  // --- 3. INYECTA AuthService en el constructor ---
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService // <--- AÑADE ESTO
+  ) { }
 
   ngOnInit(): void {
+    // Inicializa profileForm (esta parte se ve bien)
     this.profileForm = this.fb.group({
-      nombre: [this.currentUser.nombre, Validators.required],
-      telefono: [this.currentUser.telefono],
-      fotoUrl: [this.currentUser.fotoUrl],
-      // Worker-specific fields
-      habilidades: [this.currentUser.habilidades || []],
-      experiencia: [this.currentUser.experiencia || ''],
-      categoriasServicio: [this.currentUser.categoriasServicio || []],
-      zonaTrabajo: [this.currentUser.zonaTrabajo || ''],
-      disponibilidad: [this.currentUser.disponibilidad || ''],
-      // General settings
-      notificacionesActivas: [this.currentUser.notificacionesActivas]
+      nombre: ['', Validators.required],
+      email: [{ value: '', disabled: true }],
+      telefono: [''],
+      fotoUrl: [''],
+      descripcion: [''],
+      location_zone: [''],
+      habilidades: [[]],
+      experiencia: [''],
+      categoriasServicio: [[]],
+      disponibilidad: [''],
+      notificacionesActivas: [true]
     });
 
+    // Inicializa passwordForm CON SUS CONTROLES DEFINIDOS
     this.passwordForm = this.fb.group({
-      currentPassword: ['', Validators.required],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
-    }, { validator: this.passwordMatchValidator });
+      currentPassword: ['', Validators.required], // <<<--- DEFINE ESTE CONTROL
+      newPassword: ['', [Validators.required, Validators.minLength(6)]], // <<<--- DEFINE ESTE CONTROL
+      confirmPassword: ['', Validators.required] // <<<--- DEFINE ESTE CONTROL
+    }, { validator: this.passwordMatchValidator }); // El validador de grupo está bien aquí
+
+    // Llama a loadUserProfile para rellenar profileForm
+    this.loadUserProfile();
   }
 
-  passwordMatchValidator(form: FormGroup) {
-    const newPassword = form.get('newPassword')?.value;
-    const confirmPassword = form.get('confirmPassword')?.value;
+  passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const newPassword = control.get('newPassword')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
     return newPassword === confirmPassword ? null : { mismatch: true };
   }
 
+  loadUserProfile(): void {
+    this.isLoading = true;
+    this.profileErrorMessage = null;
+    this.authService.getUserProfile().subscribe({
+      next: (profileResponse: UserProfileResponse) => {
+        console.log('EditProfileComponent: Perfil completo recibido:', profileResponse);
+        // Rellenamos el formulario con los datos del usuario y su perfil
+        this.profileForm.patchValue({
+          nombre: profileResponse.name,
+          email: profileResponse.email,
+          // Datos de la tabla 'profiles' (si existen)
+          telefono: profileResponse.profile?.phone_number || '',
+          fotoUrl: profileResponse.profile?.profile_picture_url || '',
+          descripcion: profileResponse.profile?.description || '',
+          location_zone: profileResponse.profile?.location_zone || '',
+          habilidades: profileResponse.profile?.habilidades || [],
+          experiencia: profileResponse.profile?.experiencia || '',
+          categoriasServicio: profileResponse.profile?.categoriasServicio || [],
+          disponibilidad: profileResponse.profile?.disponibilidad || '',
+          // notificacionesActivas: profileResponse.profile?.notificacionesActivas ?? true // O como manejes este campo
+        });
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('EditProfileComponent: Error al cargar el perfil del usuario:', err);
+        this.profileErrorMessage = 'No se pudo cargar la información del perfil. Inténtalo de nuevo más tarde.';
+        if (err.status === 401 || err.status === 403) {
+          this.profileErrorMessage = 'No estás autorizado para ver este perfil.';
+          // Aquí podrías redirigir al login si el token expiró, etc.
+          // this.authService.logout();
+          // this.router.navigate(['/login']);
+        }
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // Tu método onProfileSubmit (por ahora solo loguea)
   onProfileSubmit(): void {
     if (this.profileForm.valid) {
-      console.log('Profile data to save:', this.profileForm.value);
-      // Here you would call your service to save the profile data
-      // e.g., this.userService.updateProfile(this.profileForm.value).subscribe(...);
-      alert('Perfil actualizado con éxito!');
+      console.log('Profile data to save:', this.profileForm.getRawValue()); // Usar getRawValue() para incluir campos deshabilitados
+      alert('Funcionalidad de guardar perfil aún no implementada.');
     }
   }
 
+  // Tu método onPasswordSubmit (sin cambios por ahora)
   onPasswordSubmit(): void {
     if (this.passwordForm.valid) {
       console.log('Password change data:', this.passwordForm.value);
-      // Here you would call your service to change the password
-      // e.g., this.authService.changePassword(this.passwordForm.value).subscribe(...);
-      alert('Contraseña cambiada con éxito!');
+      alert('Contraseña cambiada con éxito! (simulado)');
       this.passwordForm.reset();
     }
   }
 
+  // Tu método onFileSelected (sin cambios por ahora)
   onFileSelected(event: Event): void {
     const element = event.currentTarget as HTMLInputElement;
     let fileList: FileList | null = element.files;
     if (fileList && fileList.length > 0) {
       const file = fileList[0];
       console.log('File selected:', file.name);
-      // Handle file upload logic here
-      // For example, convert to base64 or send to a server and get URL back
-      // And then this.profileForm.patchValue({ fotoUrl: 'url_del_servidor_o_base64' });
     }
   }
 }

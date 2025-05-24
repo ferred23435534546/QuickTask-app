@@ -1,43 +1,48 @@
 // backend/src/models/User.ts
-import { Model, DataTypes, Sequelize } from 'sequelize';
+import { Model, DataTypes, Sequelize, Optional } from 'sequelize';
 // Importa la conexión a la base de datos que configuramos antes
 import sequelizeConnection from '../config/database';
+import Profile from './Profile';
 
 // Define los atributos del modelo User (corresponden a las columnas de la tabla)
 export interface UserAttributes {
   id: number;
   email: string;
-  password_hash: string; // Guardaremos el hash de la contraseña, no la contraseña en texto plano
+  password_hash: string;
   name: string;
-  role: 'client' | 'worker' | 'both' | 'admin'; // Roles definidos
+  role: 'client' | 'worker' | 'both' | 'admin';
   is_active: boolean;
-  // createdAt y updatedAt se añadirán automáticamente por Sequelize si timestamps=true
+  createdAt?: Date; // Añadido por Sequelize, es opcional en la interfaz
+  updatedAt?: Date; // Añadido por Sequelize, es opcional en la interfaz
 }
+
+// Define qué atributos son opcionales al crear un nuevo usuario
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'is_active' | 'role' | 'createdAt' | 'updatedAt'> { }
 
 // Define la clase del Modelo extendiendo Model de Sequelize
 // Le pasamos los atributos definidos en la interfaz
-class User extends Model<UserAttributes> implements UserAttributes {
-  // Definición explícita de los atributos públicos de la clase
-  // (Necesario para que TypeScript los reconozca)
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
   public email!: string;
   public password_hash!: string;
   public name!: string;
   public role!: 'client' | 'worker' | 'both' | 'admin';
   public is_active!: boolean;
-
-  // Timestamps automáticos (opcional pero recomendado)
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  // Aquí podrías añadir métodos personalizados para el modelo User si los necesitas
-  // Por ejemplo, un método para comparar contraseñas:
-  // public async comparePassword(password: string): Promise<boolean> {
-  //   // Necesitarías importar bcryptjs aquí
-  //   // return bcrypt.compare(password, this.password_hash);
-  // }
-}
+  // Definición de la asociación (puedes tener esta propiedad si usas eager loading)
+  public readonly profile?: Profile; // Opcional, para cuando incluyes el perfil
 
+  // --- 2. AÑADE ESTE MÉTODO DE ASOCIACIÓN ---
+  public static associate(models: any): void {
+    // Un usuario tiene un perfil
+    User.hasOne(models.Profile, {
+      foreignKey: 'user_id',
+      as: 'profile' // Alias para la asociación
+    });
+  }
+}
 // Inicializa el modelo User
 User.init(
   {

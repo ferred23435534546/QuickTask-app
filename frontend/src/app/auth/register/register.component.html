@@ -28,6 +28,22 @@
     </div>
 
     <div class="form-group">
+      <label>Soy un:</label>
+      <div class="role-options"> <div class="role-option">
+          <input type="radio" id="roleClient" formControlName="role" value="client" class="form-check-input">
+          <label for="roleClient" class="form-check-label">Cliente</label>
+        </div>
+        <div class="role-option">
+          <input type="radio" id="roleWorker" formControlName="role" value="worker" class="form-check-input">
+          <label for="roleWorker" class="form-check-label">Trabajador</label>
+        </div>
+      </div>
+      <div *ngIf="registerForm.get('role')?.invalid && (registerForm.get('role')?.dirty || registerForm.get('role')?.touched)" class="error-message">
+        <div *ngIf="registerForm.get('role')?.errors?.['required']">Seleccionar un rol es obligatorio.</div>
+      </div>
+    </div>
+    
+    <div class="form-group">
       <label for="password">Contraseña:</label>
       <input type="password" id="password" formControlName="password" class="form-control">
       <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)" class="error-message">
