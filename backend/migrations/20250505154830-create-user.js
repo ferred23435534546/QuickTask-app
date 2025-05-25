@@ -69,6 +69,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      phone: {
+        type: Sequelize.STRING, 
+        allowNull: true 
+      },
+      location: {
+        type: Sequelize.STRING, 
+        allowNull: true 
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -112,7 +120,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'users', 
+          model: 'users',
           key: 'id'      // Apunta a 'users.id'
         },
         onUpdate: 'CASCADE',
@@ -402,7 +410,7 @@ module.exports = {
           key: 'id'      // Apunta a 'users.id'
         },
         onUpdate: 'CASCADE',
-        onDelete: 'CASCADE' 
+        onDelete: 'CASCADE'
       },
       assigned_at: { // Nombre de columna como lo especificaste en TXT para ASSIGNMENTS
         type: Sequelize.DATE,
