@@ -35,6 +35,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      phone: {
+        type: Sequelize.STRING, 
+        allowNull: true 
+      },
+      location: {
+        type: Sequelize.STRING, 
+        allowNull: true 
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: false
@@ -68,14 +76,6 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
-      },
-      phone: {
-        type: Sequelize.STRING, 
-        allowNull: true 
-      },
-      location: {
-        type: Sequelize.STRING, 
-        allowNull: true 
       },
       name: {
         type: Sequelize.STRING,
