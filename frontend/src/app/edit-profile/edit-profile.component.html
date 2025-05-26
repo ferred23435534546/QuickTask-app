@@ -43,9 +43,8 @@
 
 
             <div class="form-group">
-                <label for="selectedDetails">Detalles Seleccionados</label>
-                <textarea id="selectedDetails" formControlName="selectedDetails" class="form-control" rows="4"
-                    readonly></textarea>
+                <label for="selectedDetails">Tu especialidad:</label>
+                <input type="tel" id="especialidad" formControlName="especialidad" class="form-control">
             </div>
         </section>
 
@@ -63,13 +62,17 @@
                     <label class="form-check-label" for="role_trabajador">Trabajador</label>
                 </div>
             </div>
+            <div class="form-group">
+                <label for="selectedDetails">Tipo de usuario Actual:</label>
+                <input type="tel" id="TipoU" formControlName="TipoU" class="form-control">
+            </div>
         </section>
 
         <section class="profile-section">
             <h3>Ubicación</h3>
             <div class="form-group">
                 <label for="ubicacion">Escribe tu Ubicación</label>
-                <textarea id="ubicacion" formControlName="ubicacion" class="form-control" rows="3"></textarea>
+                <input type="tel" id="ubi" formControlName="ubi" class="form-control">
             </div>
         </section>
 
