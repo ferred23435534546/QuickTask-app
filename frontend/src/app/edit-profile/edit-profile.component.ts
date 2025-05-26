@@ -1,17 +1,18 @@
 //src/app/edit-profile/edit-profile.component.ts
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControl } from '@angular/forms'; 
+import { FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 // --- 1. IMPORTA AuthService, UserData y las NUEVAS interfaces ---
-import { 
-    AuthService, 
-    UserData, 
-    UserProfileResponse, 
-    ProfileData, 
-    ChangePasswordPayload, 
-    ChangePasswordResponse  
+import {
+  AuthService,
+  UserData,
+  UserProfileResponse,
+  ProfileData,
+  ChangePasswordPayload,
+  ChangePasswordResponse
 } from '../services/auth.service';
 // Interface for profile data (la que tenías)
 interface UserProfileFormData {
@@ -47,13 +48,14 @@ export class EditProfileComponent implements OnInit {
 
   isLoading: boolean = true; // Para mostrar un indicador de carga (opcional)
   profileErrorMessage: string | null = null; // Para errores al cargar el perfil
-  
-    passwordChangeErrorMessage: string | null = null;
+
+  passwordChangeErrorMessage: string | null = null;
   passwordChangeSuccessMessage: string | null = null;
   // --- 3. INYECTA AuthService en el constructor ---
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService // <--- AÑADE ESTO
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -135,7 +137,7 @@ export class EditProfileComponent implements OnInit {
   }
 
 
-  
+
   // --- MÉTODO onPasswordSubmit CORRECTO (solo debe haber UNO con este nombre) ---
   onPasswordSubmit(): void {
     this.passwordChangeErrorMessage = null;
@@ -153,13 +155,13 @@ export class EditProfileComponent implements OnInit {
         next: (response: ChangePasswordResponse) => {
           console.log('EditProfileComponent: Contraseña cambiada con éxito!', response);
           this.passwordChangeSuccessMessage = response.message || '¡Contraseña actualizada exitosamente!';
-          this.passwordForm.reset(); 
+          this.passwordForm.reset();
         },
         error: (errorResponse) => {
           console.error('EditProfileComponent: Error al cambiar la contraseña:', errorResponse);
           if (errorResponse.error && errorResponse.error.message) {
             this.passwordChangeErrorMessage = errorResponse.error.message;
-          } else if (errorResponse.status === 401) { 
+          } else if (errorResponse.status === 401) {
             this.passwordChangeErrorMessage = 'La contraseña actual que has introducido es incorrecta.';
           } else {
             this.passwordChangeErrorMessage = 'Error al intentar cambiar la contraseña. Por favor, inténtalo más tarde.';
@@ -173,7 +175,7 @@ export class EditProfileComponent implements OnInit {
     }
   }
   // --- FIN DEL ÚNICO MÉTODO onPasswordSubmit ---
-  
+
 
   // Tu método onFileSelected (sin cambios por ahora)
   onFileSelected(event: Event): void {
@@ -184,5 +186,21 @@ export class EditProfileComponent implements OnInit {
       console.log('File selected:', file.name);
     }
   }
-  
+
+  // --- NUEVO MÉTODO PARA CERRAR SESIÓN ---
+  handleLogout(): void {
+    this.authService.logout(); // Llama al método logout del servicio
+    // que borra 'authToken' y 'currentUser' de localStorage.
+
+    // Opcional: Limpiar los formularios del componente localmente, aunque la redirección
+    // podría hacer que el componente se destruya y reconstruya si se vuelve a acceder.
+    this.profileForm.reset();
+    this.passwordForm.reset();
+
+    // Redirigir al usuario a la página de login
+    this.router.navigate(['/login']);
+    console.log('Usuario redirigido a login después de logout.');
+  }
+  // --- FIN DEL NUEVO MÉTODO ---
 }
+
