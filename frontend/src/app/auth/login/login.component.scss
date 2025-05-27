@@ -1,3 +1,4 @@
+@use "sass:color";
 // Variables (puedes ajustarlas o definirlas globalmente si prefieres)
 $primary-color: #007bff; // Un azul similar al de los títulos en la imagen
 $text-color: #333;
@@ -69,7 +70,7 @@ $font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; // Fuente genéric
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: adjust-color($primary-color, $lightness: -10%);
+      background-color: color.adjust($primary-color, $lightness: -10%);
     }
   }
 

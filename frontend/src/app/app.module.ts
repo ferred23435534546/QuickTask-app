@@ -15,9 +15,10 @@ import { HomeComponent } from './home/home.component';
     CategoriesComponent,
     AuthorsComponent,
     AboutComponent,
-    HomeComponent
+    
   ],
   imports: [
+    HomeComponent,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,

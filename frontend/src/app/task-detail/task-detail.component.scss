@@ -1,3 +1,4 @@
+@use "sass:color";
 // Variables
 $primary-color: #1976d2;
 $secondary-color: #6c757d;
@@ -176,7 +177,7 @@ $text-secondary: #666;
       color: white;
 
       &:hover {
-        background-color: darken($primary-color, 10%);
+        background-color: color.adjust($primary-color, $lightness: -10%);
       }
     }
 
@@ -196,7 +197,7 @@ $text-secondary: #666;
       border: 1px solid $border-color;
 
       &:hover {
-        background-color: darken($light-bg, 5%);
+        background-color: color.adjust($light-bg, $lightness: -5%);
       }
     }
   }
