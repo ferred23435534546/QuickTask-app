@@ -39,8 +39,8 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.registerErrorMessage = null; // Limpiar errores previos
-    this.registrationSuccessMessage = null; // Limpiar mensaje de éxito previo
+    this.registerErrorMessage = null; 
+    this.registrationSuccessMessage = null;
 
     if (this.registerForm.valid) {
       // Extraemos los valores del formulario, excluyendo confirmPassword
@@ -49,24 +49,21 @@ export class RegisterComponent implements OnInit {
         name: this.registerForm.value.name,
         email: this.registerForm.value.email,
         password: this.registerForm.value.password,
-        // role: this.registerForm.value.role // Si tuvieras un campo 'role' en el formulario
+        role: this.registerForm.value.role
       };
-      // Si no tienes un campo 'role' en el formulario, tu backend ya le asigna 'client' por defecto.
 
       console.log('Enviando datos de registro al backend:', payload);
       console.log('FRONTEND (RegisterComponent): Enviando este payload para registrar:', payload);
-      
+
       this.authService.register(payload).subscribe({
         next: (response: RegisterResponseData) => {
           console.log('Registro exitoso!', response);
           this.registrationSuccessMessage = `${response.message} Ahora puedes iniciar sesión.`;
-          // Opcional: usar un alert y luego redirigir
-          // alert('¡Registro exitoso! Serás redirigido a la página de login.');
-          
+
           // Esperar un momento para que el usuario vea el mensaje de éxito y luego redirigir
           setTimeout(() => {
             this.router.navigate(['/login']);
-          }, 3000); // Redirige después de 3 segundos (ajusta el tiempo si quieres)
+          }, 3000);
 
         },
         error: (errorResponse) => {
