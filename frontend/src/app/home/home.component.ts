@@ -1,49 +1,138 @@
+// src/app/home/home.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Para *ngIf, *ngFor, etc.
-import { RouterModule } from '@angular/router'; // Para routerLink, router-outlet, etc.
-import { FormsModule } from '@angular/forms';   // Para ngModel, etc.
+import { CommonModule } from '@angular/common';
+import { RouterModule, Router } from '@angular/router'; // Router ya lo tenías
+import { FormsModule } from '@angular/forms';
 import { Task } from '../interfaces/task.interface';
 import { TaskService, TasksResponse } from '../services/task.service';
+import { AuthService } from '../services/auth.service'; // Importa tu AuthService existente
 
 @Component({
   selector: 'app-home',
-  standalone: true, // <--- 1. Marcado como standalone
+  standalone: true,
   imports: [
-    CommonModule,   // <--- 2. Importa CommonModule para las directivas comunes
-    RouterModule,   // <--- 3. Importa RouterModule si usas directivas de enrutamiento en la plantilla
-    FormsModule     // <--- 4. Importa FormsModule si usas ngModel o formularios de plantilla
+    CommonModule,
+    RouterModule,
+    FormsModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  // ... (tus propiedades existentes: tasks, isLoading, etc.)
+  isSearchVisible: boolean = false; // Ejemplo, ya la tienes
+
+  constructor(
+    private taskService: TaskService,
+    private authService: AuthService, // Inyectado
+    private router: Router            // Inyectado
+  ) {
+    // ... tu constructor actual
+  }
+
+  ngOnInit(): void {
+    // ... tu ngOnInit actual
+    this.loadTasks(); // loadTasks no necesita protección aquí si la página es visible por defecto
+  }
+
+  // Método privado para encapsular la lógica de chequeo y redirección
+  private executeIfAuthenticated(action: () => void): void {
+    if (this.authService.isAuthenticated()) {
+      action();
+    } else {
+      this.authService.redirectToLogin(); // Usamos el método del servicio
+    }
+  }
+
+  // Método para manejar navegación protegida
+  navigateIfAuthenticated(path: any[] | string): void {
+    this.executeIfAuthenticated(() => {
+      if (typeof path === 'string') {
+        this.router.navigate([path]);
+      } else {
+        this.router.navigate(path);
+      }
+    });
+  }
+
+  // --- Métodos de acción actualizados o nuevos ---
+  toggleSearch(): void {
+    // Si solo mostrar/ocultar no depende de estar logueado, pero la búsqueda sí:
+    // this.isSearchVisible = !this.isSearchVisible;
+    // Si el simple hecho de querer mostrar el input requiere login:
+    this.executeIfAuthenticated(() => {
+      this.isSearchVisible = !this.isSearchVisible;
+    });
+  }
+
+  onSearch(): void {
+    this.executeIfAuthenticated(() => {
+      this.currentPage = 1;
+      this.loadTasks(1);
+    });
+  }
+
+  onPageChange(page: number): void {
+    // Asumimos que si la página es visible, la paginación de las tareas visibles está bien,
+    // pero si la carga de tareas en sí debe ser protegida (por si se accede a la página
+    // y luego se desloguea en otra pestaña, por ejemplo), entonces sí proteger.
+    // Por ahora, protegeremos la acción de cambiar de página.
+    this.executeIfAuthenticated(() => {
+       this.loadTasks(page);
+    });
+  }
+
+  // Para <a (click)="navigateToHome()">Inicio</a>
+  navigateToHome(): void {
+    // Podrías querer que 'Inicio' siempre funcione o también protegerlo
+    // this.router.navigate(['/']); // Sin protección
+    this.navigateIfAuthenticated('/'); // Con protección
+  }
+
+  // Para <a (click)="navigateToEditProfile()">Perfil</a>
+  navigateToEditProfile(): void {
+    this.navigateIfAuthenticated('/edit-profile');
+  }
+
+  // Para <button (click)="navigateToCreateTask()">Comenzar</button>
+  navigateToCreateTask(): void {
+    this.navigateIfAuthenticated('/create-task');
+  }
+
+  // Para <button (click)="navigateToBlog()">Acceder</button> (al blog)
+  navigateToBlog(): void {
+    this.navigateIfAuthenticated('/blog');
+  }
+
+  // Para <button (click)="navigateToTaskDetail(task.id)">Ver</button>
+  navigateToTaskDetail(taskId: string | number | undefined): void {
+    if (taskId === undefined) {
+        console.error('ID de tarea indefinido para la navegación');
+        return;
+    }
+    this.navigateIfAuthenticated(['/task', taskId]);
+  }
+
+  // Para <button (click)="openTelegramLink()">Telegram</button>
+  openTelegramLink(): void {
+    this.executeIfAuthenticated(() => {
+      window.open('https://t.me/QuickTaskHelperBot', '_blank');
+    });
+  }
+
+  // ... (El resto de tus métodos como loadTasks, get pages, etc., se mantienen como están)
+  // Asegúrate de que las propiedades como currentPage, totalPages, filterKeyword, etc., estén declaradas en la clase.
+  // (He añadido algunas de ejemplo arriba, pero complétalas según tu código)
   tasks: Task[] = [];
   isLoading = true;
   errorMessage: string | null = null;
-
-  fechaActual = new Date();
-  isSearchVisible: boolean = false;
   currentPage: number = 1;
   totalPages: number = 1;
   limit: number = 5;
   totalCount: number = 0;
-
   filterKeyword: string = '';
   filterCategory: string = '';
-
-  constructor(private taskService: TaskService) {
-    console.log('CONSTRUCTOR HOME');
-    // No es usual llamar a loadTasks() en el constructor si también se llama en ngOnInit.
-    // Considera si es necesario en ambos sitios o si ngOnInit es suficiente.
-    // Por ahora, lo mantengo como lo tenías.
-    this.loadTasks();
-    console.log('TAREAS RECIBIDAS CONSTRUCTOR:', this.tasks); // Añadido CONSTRUCTOR para diferenciar logs
-  }
-
-  ngOnInit(): void {
-    console.log('NGONINIT HOME');
-    this.loadTasks();
-  }
+  // fechaActual = new Date(); // ya la tienes
 
   loadTasks(page: number = 1): void {
     this.isLoading = true;
@@ -51,7 +140,6 @@ export class HomeComponent implements OnInit {
     this.taskService.getTasks(page, this.limit, this.filterCategory, this.filterKeyword).subscribe({
       next: (response: TasksResponse) => {
         this.tasks = response.tasks;
-        console.log('TAREAS RECIBIDAS LOADTASKS:', this.tasks); // Añadido LOADTASKS para diferenciar logs
         this.currentPage = response.currentPage;
         this.totalPages = response.totalPages;
         this.totalCount = response.totalCount;
@@ -59,40 +147,22 @@ export class HomeComponent implements OnInit {
       },
       error: (err) => {
         this.errorMessage = 'Error al cargar las tareas.';
-        console.error('Error en loadTasks:', err); // Es bueno loguear el error real
         this.isLoading = false;
       }
     });
   }
 
-  toggleSearch(): void {
-    this.isSearchVisible = !this.isSearchVisible;
-  }
-
-  onPageChange(page: number): void {
-    this.loadTasks(page);
-  }
-
-  onSearch(): void {
-    this.currentPage = 1; // Reinicia a la primera página en una nueva búsqueda
-    this.loadTasks(1);
-  }
-
   get pages(): number[] {
     const visiblePages = 5;
-    const pages: number[] = [];
+    const pagesArray: number[] = []; // Renombrado para evitar conflicto con la propiedad de clase
     let start = Math.max(1, this.currentPage - Math.floor(visiblePages / 2));
     let end = Math.min(this.totalPages, start + visiblePages - 1);
-
-    // Ajusta el inicio si el final es menor que el número de páginas visibles y hay suficientes páginas totales
     if (this.totalPages >= visiblePages && (end - start + 1 < visiblePages)) {
       start = Math.max(1, end - visiblePages + 1);
     }
-
     for (let i = start; i <= end; i++) {
-      pages.push(i);
+      pagesArray.push(i);
     }
-
-    return pages;
+    return pagesArray;
   }
 }

@@ -10,13 +10,14 @@
          class="header-search-input"
          id="header-search-input"
          placeholder="Buscar tareas..."
-         aria-label="Campo de búsqueda de tareas">
-    </div>
+         aria-label="Campo de búsqueda de tareas"
+         [(ngModel)]="filterKeyword"
+         (keyup.enter)="onSearch()"> </div>
   
     <nav class="main-nav">
-      <a routerLink="/">Inicio</a>
+      <a (click)="navigateToHome()" style="cursor: pointer;">Inicio</a>
       <a routerLink="/login">login</a>
-      <a routerLink="/edit-profile" class="profile-link" title="Perfil" aria-label="Perfil de usuario">
+      <a (click)="navigateToEditProfile()" class="profile-link" title="Perfil" aria-label="Perfil de usuario" style="cursor: pointer;">
         <i class="fas fa-user-circle profile-icon"></i>
       </a>
     </nav>
@@ -48,21 +49,19 @@
       <section class="post-task-section card">
         <h3>Publicar Tarea</h3>
         <p>Describe la tarea que necesitas con un presupuesto</p>
-        <button class="get-started-button" routerLink="/create-task">Comenzar</button>
+        <button class="get-started-button" (click)="navigateToCreateTask()">Comenzar</button>
       </section>
 
       <section class="post-task-section card">
         <h3>MyQuickSpace</h3>
         <p>Lee las novedades en nuestro blog</p>
-        <button class="get-started-button" routerLink="/blog">Acceder</button>
+        <button class="get-started-button" (click)="navigateToBlog()">Acceder</button>
       </section>
 
       <section class="post-task-section card">
         <h3>Telegram</h3>
         <p>Únete a nuestro canal de Telegram para recibir ayuda y novedades.</p>
-        <a href="https://t.me/QuickTaskHelperBot" target="_blank" rel="noopener noreferrer">
-          <button class="get-started-button">Telegram</button>
-        </a>
+        <button class="get-started-button" (click)="openTelegramLink()">Telegram</button>
       </section>
     </aside>
   
@@ -79,7 +78,7 @@
               <span class="badge budget-badge" *ngIf="task.budget">Presupuesto: {{task.budget}}€</span>
             </div>
           </div>
-          <button class="view-button" [routerLink]="['/task', task.id]">Ver</button>
+          <button class="view-button" (click)="navigateToTaskDetail(task.id)">Ver</button>
         </div>
 
         <div *ngIf="!isLoading && tasks.length === 0" class="no-tasks-message" style="text-align:center; color:#888; margin:2rem 0; font-size:1.2rem;">
@@ -87,13 +86,20 @@
         </div>
 
         <div class="pagination">
-          <button class="page-button" [class.active]="currentPage === 1" (click)="onPageChange(1)">1</button>
-          <button *ngFor="let page of pages.slice(1)" class="page-button" [class.active]="currentPage === page" (click)="onPageChange(page)">
+          <button class="page-button" [class.active]="currentPage === 1" (click)="onPageChange(1)" [disabled]="isLoading">1</button>
+          <button *ngFor="let page of pages.slice(1, pages.length -1 )" 
+                  class="page-button" 
+                  [class.active]="currentPage === page" 
+                  (click)="onPageChange(page)"
+                  [disabled]="isLoading">
             {{page}}
           </button>
-          <button *ngIf="totalPages > pages[pages.length - 1]" class="page-button">...</button>
-          <button *ngIf="totalPages > pages[pages.length - 1]" class="page-button" (click)="onPageChange(totalPages)">{{totalPages}}</button>
-          <button class="page-button next" [disabled]="currentPage === totalPages" (click)="onPageChange(currentPage + 1)">
+          <ng-container *ngIf="totalPages > pages[pages.length -1] && totalPages > 1">
+            <button class="page-button" disabled>...</button>
+            <button class="page-button" (click)="onPageChange(totalPages)" [disabled]="isLoading">{{totalPages}}</button>
+          </ng-container>
+          
+          <button class="page-button next" [disabled]="currentPage === totalPages || isLoading" (click)="onPageChange(currentPage + 1)">
             <i class="fas fa-chevron-right"></i>
           </button>
         </div>
