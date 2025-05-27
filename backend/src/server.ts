@@ -11,10 +11,11 @@ import sequelizeConnection, { testDbConnection } from './config/database';
 // --- IMPORTA TUS MODELOS AQUÍ ---
 import User from './models/User';
 import Profile from './models/Profile';
+import Task from './models/Task';
 // Importa otros modelos si los tienes
 
 // --- LLAMA A LAS ASOCIACIONES AQUÍ ---
-const models = { User, Profile /*, OtroModelo */ };
+const models = { User, Profile, Task };
 Object.values(models).forEach((model: any) => { // 'any' aquí porque no tenemos una interfaz común para modelos con 'associate'
   if (model.associate) {
     model.associate(models); // Pasa todos los modelos para que puedan referenciarse entre sí
@@ -364,6 +365,143 @@ app.post('/api/auth/change-password', authenticateToken, async (req: Authenticat
     res.status(500).json({ message: 'Error interno del servidor al cambiar la contraseña.' });
   }
 });
+
+// --- ENDPOINT: Obtener todas las tareas con paginación ---
+app.get('/api/tasks', async (req: Request, res: Response) => {
+  try {
+    // Obtener parámetros de paginación
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 5;
+    const offset = (page - 1) * limit;
+
+    // Obtener parámetros de filtro
+    const category = req.query.category as string;
+    const keyword = req.query.keyword as string;
+
+    // Construir el objeto where para los filtros
+    const where: any = {};
+    if (category) {
+      where.category = category;
+    }
+    if (keyword) {
+      where["$or"] = [
+        { title: { $like: `%${keyword}%` } },
+        { description: { $like: `%${keyword}%` } }
+      ];
+    }
+
+    // Contar el total de tareas filtradas
+    const totalCount = await Task.count({ where });
+
+    // Obtener las tareas filtradas y paginadas
+    const tasks = await Task.findAll({
+      where,
+      order: [['createdAt', 'DESC']],
+      limit,
+      offset
+    });
+
+    res.json({
+      tasks,
+      totalCount,
+      currentPage: page,
+      totalPages: Math.ceil(totalCount / limit),
+      hasNextPage: page < Math.ceil(totalCount / limit),
+      hasPreviousPage: page > 1
+    });
+  } catch (error) {
+    console.error('Error al obtener tareas:', error);
+    res.status(500).json({ message: 'Error al obtener tareas' });
+  }
+});
+
+// --- ENDPOINT: Crear una nueva tarea ---
+app.post('/api/tasks', (async (req: Request, res: Response) => {
+  try {
+    const {
+      title,
+      description,
+      category,
+      location,
+      budget,
+      urgency,
+      requirements,
+      dateNeeded,
+      status,
+      userId
+    } = req.body;
+
+    // Validación básica
+    if (!title || !description || !category || !location || !budget || !urgency || !dateNeeded || !status || !userId) {
+      return res.status(400).json({ message: 'Faltan campos obligatorios para crear la tarea.' });
+    }
+
+    const newTask = await Task.create({
+      title,
+      description,
+      category,
+      location,
+      budget,
+      urgency,
+      requirements,
+      dateNeeded,
+      status,
+      userId
+    });
+
+    res.status(201).json(newTask);
+  } catch (error) {
+    console.error('Error al crear tarea:', error);
+    res.status(500).json({ message: 'Error al crear tarea' });
+  }
+}) as RequestHandler);
+
+// --- ENDPOINT: Obtener detalle de una tarea ---
+app.get('/api/tasks/:id', (async (req: Request, res: Response) => {
+  try {
+    const task = await Task.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['id', 'name', 'email', 'role'],
+          include: [
+            {
+              model: Profile,
+              as: 'profile',
+              attributes: ['profile_picture_url', 'avg_rating', 'rating_count']
+            }
+          ]
+        }
+      ]
+    });
+
+    if (!task) {
+      return res.status(404).json({ message: 'Tarea no encontrada' });
+    }
+
+    // Contar tareas publicadas por el usuario propietario
+    let user = (task.get('user') as any) || null;
+    let tasksCount = 0;
+    if (user) {
+      tasksCount = await Task.count({ where: { userId: user.id } });
+    }
+
+    // Serializar la respuesta para incluir tasksCount y evitar problemas de referencias circulares
+    const response = {
+      ...task.toJSON(),
+      user: user ? {
+        ...user,
+        tasksCount
+      } : null
+    };
+
+    res.json(response);
+  } catch (error) {
+    console.error('Error al obtener detalle de tarea:', error);
+    res.status(500).json({ message: 'Error al obtener detalle de tarea' });
+  }
+}) as RequestHandler);
 
 // --- Función para iniciar el servidor (Sin Cambios) ---
 const startServer = async () => {

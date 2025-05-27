@@ -41,6 +41,11 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
       foreignKey: 'user_id',
       as: 'profile' // Alias para la asociación
     });
+    // Un usuario tiene muchas tareas
+    User.hasMany(models.Task, {
+      foreignKey: 'userId',
+      as: 'tasks'
+    });
   }
 }
 // Inicializa el modelo User

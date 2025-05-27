@@ -1,3 +1,18 @@
+export interface TaskUserProfile {
+    profile_picture_url?: string | null;
+    avg_rating?: number | null;
+    rating_count?: number | null;
+}
+
+export interface TaskUser {
+    id: number;
+    name: string;
+    email: string;
+    role: string;
+    profile?: TaskUserProfile | null;
+    tasksCount?: number;
+}
+
 export interface Task {
     id: string;
     title: string;
@@ -7,7 +22,8 @@ export interface Task {
     budget?: number;
     createdAt: Date;
     status: 'open' | 'in-progress' | 'completed';
-    userId: string;
+    userId: number;
+    user?: TaskUser | null;
 }
 
 // Enums para las propiedades que tienen valores específicos

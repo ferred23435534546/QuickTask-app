@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Task, TaskCategory, TaskStatus, TaskUrgency } from '../interfaces/task.interface';
+import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-create-task',
@@ -15,8 +16,10 @@ export class CreateTaskComponent {
   taskForm!: FormGroup;
   categories = Object.values(TaskCategory);
   urgencyLevels = Object.values(TaskUrgency);
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private taskService: TaskService) {
     this.initForm();
   }
 
@@ -37,22 +40,33 @@ export class CreateTaskComponent {
   }
 
   onSubmit() {
+    console.log('Enviando tarea...');
+    this.successMessage = null;
+    this.errorMessage = null;
     if (this.taskForm.valid) {
-      const newTask: Partial<Task> = {
-        ...this.taskForm.value,
-        status: TaskStatus.Publicada,
-        dateCreated: new Date(),
-        views: 0,
-        applications: 0,
-        author: {
-          id: 1, // Este valor vendría del servicio de autenticación
-          name: 'Usuario Actual', // Este valor vendría del servicio de autenticación
-          rating: 0
-        }
+      // Adaptar el objeto para que coincida con el backend
+      const formValue = this.taskForm.value;
+      const newTask = {
+        title: formValue.title,
+        description: formValue.description,
+        category: formValue.category,
+        location: formValue.location,
+        budget: formValue.budget.amount, // Solo el número
+        urgency: formValue.urgency,
+        requirements: formValue.requirements,
+        dateNeeded: formValue.dateNeeded,
+        status: 'open' as 'open',
+        userId: 1 // TODO: Reemplazar por el usuario real autenticado
       };
-
-      // Aquí iría la lógica para enviar la tarea al backend
-      console.log('Nueva tarea creada:', newTask);
+      this.taskService.createTask(newTask).subscribe({
+        next: (task) => {
+          this.successMessage = '¡Tarea creada con éxito!';
+          this.taskForm.reset();
+        },
+        error: (err) => {
+          this.errorMessage = 'Error al crear la tarea.';
+        }
+      });
     } else {
       this.markFormGroupTouched(this.taskForm);
     }

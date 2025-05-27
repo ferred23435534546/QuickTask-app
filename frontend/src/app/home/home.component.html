@@ -28,11 +28,11 @@
             <h3>Filtros</h3>
             <div class="form-group">
               <label for="keyword">Palabra clave</label>
-              <input type="text" id="keyword" name="keyword">
+              <input type="text" id="keyword" name="keyword" [(ngModel)]="filterKeyword" />
             </div>
             <div class="form-group">
               <label for="category">Categoría</label>
-              <select id="category" name="category">
+              <select id="category" name="category" [(ngModel)]="filterCategory">
                 <option value="">-- Seleccionar Categoría --</option>
                 <option value="cleaning">Limpieza</option>
                 <option value="gardening">Jardinería</option>
@@ -42,7 +42,7 @@
                 <option value="other">Otros</option>
               </select>
             </div>
-            <button class="search-button">Buscar</button>
+            <button class="search-button" (click)="onSearch()">Buscar</button>
           </section>
 
       <section class="post-task-section card">
@@ -55,6 +55,14 @@
         <h3>MyQuickSpace</h3>
         <p>Lee las novedades en nuestro blog</p>
         <button class="get-started-button" routerLink="/blog">Acceder</button>
+      </section>
+
+      <section class="post-task-section card">
+        <h3>Telegram</h3>
+        <p>Únete a nuestro canal de Telegram para recibir ayuda y novedades.</p>
+        <a href="https://t.me/QuickTaskHelperBot" target="_blank" rel="noopener noreferrer">
+          <button class="get-started-button">Telegram</button>
+        </a>
       </section>
     </aside>
   
@@ -72,6 +80,10 @@
             </div>
           </div>
           <button class="view-button" [routerLink]="['/task', task.id]">Ver</button>
+        </div>
+
+        <div *ngIf="!isLoading && tasks.length === 0" class="no-tasks-message" style="text-align:center; color:#888; margin:2rem 0; font-size:1.2rem;">
+          No hay tareas que coincidan con los filtros seleccionados.
         </div>
 
         <div class="pagination">
