@@ -423,6 +423,74 @@ module.exports = {
         defaultValue: Sequelize.NOW
       }
     });
+
+    await queryInterface.createTable('tasks', {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false
+      },
+      title: {
+        type: Sequelize.STRING(255),
+        allowNull: false
+      },
+      description: {
+        type: Sequelize.TEXT,
+        allowNull: false
+      },
+      category: {
+        type: Sequelize.STRING(50),
+        allowNull: false
+      },
+      location: {
+        type: Sequelize.STRING(255),
+        allowNull: false
+      },
+      budget: {
+        type: Sequelize.FLOAT,
+        allowNull: false
+      },
+      urgency: {
+        type: Sequelize.STRING(50),
+        allowNull: false
+      },
+      requirements: {
+        type: Sequelize.TEXT,
+        allowNull: true // Cambiado a true ya que es anulable en tu SQL
+      },
+      dateNeeded: {
+        type: Sequelize.DATEONLY, // Usar DATEONLY para el tipo DATE de SQL
+        allowNull: false
+      },
+      status: {
+        type: Sequelize.STRING(50),
+        allowNull: false
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { // Asumiendo que userId es una clave foránea a tu tabla de usuarios
+          model: 'users', // Nombre de la tabla de destino
+          key: 'id'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        // Nota: Sequelize maneja automáticamente ON UPDATE CURRENT_TIMESTAMP para el campo `updatedAt`
+        // si se establece `timestamps: true` en la definición del modelo.
+        // Para migraciones "raw", así es como lo harías explícitamente.
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP')
+      }
+    });
   },
 
   async down(queryInterface, Sequelize) {
@@ -435,5 +503,6 @@ module.exports = {
     await queryInterface.dropTable('profiles');
     await queryInterface.dropTable('categories');
     await queryInterface.dropTable('users'); // Ahora también eliminamos la tabla users
+    await queryInterface.dropTable('tasks');
   }
 };
