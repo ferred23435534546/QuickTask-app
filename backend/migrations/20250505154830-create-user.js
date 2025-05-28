@@ -4,7 +4,7 @@
 /*Buenas chicos, aquí os voy a dejar varios comandos (un par alomejor) sobre como poder hacer cambios (si es necesario)
 dentro de la base de datos.
 
--docker compose exec backend npx sequelize-cli db:migrate:undo:all --debug 
+-docker compose exec backend npx sequelize-cli db:migrate:undo:all --debug
   Este comando revertirá todas las migraciones que Sequelize haya registrado como aplicadas en tu base de datos. 
   La opción --debug te dará información detallada del proceso. l
 -docker compose exec backend npx sequelize-cli db:migrate --debug
