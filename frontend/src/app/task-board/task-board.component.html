@@ -7,67 +7,27 @@
     <link rel="stylesheet" href="task-board.component.scss">
 </head>
 <body>
- <style>
-        /* Estilos básicos para las estrellas */
-        .rating {
-            display: inline-block;
-        }
-        .rating input {
-            display: none;
-        }
-        .rating label {
-            float: right;
-            color: #ddd;
-            font-size: 2em;
-            padding: 5px;
-            text-decoration: none;
-        }
-        .rating label:hover,
-        .rating label:hover ~ label,
-        .rating input:checked ~ label {
-            color: #ffc107;
-        }
-        .campo-formulario {
-            margin-bottom: 15px;
-        }
-        .boton-azul {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .boton-azul:hover {
-            background-color: #0056b3;
-        }
-        #mensaje-valoracion {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            display: none; /* Oculto inicialmente */
-        }
-        .error-message {
-            color: red;
-            font-size: 0.9em;
-            margin-top: 5px;
-        }
-    </style>
     <main>
         <section id="formulario-valoracion">
             <h2>Por favor, valora la tarea:</h2>
             <form id="form-valoracion-tarea">
                 <div class="campo-formulario">
-                    <label for="tarea-id">Tarea realizada:</label>
-                    <input type="text" id="tarea-id" name="tarea-id" placeholder="Si aplica">
+                    <label for="tarea-id">ID de la Tarea:</label>
+                    <input type="text" id="tarea-id" name="tarea-id" placeholder="Introduce el ID de la tarea">
+                    <button type="button" id="buscar-tarea-btn" class="boton-azul">Buscar Tarea</button>
+                    <div id="error-tarea-id" class="error-message"></div>
+                </div>
+
+                <div id="tarea-info">
+                    <p><strong>Nombre de la Tarea:</strong> <span id="nombre-tarea"></span></p>
+                    <p><strong>Descripción:</strong> <span id="descripcion-tarea"></span></p>
+                    <p><strong>Fecha Límite:</strong> <span id="fecha-limite-tarea"></span></p>
                 </div>
 
                 <div class="campo-formulario">
                     <label>Puntuación (1-5):</label>
                     <div class="rating">
-                        <input type="radio" id="star5" name="puntuacion" value="5" required /><label for="star5" title="Excelente">★</label>
+                        <input type="radio" id="star5" name="puntuacion" value="5" /><label for="star5" title="Excelente">★</label>
                         <input type="radio" id="star4" name="puntuacion" value="4" /><label for="star4" title="Bien">★</label>
                         <input type="radio" id="star3" name="puntuacion" value="3" /><label for="star3" title="Regular">★</label>
                         <input type="radio" id="star2" name="puntuacion" value="2" /><label for="star2" title="Mal">★</label>
@@ -89,64 +49,35 @@
                     <label for="tiempo">Realizado a tiempo</label><br>
                     <input type="checkbox" id="calidad" name="aspecto-calidad" value="calidad">
                     <label for="calidad">Buena calidad</label><br>
-                    </div>
+                </div>
 
                 <button type="submit" class="boton-azul">Enviar Valoración</button>
+                <button type="button" onclick="window.history.back()" class="boton-dos">Volver</button>
             </form>
 
             <div id="mensaje-valoracion"></div>
         </section>
-
-        </main>
+    </main>
 
     <footer>
-        <p>&copy; 2025 Aplicación de Tareas</p>
+        <p>&copy; 2025 QuickTask. Todos los derechos reservados.</p>
     </footer>
 
     <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
         const formularioValoracion = document.getElementById('form-valoracion-tarea');
-        const mensajeValoracionDiv = document.getElementById('mensaje-valoracion');
-        const puntuacionRadios = document.querySelectorAll('input[name="puntuacion"]');
-        const errorPuntuacion = document.getElementById('error-puntuacion');
 
-        formularioValoracion.addEventListener('submit', function(event) {
-            event.preventDefault();
-
-            let puntuacionSeleccionada = null;
-            puntuacionRadios.forEach(radio => {
-                if (radio.checked) {
-                    puntuacionSeleccionada = radio.value;
-                }
+        if (formularioValoracion) {
+            console.log('¡Formulario encontrado! Intentando añadir listener...');
+            formularioValoracion.addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('¡El submit ha sido capturado! La página NO debería recargarse.');
+                alert('Formulario enviado (simulado)'); // Un alert para confirmación visual
             });
-
-            if (!puntuacionSeleccionada) {
-                errorPuntuacion.textContent = "Por favor, selecciona una puntuación.";
-                return;
-            } else {
-                errorPuntuacion.textContent = "";
-            }
-
-            const tareaId = document.getElementById('tarea-id').value;
-            const comentarios = document.getElementById('comentarios').value;
-            const aspectosValorados = [];
-            if (document.getElementById('completo').checked) aspectosValorados.push('Completo');
-            if (document.getElementById('tiempo').checked) aspectosValorados.push('A tiempo');
-            if (document.getElementById('calidad').checked) aspectosValorados.push('Buena calidad');
-            // Añade aquí la lógica para recoger otros aspectos si los incluyes
-
-            // Simulación de envío de datos (aquí iría tu código para enviar al servidor)
-            console.log("ID de la Tarea:", tareaId);
-            console.log("Puntuación:", puntuacionSeleccionada);
-            console.log("Comentarios:", comentarios);
-            console.log("Aspectos Valorados:", aspectosValorados);
-
-            mensajeValoracionDiv.textContent = "¡Gracias por tu valoración! Ha sido enviada correctamente.";
-            mensajeValoracionDiv.style.display = 'block'; // Mostrar el mensaje
-
-            formularioValoracion.reset();
-            // Deseleccionar las estrellas
-            puntuacionRadios.forEach(radio => radio.checked = false);
-        });
-    </script>
+        } else {
+            console.error('ERROR CRÍTICO: El formulario con ID "form-valoracion-tarea" NO FUE ENCONTRADO al cargar el DOM.');
+        }
+    });
+    </script>   
 </body>
 </html>

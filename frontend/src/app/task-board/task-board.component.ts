@@ -38,5 +38,7 @@ export class TaskBoardComponent {
       location: 'Remote'
     }
   ];
+
+  
 }
 

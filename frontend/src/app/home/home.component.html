@@ -1,3 +1,4 @@
+<body>
 <header class="app-header">
     <div class="logo-search-container">
        <div class="logo">QuickTask</div>
@@ -15,7 +16,7 @@
   
     <nav class="main-nav">
       <a routerLink="/">Inicio</a>
-      <a routerLink="/login">login</a>
+      <a routerLink="/login">Login</a>
       <a routerLink="/edit-profile" class="profile-link" title="Perfil" aria-label="Perfil de usuario">
         <i class="fas fa-user-circle profile-icon"></i>
       </a>
@@ -91,3 +92,45 @@
   <footer>
     <p>&copy; 2025 QuickTask. Todos los derechos reservados.</p>
   </footer>
+  <script>
+  // Dentro de home.component.html (en su script)
+const urlParams = new URLSearchParams(window.location.search);
+const ratedTaskId = urlParams.get('ratedTaskId');
+
+if (ratedTaskId) {
+    console.log('Hemos vuelto de valorar la tarea con ID:', ratedTaskId);
+    // Ahora, con este ID, puedes hacer algo para actualizar la vista de esa tarea
+    // Por ejemplo, recargar los datos de esa tarea o de todas las tareas
+    // para que se muestre la valoración actualizada.
+    loadTaskDetails(ratedTaskId); // Una función que tú crearías para cargar detalles de la tarea
+}
+
+function loadTaskDetails(taskId) {
+    // Aquí harías otra llamada a tu backend para obtener la información actualizada de la tarea,
+    // incluyendo su nueva valoración.
+    fetch(`http://localhost:8000/api/tasks/${taskId}`) // Asegúrate que esta URL es correcta
+        .then(response => response.json())
+        .then(taskData => {
+            // Una vez que tengas los datos actualizados de la tarea,
+            // busca la tarea en tu lista de tareas en home.component.html y actualiza su visualización
+            // (por ejemplo, actualiza las estrellas o el puntaje promedio).
+            updateTaskDisplay(taskData);
+        })
+        .catch(error => console.error('Error al cargar la tarea actualizada:', error));
+}
+
+function updateTaskDisplay(task) {
+    // Aquí la lógica para encontrar el elemento HTML de la tarea y actualizarlo
+    // Por ejemplo, si tienes un div para cada tarea con un ID "task-N":
+    const taskElement = document.getElementById(`task-${task.id}`);
+    if (taskElement) {
+        // Actualiza las estrellas, el promedio de puntuación, etc.
+        // Esto dependerá de cómo tengas estructurado tu HTML para cada tarea
+        const ratingDisplay = taskElement.querySelector('.task-rating-display');
+        if (ratingDisplay) {
+            ratingDisplay.textContent = `Puntuación: ${task.averageRating || 'No valorada'}`; // O pinta estrellas
+        }
+    }
+}
+</script>
+</body>

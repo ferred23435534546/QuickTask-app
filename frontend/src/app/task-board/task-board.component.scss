@@ -1,17 +1,20 @@
-/* Variables de color */
-$color-principal: #343a40; // Gris oscuro para el header/footer
-$color-secundario: #f8f9fa; // Gris claro para el fondo
-$color-azul-principal: #007bff;
-$color-azul-hover: #0056b3;
-$color-texto-principal: #212529;
-$color-texto-secundario: #6c757d;
-$color-accento: #ffc107; // Amarillo para las estrellas
-$color-error: #dc3545;
+/* Variables de color - Actualizadas para coincidir con el estilo general */
+@use "sass:color";
+$primary-color: #1976d2; // Azul principal, como en el header
+$secondary-color: #6c757d; // Gris secundario para texto
+$success-color: #28a745; // Verde para éxito (puedes usarlo para mensajes de éxito)
+$danger-color: #dc3545; // Rojo para errores (usado en mensajes de error)
+$light-bg: #f8f9fa; // Fondo general claro
+$white: #ffffff; // Blanco para tarjetas y elementos de fondo
+$border-color: #dee2e6; // Color de borde para elementos
+$text-primary: #212529; // Color principal del texto
+$text-secondary: #666; // Color secundario del texto
+$accent-star-color: #ffc107; // Amarillo para las estrellas
 
 body {
-    font-family: sans-serif;
-    background-color: $color-secundario;
-    color: $color-texto-principal;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    background-color: $light-bg;
+    color: $text-primary;
     margin: 0;
     padding: 0;
     display: flex;
@@ -20,126 +23,220 @@ body {
 }
 
 header {
-    background-color: $color-principal;
-    color: white;
-    padding: 1em 0;
-    text-align: center;
-    margin-bottom: 20px;
+    // This header styling will ideally come from your app-header component,
+    // but including a basic style here for standalone demo if needed.
+    background: $white;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 2rem; // Adjusted margin to match other sections
+    text-align: center; // Adjust if your app-header isn't centered
 }
 
 main {
     flex-grow: 1;
-    padding: 20px;
+    max-width: 800px; // Constrain width for better readability
+    margin: 2rem auto; // Center the main content
+    padding: 0 1rem; // Add horizontal padding
+}
+
+// Card style utility class for reusability
+.card {
+    background: $white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem; // Add margin bottom for separation
 }
 
 #formulario-valoracion {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    @extend .card; // Apply card styles
+    padding: 2rem; // Slightly more padding for the main form card
 
     h2 {
         margin-top: 0;
-        color: $color-texto-principal;
-        margin-bottom: 15px;
+        color: $text-primary;
+        font-size: 1.75rem; // Slightly larger for section title
+        margin-bottom: 1.5rem;
+        text-align: center; // Center form title
     }
 
     .campo-formulario {
-        margin-bottom: 15px;
+        margin-bottom: 1.5rem; // Increased margin for better spacing
 
         label {
             display: block;
-            margin-bottom: 5px;
-            color: $color-texto-principal;
-            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: $text-primary;
+            font-weight: 600; // Bolder labels
+            font-size: 0.95rem;
         }
 
         input[type="text"],
-        textarea,
-        select {
-            width: calc(100% - 12px);
-            padding: 8px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
+        textarea {
+            width: calc(100% - 20px); // Adjusting for padding
+            padding: 10px; // More padding
+            border: 1px solid $border-color;
+            border-radius: 6px; // Slightly more rounded corners
             box-sizing: border-box;
+            font-size: 1rem;
+
+            &:focus {
+                border-color: $primary-color; // Highlight on focus
+                outline: none;
+                box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+            }
         }
 
         textarea {
             resize: vertical;
+            min-height: 100px; // Minimum height for textarea
         }
 
         .rating {
             display: inline-block;
+            direction: rtl; // Stars from right to left for easier CSS selection
 
             input {
                 display: none;
             }
 
             label {
-                float: right;
-                color: #ddd;
-                font-size: 2em;
-                padding: 5px;
-                text-decoration: none;
                 cursor: pointer;
+                color: $border-color; // Default grey stars
+                font-size: 2.5em; // Larger stars
+                padding: 0 5px; // Reduced padding between stars
+                transition: color 0.2s ease-in-out; // Smooth transition for hover/checked
 
                 &:hover,
                 &:hover ~ label,
                 input:checked ~ & {
-                    color: $color-accento;
+                    color: $accent-star-color; // Yellow when selected
                 }
             }
         }
 
         .error-message {
-            color: $color-error;
-            font-size: 0.9em;
-            margin-top: 5px;
+            color: $danger-color;
+            font-size: 0.85em;
+            margin-top: 0.5rem;
         }
 
-        /* Estilo específico para las etiquetas de los checkboxes */
-        input[type="checkbox"] + label {
-            display: inline-block;
-            margin-left: 5px;
-            color: $color-texto-principal; /* Aseguramos que el color del texto sea el principal */
-            font-weight: normal; /* O el peso de fuente que desees */
-        }
-
-        /* Ajuste para que los checkboxes y las etiquetas estén en la misma línea */
         input[type="checkbox"] {
             vertical-align: middle;
-            margin-top: -2px; /* Pequeño ajuste vertical */
+            margin-right: 8px; // Space between checkbox and label
+            transform: scale(1.1); // Slightly larger checkbox
+        }
+
+        input[type="checkbox"] + label {
+            display: inline-block;
+            margin-bottom: 0; // Remove bottom margin
+            font-weight: normal; // Normal weight for checkbox labels
+            cursor: pointer;
+            color: $text-secondary; // Secondary text color for these labels
         }
     }
 
     .boton-azul {
-        background-color: $color-azul-principal;
-        color: white;
-        padding: 10px 15px;
+        background-color: $primary-color;
+        color: $white;
+        padding: 0.8rem 1.5rem;
         border: none;
-        border-radius: 5px;
+        border-radius: 6px;
         cursor: pointer;
-        font-size: 1em;
+        font-size: 1.05em;
+        font-weight: 600;
+        transition: background-color 0.2s ease, transform 0.1s ease;
 
         &:hover {
-            background-color: $color-azul-hover;
+            background-color: darken($primary-color, 8%);
+            transform: translateY(-1px); // Slight lift on hover
+        }
+
+        &:active {
+            transform: translateY(0); // Press effect
+        }
+    }
+    
+    .boton-dos {
+        background-color: $text-secondary;
+        color: $white;
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1.05em;
+        font-weight: 600;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+
+        &:hover {
+            background-color: darken($text-secondary, 8%);
+            transform: translateY(-1px); // Slight lift on hover
+        }
+
+        &:active {
+            transform: translateY(0); // Press effect
+        }
+    }
+
+    #buscar-tarea-btn {
+        margin-left: 10px; // Space between input and button
+        padding: 8px 15px; // Smaller padding for search button
+        font-size: 0.95em;
+    }
+}
+
+#tarea-info {
+    @extend .card; // Apply card styles
+    border: 1px dashed $primary-color; // Dashed border
+    background-color: lighten($primary-color, 45%); // Lighter blue background
+    color: $text-primary;
+    padding: 1rem 1.5rem; // Adjusted padding
+    display: none; // Hidden by default
+    margin-bottom: 1.5rem; // Ensure spacing
+
+    p {
+        margin: 0.5rem 0;
+        line-height: 1.4;
+
+        strong {
+            color: $text-primary; // Ensure strong text stands out
+            font-weight: 700;
+        }
+
+        span {
+            font-weight: normal;
+            color: $text-secondary;
         }
     }
 }
 
 #mensaje-valoracion {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+    @extend .card; // Apply card styles
     text-align: center;
+    font-weight: 500;
+    display: none; // Hidden by default
+    padding: 1rem; // Compact padding
+    border-left: 5px solid; // Add a prominent left border
+
+    &[style*="background-color: rgb(230, 255, 230)"] { // Success message
+        border-color: $success-color;
+    }
+
+    &[style*="background-color: rgb(255, 230, 230)"] { // Error message
+        border-color: $danger-color;
+    }
 }
 
 footer {
-    background-color: $color-principal;
-    color: white;
+    background-color: $white;
+    color: $text-secondary;
     text-align: center;
-    padding: 1em 0;
-    margin-top: 20px;
+    padding: 1.5rem 0;
+    margin-top: auto; // Push footer to the bottom
+    border-top: 1px solid $border-color;
+
+    p {
+        margin: 0;
+        font-size: 0.9em;
+    }
 }

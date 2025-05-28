@@ -17,7 +17,7 @@
       <h1>{{task.title}}</h1>
       <span class="status-badge" [class]="task.status">{{task.status === 'open' ? 'Abierta' : 'Cerrada'}}</span>
     </div>
-    
+
     <div class="task-info-section card">
       <div class="info-group">
         <label>Categoría:</label>
@@ -45,6 +45,7 @@
     <div class="action-buttons card">
       <button class="apply-button">Postularme</button>
       <button class="contact-button">Contactar</button>
+      <button class="board-button" routerLink="/task-board">Valorar tarea</button>
       <button class="back-button" routerLink="/">Volver</button>
     </div>
   </div>
@@ -56,4 +57,4 @@
 
 <footer>
   <p>&copy; 2025 QuickTask. Todos los derechos reservados.</p>
-</footer> 
+</footer>
