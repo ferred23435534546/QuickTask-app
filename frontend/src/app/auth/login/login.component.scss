@@ -1,30 +1,39 @@
-@use "sass:color";
-// Variables (puedes ajustarlas o definirlas globalmente si prefieres)
-$primary-color: #007bff; // Un azul similar al de los títulos en la imagen
-$text-color: #333;
-$label-color: #555;
-$border-color: #ccc;
-$input-background: #fff;
-$container-background: #f9f9f9; // Un fondo muy sutil para el contenedor
-$button-text-color: #fff;
-$font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; // Fuente genérica limpia
+// src/app/auth/login/login.component.scss
+@use "sass:color"; // Para usar color.adjust
 
+// --- Variables Definidas Localmente para este Componente ---
+$primary-color: #0d6efd;     // Azul principal
+$secondary-color: #6c757d;  // Gris secundario
+$border-color: #dee2e6;        // Color de borde
+$text-primary: #333;           // Color de texto principal
+$text-secondary: #666;        // Color de texto secundario
+$light-bg-body: #f8f9fa;       // Fondo claro para el body (si quieres aplicarlo desde aquí o un global)
+$container-bg: #ffffff;        // Fondo blanco para contenedores/tarjetas
+$error-color: #dc3545;         // Rojo para errores
+$font-family: 'Poppins', sans-serif; // Fuente principal
+// ---------------------------------------------------------
+
+// Estilo para el contenedor del login (asume que tu componente está centrado por otros medios si no está en styles.scss global)
+// Si quieres centrarlo desde aquí, necesitarías un div wrapper en el HTML del componente o
+// que el :host o el .login-container tengan estilos para ocupar la pantalla y centrar su contenido.
+// Por ahora, este estilo es para la "tarjeta" del formulario:
 .login-container {
-  font-family: $font-family;
-  max-width: 450px; // Ancho máximo del formulario
-  margin: 50px auto; // Centrado en la página con margen superior/inferior
-  padding: 30px;
-  background-color: $container-background;
+  background: $container-bg;
+  padding: 30px 40px;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // Sombra sutil como en la imagen
-  color: $text-color;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 420px;
+  text-align: left; 
+  font-family: $font-family; // Aplicamos la fuente aquí
+  margin: 40px auto; // Para centrarlo si está en un flujo normal de página
 
   h2 {
+    color: $text-primary;
+    margin: 0 0 25px;
+    font-size: 1.75rem;
+    font-weight: 600;
     text-align: center;
-    color: $primary-color; // Color del título principal
-    margin-bottom: 25px;
-    font-size: 28px;
-    font-weight: 500;
   }
 
   .form-group {
@@ -32,82 +41,91 @@ $font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; // Fuente genéric
 
     label {
       display: block;
-      color: $label-color;
       margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: 600;
+      color: $text-secondary;
+      font-size: 0.9rem;
+      font-weight: 500;
     }
 
     input[type="email"],
     input[type="password"] {
       width: 100%;
-      padding: 12px;
+      padding: 10px 15px;
       border: 1px solid $border-color;
-      border-radius: 5px;
-      box-sizing: border-box; // Para que el padding no afecte el ancho total
-      font-size: 16px;
-      background-color: $input-background;
-      color: $text-color;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: $font-family; // Hereda, pero por si acaso
+      box-sizing: border-box;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
       &:focus {
-        border-color: $primary-color;
         outline: none;
-        box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+        border-color: $primary-color;
+        box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
       }
     }
   }
 
   .submit-button {
     width: 100%;
-    padding: 12px;
+    padding: 12px 20px;
     background-color: $primary-color;
-    color: $button-text-color;
+    color: white;
     border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
+    border-radius: 6px;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 
     &:hover {
-      background-color: color.adjust($primary-color, $lightness: -10%);
+      background-color: color.adjust($primary-color, $lightness: -7%);
+      transform: translateY(-1px);
+    }
+
+    &:disabled {
+      background-color: $secondary-color;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    &:active {
+      transform: translateY(0);
     }
   }
 
-  .register-link {
+  .error-message { // Para errores de validación de campos
+    color: $error-color;
+    font-size: 0.8rem;
+    margin-top: 6px;
+  }
+
+  .register-link { // Para el enlace "¿No tienes cuenta? Regístrate aquí"
     text-align: center;
     margin-top: 25px;
-    font-size: 14px;
+    font-size: 0.9rem;
 
     a {
       color: $primary-color;
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 500;
 
       &:hover {
         text-decoration: underline;
       }
     }
   }
-}
 
-// Estilos para placeholders (opcional, pero da un toque profesional)
-input::placeholder {
-  color: #aaa;
-  opacity: 1; // Firefox
-}
-
-input:-ms-input-placeholder { // Internet Explorer 10-11
-  color: #aaa;
-}
-
-input::-ms-input-placeholder { // Microsoft Edge
-  color: #aaa;
-}
-
-//Estilo para mensajes de error
-.error-message {
-    color: #dc3545; // Un color rojo típico para errores
-    font-size: 0.875em; // Un poco más pequeño que el texto normal
-    margin-top: 5px;
+  .alert.alert-danger { // Para errores del servidor
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    text-align: center;
   }
+}
