@@ -96,7 +96,7 @@ app.post('/api/auth/register', (async (req: Request, res: Response) => {
 
     // --- PASO 7: Enviar respuesta ---
     res.status(201).json({
-      message: 'User registered successfully!',
+      message: 'Usuario registrado con éxito.',
       userId: newUser.id
     });
 
