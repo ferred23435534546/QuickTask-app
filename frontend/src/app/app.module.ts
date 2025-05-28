@@ -7,15 +7,18 @@ import { RegisterComponent } from './auth/register/register.component';
 import { CategoriesComponent } from './blog-page/categories/categories.component';
 import { AuthorsComponent } from './blog-page/authors/authors.component';
 import { AboutComponent } from './blog-page/about/about.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
     RegisterComponent,
     CategoriesComponent,
     AuthorsComponent,
-    AboutComponent
+    AboutComponent,
+    
   ],
   imports: [
+    HomeComponent,
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,

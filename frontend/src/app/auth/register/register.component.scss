@@ -1,3 +1,4 @@
+@use "sass:color";
 // En src/app/auth/register/register.component.scss
 
 // src/app/auth/register/register.component.scss
@@ -82,11 +83,11 @@ $danger-color-border: #f5c6cb;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: darken($primary-color, 10%);
+      background-color: color.adjust($primary-color, $lightness: -10%);
     }
 
     &:disabled {
-      background-color: lighten($primary-color, 20%);
+      background-color: color.adjust($primary-color, $lightness: 20%);
       cursor: not-allowed;
     }
   }

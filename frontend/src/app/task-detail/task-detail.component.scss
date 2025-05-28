@@ -1,3 +1,4 @@
+@use "sass:color";
 // Variables
 $primary-color: #1976d2;
 $secondary-color: #6c757d;
@@ -114,26 +115,36 @@ $text-secondary: #666;
   }
 }
 
+.task-owner {
+  margin-top: 2rem;
+  background: #f8f9fa;
+  border-left: 4px solid #1976d2;
+  .owner-info {
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+    span {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    .profile-pic {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 0.5rem;
+      border: 2px solid #1976d2;
+      display: block;
+    }
+  }
+}
+
 .badge {
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
+  padding: 0.4em 1em;
+  border-radius: 12px;
   font-weight: 500;
-
-  &.category-badge {
-    background-color: #e3f2fd;
-    color: $primary-color;
-  }
-
-  &.location-badge {
-    background-color: #fff3e0;
-    color: #f57c00;
-  }
-
-  &.budget-badge {
-    background-color: #e8f5e9;
-    color: #388e3c;
-  }
+  &.category-badge { background: #e3f2fd; color: #1976d2; }
+  &.location-badge { background: #fff3cd; color: #856404; }
+  &.budget-badge { background: #d4edda; color: #155724; }
 }
 
 .task-description {
@@ -166,7 +177,7 @@ $text-secondary: #666;
       color: white;
 
       &:hover {
-        background-color: darken($primary-color, 10%);
+        background-color: color.adjust($primary-color, $lightness: -10%);
       }
     }
 
@@ -186,7 +197,7 @@ $text-secondary: #666;
       border: 1px solid $border-color;
 
       &:hover {
-        background-color: darken($light-bg, 5%);
+        background-color: color.adjust($light-bg, $lightness: -5%);
       }
     }
   }
@@ -211,4 +222,15 @@ footer {
     color: $text-secondary;
     margin: 0;
   }
+}
+
+button, .btn {
+  padding: 0.7em 1.5em;
+  border-radius: 8px;
+  font-size: 1.1em;
+  margin-right: 1em;
+  transition: background 0.2s;
+  &.primary { background: #1976d2; color: #fff; }
+  &.secondary { background: #fff; color: #1976d2; border: 1px solid #1976d2; }
+  &:hover { filter: brightness(0.95); }
 } 

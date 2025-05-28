@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Task } from '../interfaces/task.interface';
+import { TaskService } from '../services/task.service';
 
 @Component({
   selector: 'app-task-detail',
@@ -11,23 +12,28 @@ import { Task } from '../interfaces/task.interface';
   styleUrls: ['./task-detail.component.scss']
 })
 export class TaskDetailComponent implements OnInit {
-  task: Task | null = null;
+  task: any = null;
+  isLoading = true;
+  errorMessage: string | null = null;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private taskService: TaskService) {}
 
   ngOnInit() {
     const taskId = this.route.snapshot.params['id'];
-    // Simulamos obtener la tarea del array de tareas
-    this.task = {
-      id: taskId,
-      title: `Tarea ${taskId}`,
-      description: 'Esta es una descripción detallada de la tarea que incluye todos los detalles necesarios para que los usuarios puedan entender exactamente lo que se necesita hacer.',
-      category: 'Limpieza',
-      location: 'Centro',
-      budget: 50,
-      createdAt: new Date(),
-      status: 'open',
-      userId: 'user1'
-    };
+    this.isLoading = true;
+    this.taskService.getTaskById(taskId).subscribe({
+      next: (task) => {
+        this.task = task;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.errorMessage = 'Error al cargar la tarea.';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  goBack() {
+    window.history.back();
   }
 } 

@@ -1,3 +1,4 @@
+@use "sass:color";
 // Variables
 $primary-color: #007bff;
 $text-primary: #333;
@@ -181,7 +182,7 @@ $card-shadow: 0 2px 4px rgba(0,0,0,0.1);
         transition: background-color 0.3s ease;
 
         &:hover {
-            background-color: darken($primary-color, 10%);
+            background-color: color.adjust($primary-color, $lightness: -10%);
         }
     }
 }
