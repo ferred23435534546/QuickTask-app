@@ -1,87 +1,59 @@
-//src/app/edit-profile/edit-profile.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ValidationErrors, AbstractControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-
-// --- 1. IMPORTA AuthService, UserData y las NUEVAS interfaces ---
+import { Router, RouterModule } from '@angular/router';
 import {
-  AuthService,
-  UserData,
+  EditService,
   UserProfileResponse,
-  ProfileData,
+  UpdateProfilePayload,
   ChangePasswordPayload,
-  ChangePasswordResponse
-} from '../services/auth.service';
-// Interface for profile data (la que tenías)
-interface UserProfileFormData {
-  nombre: string | null;
-  email: string | null;
-  telefono?: string | null;
-  fotoUrl?: string | null;
-  descripcion?: string | null;     // <<< Campo de la tabla profiles
-  location_zone?: string | null;   // <<< Campo de la tabla profiles
-  // ... (habilidades, experiencia, etc., que ya tenías y coinciden con ProfileData)
-  habilidades?: string[] | null;
-  experiencia?: string | null;
-  categoriasServicio?: string[] | null;
-  zonaTrabajo?: string | null; // Este podría ser location_zone
-  disponibilidad?: string | null;
-  notificacionesActivas?: boolean | null;
-}
+  ChangePasswordResponse,
+  ProfileData
+} from '../services/edit.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss']
 })
-
 export class EditProfileComponent implements OnInit {
   profileForm!: FormGroup;
-  passwordForm!: FormGroup; // Mantienes tu passwordForm
+  passwordForm!: FormGroup;
 
-  availableCategories: string[] = ['Limpieza', 'Fontanería', 'Electricidad', 'Clases de Matemáticas', 'Clases de Idiomas', 'Cuidado de Niños', 'Cuidado de Mayores'];
-  availableSkills: string[] = ['Wordpress', 'SEO', 'Diseño Gráfico', 'Redacción Creativa'];
-
-  isLoading: boolean = true; // Para mostrar un indicador de carga (opcional)
-  profileErrorMessage: string | null = null; // Para errores al cargar el perfil
-
+  isLoading: boolean = true;
+  profileErrorMessage: string | null = null;
   passwordChangeErrorMessage: string | null = null;
   passwordChangeSuccessMessage: string | null = null;
-  // --- 3. INYECTA AuthService en el constructor ---
+  profileUpdateSuccessMessage: string | null = null;
+  profileUpdateErrorMessage: string | null = null;
+  currentUserRole: string | null = null;
+
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private editService: EditService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    // Inicializa profileForm (esta parte se ve bien)
     this.profileForm = this.fb.group({
       nombre: ['', Validators.required],
       email: [{ value: '', disabled: true }],
       telefono: [''],
-      fotoUrl: [''],
-      descripcion: [''],
-      location_zone: [''],
-      habilidades: [[]],
-      experiencia: [''],
-      categoriasServicio: [[]],
-      disponibilidad: [''],
-      notificacionesActivas: [true]
+      ubi: [''],
+      // descripcion: [''], // <-- ELIMINADO
+      role: ['client', Validators.required] // <-- Añadido Validators.required
     });
 
-    // Inicializa passwordForm CON SUS CONTROLES DEFINIDOS
     this.passwordForm = this.fb.group({
-      currentPassword: ['', Validators.required], // <<<--- DEFINE ESTE CONTROL
-      newPassword: ['', [Validators.required, Validators.minLength(6)]], // <<<--- DEFINE ESTE CONTROL
-      confirmPassword: ['', Validators.required] // <<<--- DEFINE ESTE CONTROL
-    }, { validator: this.passwordMatchValidator }); // El validador de grupo está bien aquí
+      currentPassword: ['', Validators.required],
+      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required]
+    }, { validator: this.passwordMatchValidator });
 
-    // Llama a loadUserProfile para rellenar profileForm
     this.loadUserProfile();
   }
 
@@ -94,51 +66,68 @@ export class EditProfileComponent implements OnInit {
   loadUserProfile(): void {
     this.isLoading = true;
     this.profileErrorMessage = null;
-    this.authService.getUserProfile().subscribe({
-      next: (profileResponse: UserProfileResponse) => {
-        console.log('EditProfileComponent: Perfil completo recibido:', profileResponse);
-        // Rellenamos el formulario con los datos del usuario y su perfil
-        this.profileForm.patchValue({
-          nombre: profileResponse.name,
-          email: profileResponse.email,
-          // Datos de la tabla 'profiles' (si existen)
-          telefono: profileResponse.profile?.phone_number || '',
-          fotoUrl: profileResponse.profile?.profile_picture_url || '',
-          descripcion: profileResponse.profile?.description || '',
-          location_zone: profileResponse.profile?.location_zone || '',
-          habilidades: profileResponse.profile?.habilidades || [],
-          experiencia: profileResponse.profile?.experiencia || '',
-          categoriasServicio: profileResponse.profile?.categoriasServicio || [],
-          disponibilidad: profileResponse.profile?.disponibilidad || '',
-          // notificacionesActivas: profileResponse.profile?.notificacionesActivas ?? true // O como manejes este campo
-        });
-        this.isLoading = false;
+    this.editService.getUserProfile().subscribe({
+      next: (response: UserProfileResponse) => {
+          console.log('Perfil recibido:', response);
+          this.currentUserRole = response.role;
+          this.profileForm.patchValue({
+              nombre: response.name,
+              email: response.email,
+              telefono: response.profile?.phone_number || response.phone || '',
+              ubi: response.profile?.location_zone || response.location || '',
+              // descripcion: response.profile?.description || '', // <-- ELIMINADO
+              role: response.role || 'client'
+          });
+          this.isLoading = false;
       },
-      error: (err) => {
-        console.error('EditProfileComponent: Error al cargar el perfil del usuario:', err);
-        this.profileErrorMessage = 'No se pudo cargar la información del perfil. Inténtalo de nuevo más tarde.';
-        if (err.status === 401 || err.status === 403) {
-          this.profileErrorMessage = 'No estás autorizado para ver este perfil.';
-          // Aquí podrías redirigir al login si el token expiró, etc.
-          // this.authService.logout();
-          // this.router.navigate(['/login']);
-        }
+      error: (err: HttpErrorResponse) => {
+        console.error('Error al cargar el perfil:', err);
+        this.profileErrorMessage = err.error?.message || err.message || 'No se pudo cargar la información del perfil.';
         this.isLoading = false;
       }
     });
   }
 
-  // Tu método onProfileSubmit (por ahora solo loguea)
   onProfileSubmit(): void {
+    this.profileUpdateErrorMessage = null;
+    this.profileUpdateSuccessMessage = null;
+
     if (this.profileForm.valid) {
-      console.log('Profile data to save:', this.profileForm.getRawValue()); // Usar getRawValue() para incluir campos deshabilitados
-      alert('Funcionalidad de guardar perfil aún no implementada.');
+      const formData = this.profileForm.getRawValue();
+
+      // Construimos el payload, asegurándonos de que los valores no sean undefined
+      const payload: UpdateProfilePayload = {
+        name: formData.nombre,
+        phone: formData.telefono || null, // Envía null si está vacío
+        location: formData.ubi || null,   // Envía null si está vacío
+        role: formData.role,             // Role siempre tendrá valor
+        profile: {
+          phone_number: formData.telefono || null,
+          location_zone: formData.ubi || null,
+          // description: formData.descripcion || null // <-- ELIMINADO
+        }
+      };
+
+      console.log('Datos del perfil a guardar:', payload);
+
+      this.editService.updateUserProfile(payload).subscribe({
+        next: (response: UserProfileResponse) => {
+          console.log('Perfil actualizado con éxito!', response);
+          this.profileUpdateSuccessMessage = response.message || '¡Perfil actualizado con éxito!';
+          this.loadUserProfile();
+        },
+        error: (errorResponse: HttpErrorResponse) => {
+          console.error('Error al actualizar el perfil:', errorResponse);
+          this.profileUpdateErrorMessage = errorResponse.error?.message || errorResponse.message || 'Error al guardar. Inténtalo más tarde.';
+        }
+      });
+    } else {
+        this.profileUpdateErrorMessage = 'Por favor, revisa que todos los campos estén correctos.';
+        this.profileForm.markAllAsTouched();
     }
   }
 
-
-
-  // --- MÉTODO onPasswordSubmit CORRECTO (solo debe haber UNO con este nombre) ---
+  // onPasswordSubmit y handleLogout sin cambios
   onPasswordSubmit(): void {
     this.passwordChangeErrorMessage = null;
     this.passwordChangeSuccessMessage = null;
@@ -148,37 +137,27 @@ export class EditProfileComponent implements OnInit {
         currentPassword: this.passwordForm.value.currentPassword,
         newPassword: this.passwordForm.value.newPassword
       };
-
-      console.log('EditProfileComponent: Enviando datos para cambiar contraseña:', payload);
-
-      this.authService.changePassword(payload).subscribe({
+      this.editService.changePassword(payload).subscribe({
         next: (response: ChangePasswordResponse) => {
-          console.log('EditProfileComponent: Contraseña cambiada con éxito!', response);
           this.passwordChangeSuccessMessage = response.message || '¡Contraseña actualizada exitosamente!';
           this.passwordForm.reset();
         },
-        error: (errorResponse) => {
-          console.error('EditProfileComponent: Error al cambiar la contraseña:', errorResponse);
-          if (errorResponse.error && errorResponse.error.message) {
-            this.passwordChangeErrorMessage = errorResponse.error.message;
-          } else if (errorResponse.status === 401) {
-            this.passwordChangeErrorMessage = 'La contraseña actual que has introducido es incorrecta.';
-          } else {
-            this.passwordChangeErrorMessage = 'Error al intentar cambiar la contraseña. Por favor, inténtalo más tarde.';
-          }
+        error: (errorResponse: HttpErrorResponse) => {
+          this.passwordChangeErrorMessage = errorResponse.error?.message || errorResponse.message || 'Error al cambiar la contraseña.';
         }
       });
     } else {
-      console.log('EditProfileComponent: Formulario de cambio de contraseña no válido.');
-      this.passwordForm.markAllAsTouched();
-      this.passwordChangeErrorMessage = 'Por favor, completa todos los campos correctamente y asegúrate de que las nuevas contraseñas coincidan.';
+        this.passwordChangeErrorMessage = 'Formulario inválido.';
+        this.passwordForm.markAllAsTouched();
     }
   }
-  // --- FIN DEL ÚNICO MÉTODO onPasswordSubmit ---
 
+  handleLogout(): void {
+    this.editService.logout();
+    this.router.navigate(['/login']);
+  }
 
-  // Tu método onFileSelected (sin cambios por ahora)
-  onFileSelected(event: Event): void {
+   onFileSelected(event: Event): void {
     const element = event.currentTarget as HTMLInputElement;
     let fileList: FileList | null = element.files;
     if (fileList && fileList.length > 0) {
@@ -186,21 +165,4 @@ export class EditProfileComponent implements OnInit {
       console.log('File selected:', file.name);
     }
   }
-
-  // --- NUEVO MÉTODO PARA CERRAR SESIÓN ---
-  handleLogout(): void {
-    this.authService.logout(); // Llama al método logout del servicio
-    // que borra 'authToken' y 'currentUser' de localStorage.
-
-    // Opcional: Limpiar los formularios del componente localmente, aunque la redirección
-    // podría hacer que el componente se destruya y reconstruya si se vuelve a acceder.
-    this.profileForm.reset();
-    this.passwordForm.reset();
-
-    // Redirigir al usuario a la página de login
-    this.router.navigate(['/login']);
-    console.log('Usuario redirigido a login después de logout.');
-  }
-  // --- FIN DEL NUEVO MÉTODO ---
 }
-

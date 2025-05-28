@@ -1,225 +1,242 @@
 @use "sass:color";
-// --- Variables (puedes importarlas de un archivo global o definirlas aquí) ---
-$primary-color: #007bff;
+
+//  Variables
+$primary-color: #0d6efd; // Un azul más vivo
 $secondary-color: #6c757d;
 $success-color: #28a745;
-$warning-color: #ffc107;
-$danger-color: #dc3545;
+$warning-color: #ffc107; // Amarillo para acciones de advertencia
+$danger-color: #dc3545;   // Rojo para errores
 $border-color: #dee2e6;
-$card-bg: #ffffff;
-$body-bg: #f8f9fa;
-$text-color: #212529;
-$text-muted: #6c757d;
-$spacing-unit: 1rem;
+$card-bg: #f8f9fa;       // Un gris claro
+$body-bg: #ffffff;
+$text-primary: #333;
+$text-secondary: #666;
 
-// --- Estilos Base del Contenedor ---
 :host {
-  display: block;
-  padding: $spacing-unit * 1.5; // Espacio alrededor de toda la página de edición
+    display: block;
+    padding: 20px;
+    background-color: $card-bg;
+    font-family: 'Poppins', sans-serif;
+    color: $text-primary;
 }
 
 .edit-profile-container {
-  background-color: $card-bg;
-  padding: $spacing-unit * 1.5;
-  border-radius: 0.375rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  max-width: 800px; // Limita el ancho para mejor legibilidad en pantallas grandes
-  margin: 0 auto; // Centra el contenedor
+    background-color: $body-bg;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Sombra más pronunciada
+    max-width: 800px;
+    margin: 20px auto;
 
-  h2 {
-    color: $text-color;
-    margin-bottom: $spacing-unit * 1.5;
-    padding-bottom: $spacing-unit * 0.75;
-    border-bottom: 1px solid $border-color;
-  }
+    h2 {
+        color: $primary-color; // Encabezado principal en azul
+        margin-bottom: 20px;
+        font-weight: 600;
+        border-bottom: 2px solid $primary-color; // Línea azul más gruesa
+        padding-bottom: 10px;
+    }
 
-  h3 {
-    color: $primary-color;
-    margin-top: $spacing-unit * 1.5;
-    margin-bottom: $spacing-unit;
-    font-size: 1.25rem;
-  }
+    h3 {
+        color: $text-primary;
+        margin-top: 25px;
+        margin-bottom: 15px;
+        font-size: 1.25rem;
+        font-weight: 600;
+        border-bottom: 1px solid $border-color; // Separador sutil
+        padding-bottom: 5px;
+    }
 }
 
-// --- Estilos de Formularios ---
 .profile-section {
-  margin-bottom: $spacing-unit * 2;
+    margin-bottom: 20px;
 
-  &:last-of-type {
-    margin-bottom: $spacing-unit;
-  }
-}
-
-.form-group {
-  margin-bottom: $spacing-unit * 1;
-
-  label {
-    display: block;
-    margin-bottom: 0.3rem;
-    font-weight: 500;
-    font-size: 0.9em;
-    color: $text-muted;
-  }
-
-  .form-control {
-    display: block;
-    width: 100%;
-    padding: 0.5rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: $text-color;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid $border-color;
-    border-radius: 0.25rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-
-    &:focus {
-      border-color: color.adjust($primary-color, $lightness: 25%);
-      outline: 0;
-      box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
-    }
-
-    &[readonly] {
-      background-color: #e9ecef;
-      opacity: 1;
-    }
-  }
-
-  select[multiple] {
-    min-height: 100px; // Altura mínima para selectores múltiples
-  }
-
-  .form-control-file {
-    display: block;
-    width: 100%;
-  }
-
-  .form-check {
-    display: flex;
-    align-items: center;
-    .form-check-input {
-      margin-right: 0.5rem;
-      width: auto; // Para que no ocupe todo el ancho
-    }
-    .form-check-label {
-      margin-bottom: 0; // Reset margin
-      font-weight: normal;
-      color: $text-color;
-    }
-  }
-}
-
-.profile-image-preview {
-  max-width: 150px;
-  max-height: 150px;
-  border: 1px solid $border-color;
-  margin-top: $spacing-unit * 0.5;
-  border-radius: 0.25rem;
-  object-fit: cover;
-}
-
-// --- Estilos de Botones (Genéricos de Bootstrap simulados) ---
-.btn {
-  display: inline-block;
-  font-weight: 400;
-  color: $text-color;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  user-select: none;
-  background-color: transparent;
-  border: 1px solid transparent;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 0.25rem;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-
-  &:not(:disabled):not(.disabled) {
-    cursor: pointer;
-  }
-
-  &:hover {
-    text-decoration: none;
-  }
-
-  &:focus, &.focus {
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
-  }
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: $primary-color;
-  border-color: $primary-color;
-  &:hover {
-    background-color: color.adjust($primary-color, $lightness: -10%);
-    border-color: color.adjust($primary-color, $lightness: -10%);
-  }
-}
-
-.btn-warning {
-  color: $text-color;
-  background-color: $warning-color;
-  border-color: $warning-color;
-  &:hover {
-    background-color: color.adjust($warning-color, $lightness: -10%);
-    border-color: color.adjust($warning-color, $lightness: -10%);
-  }
-}
-
-// --- Alertas (Genéricas de Bootstrap simuladas) ---
-.alert {
-  position: relative;
-  padding: 0.75rem 1.25rem;
-  margin-top: 0.5rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-  font-size: 0.9em;
-}
-
-.alert-danger {
-  color: color.adjust($danger-color, $lightness: -10%);
-  background-color: color.adjust($danger-color, $lightness: 35%);
-  border-color: color.adjust($danger-color, $lightness: 30%);
-}
-
-// --- Separador ---
-hr.my-4 {
-  margin-top: $spacing-unit * 2;
-  margin-bottom: $spacing-unit * 2;
-  border: 0;
-  border-top: 1px solid $border-color;
-}
-
-// --- Utilidades de Texto ---
-.text-muted {
-  color: $text-muted !important;
-}
-.mt-1 { margin-top: $spacing-unit * 0.25 !important; }
-.mt-2 { margin-top: $spacing-unit * 0.5 !important; }
-.mb-2 { margin-bottom: $spacing-unit * 0.5 !important; }
-
-// --- Sección Específica para Trabajadores ---
-.worker-details {
-  border-top: 1px dashed $border-color;
-  padding-top: $spacing-unit;
-  margin-top: $spacing-unit * 1.5;
-}
-
-
-// --- Media Query Básica para Responsive (opcional) ---
-@media (max-width: 768px) {
-  .edit-profile-container {
-    padding: $spacing-unit;
-  }
-  .btn {
-    width: 100%; // Botones ocupan todo el ancho en móviles
-    margin-bottom: $spacing-unit * 0.5;
     &:last-of-type {
         margin-bottom: 0;
     }
-  }
+}
+
+.form-group {
+    margin-bottom: 15px;
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: $text-secondary;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px 12px;
+        border: 2px solid $border-color; // Borde más grueso
+        border-radius: 5px;
+        font-size: 0.95rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+        &:focus {
+            outline: none;
+            border-color: $primary-color;
+            box-shadow: 0 0 5px rgba($primary-color, 0.5); // Sombra al enfocar
+        }
+
+        &[readonly] {
+            background-color: #e9ecef;
+            opacity: 1;
+        }
+    }
+
+    select[multiple] {
+        min-height: 100px;
+    }
+
+    .form-control-file {
+        display: block;
+        width: 100%;
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+
+        .form-check-input {
+            margin-right: 0.5rem;
+            width: auto;
+            accent-color: $primary-color; // Color del radio/checkbox
+        }
+
+        .form-check-label {
+            margin-bottom: 0;
+            font-weight: normal;
+            color: $text-primary;
+        }
+    }
+}
+
+.profile-image-preview {
+    max-width: 150px;
+    max-height: 150px;
+    border: 2px solid $primary-color; // Borde azul
+    margin-top: 10px;
+    border-radius: 5px;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); // Ligera sombra
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 24px; // Botones más grandes
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba($primary-color, 0.5);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+}
+
+.btn-primary {
+    color: white;
+    background-color: $primary-color;
+    border: none;
+
+    &:hover {
+        background-color: color.adjust($primary-color, $lightness: -10%);
+    }
+}
+
+.btn-warning {
+    color: $text-primary;
+    background-color: $warning-color;
+    border: none;
+
+    &:hover {
+        background-color: color.adjust($warning-color, $lightness: -10%);
+    }
+}
+
+.alert {
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.alert-danger {
+    color: white;
+    background-color: $danger-color;
+    border: none;
+}
+
+.alert-success {
+    color: white;
+    background-color: $success-color;
+    border: none;
+}
+
+hr.my-4 {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    border: 0;
+    border-top: 2px solid $border-color;
+}
+
+.text-muted {
+    color: $text-secondary !important;
+    font-style: italic;
+}
+
+.mt-1 {
+    margin-top: 5px !important;
+}
+
+.mt-2 {
+    margin-top: 10px !important;
+}
+
+.mb-2 {
+    margin-bottom: 10px !important;
+}
+
+.worker-details {
+    border-top: 2px dashed $border-color;
+    padding-top: 15px;
+    margin-top: 20px;
+}
+
+//  Responsive design
+@media (max-width: 768px) {
+    .edit-profile-container {
+        padding: 20px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+    }
 }
