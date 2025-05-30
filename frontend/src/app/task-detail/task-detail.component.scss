@@ -1,13 +1,88 @@
 @use "sass:color";
-// Variables
-$primary-color: #1976d2;
+// Variables del blog/home
+$primary-color: #0d6efd;
 $secondary-color: #6c757d;
 $success-color: #28a745;
 $danger-color: #dc3545;
-$light-bg: #f8f9fa;
 $border-color: #dee2e6;
-$text-primary: #212529;
+$text-primary: #333;
 $text-secondary: #666;
+$light-bg: #f8f9fa;
+
+body, :host {
+    font-family: 'Poppins', sans-serif;
+    background-color: $light-bg;
+    color: $text-primary;
+    line-height: 1.6;
+}
+
+.card, .task-detail-container, .task-header, .task-info-section, .task-description, .task-actions {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid $border-color;
+}
+
+h1, h2, h3 {
+    color: $text-primary;
+    font-weight: 600;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.5em 1.2em;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: white;
+    background-color: $success-color;
+    &.cerrado {
+      background-color: $danger-color;
+    }
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.3em 0.8em;
+    border-radius: 12px;
+    font-size: 0.95em;
+    margin-right: 0.5em;
+    background-color: #e9ecef;
+    color: $text-secondary;
+    &.category-badge { background-color: #cfe2ff; color: #0a58ca; }
+    &.location-badge { background-color: #fff3cd; color: #856404; }
+    &.budget-badge { background-color: #d4edda; color: #155724; }
+}
+
+.task-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 1.5rem;
+    button {
+      padding: 0.7em 2em;
+      border-radius: 6px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+      &.primary { background: $primary-color; color: white; }
+      &.secondary { background: $secondary-color; color: white; }
+      &.danger { background: $danger-color; color: white; }
+      &:hover { opacity: 0.9; }
+    }
+}
+
+footer {
+  text-align: center;
+  padding: 20px 0;
+  margin-top: 30px;
+  border-top: 1px solid $border-color;
+  color: $text-secondary;
+  font-size: 0.9rem;
+}
 
 // Header styles
 .app-header {
@@ -83,23 +158,6 @@ $text-secondary: #666;
   }
 }
 
-.status-badge {
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-weight: 500;
-  text-transform: capitalize;
-
-  &.open {
-    background-color: $success-color;
-    color: white;
-  }
-
-  &.closed {
-    background-color: $danger-color;
-    color: white;
-  }
-}
-
 .task-info-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -136,15 +194,6 @@ $text-secondary: #666;
       display: block;
     }
   }
-}
-
-.badge {
-  padding: 0.4em 1em;
-  border-radius: 12px;
-  font-weight: 500;
-  &.category-badge { background: #e3f2fd; color: #1976d2; }
-  &.location-badge { background: #fff3cd; color: #856404; }
-  &.budget-badge { background: #d4edda; color: #155724; }
 }
 
 .task-description {
@@ -208,20 +257,6 @@ $text-secondary: #666;
   padding: 2rem;
   color: $text-secondary;
   font-size: 1.2rem;
-}
-
-// Footer styles
-footer {
-  text-align: center;
-  padding: 2rem;
-  background: white;
-  border-top: 1px solid $border-color;
-  margin-top: 3rem;
-
-  p {
-    color: $text-secondary;
-    margin: 0;
-  }
 }
 
 button, .btn {

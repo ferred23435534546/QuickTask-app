@@ -39,7 +39,10 @@
 
         <div class="form-group half">
           <label for="location">Ubicación *</label>
-          <input type="text" id="location" formControlName="location" placeholder="Ej: Centro de la ciudad">
+          <select id="location" formControlName="location">
+            <option value="">Selecciona una ciudad</option>
+            <option *ngFor="let city of cities" [value]="city">{{city}}</option>
+          </select>
           <div *ngIf="taskForm.get('location')?.touched && taskForm.get('location')?.invalid" class="error-message">
             <span *ngIf="taskForm.get('location')?.errors?.['required']">La ubicación es obligatoria</span>
           </div>
@@ -88,6 +91,13 @@
         <label for="requirements">Requisitos específicos (opcional)</label>
         <textarea id="requirements" formControlName="requirements" rows="3"
           placeholder="Añade cualquier requisito específico para la tarea"></textarea>
+      </div>
+
+      <div *ngIf="successMessage" class="success-message">
+        <span style="color: #28a745; font-weight: 600;">
+          <i class="fas fa-check-circle" style="margin-right: 6px;"></i>
+          {{ successMessage }}
+        </span>
       </div>
 
       <button type="submit" class="submit-button" [disabled]="taskForm.invalid">

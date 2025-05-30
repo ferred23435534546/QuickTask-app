@@ -1,4 +1,38 @@
 @use "sass:color";
+// Variables del blog
+$primary-color: #0d6efd;
+$secondary-color: #6c757d;
+$success-color: #28a745;
+$border-color: #dee2e6;
+$text-primary: #333;
+$text-secondary: #666;
+$light-bg: #f8f9fa;
+
+body, :host {
+    font-family: 'Poppins', sans-serif;
+    background-color: $light-bg;
+    color: $text-primary;
+    line-height: 1.6;
+}
+
+.app-header {
+    background-color: white;
+    border-bottom: 1px solid $border-color;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.card, .post-task-section, .main-content-area, .create-task-content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid $border-color;
+}
+
+h1, h2, h3 {
+    color: $text-primary;
+    font-weight: 600;
+}
+
 // --- Variables Básicas (Opcional) ---
 $primary-color: #007bff; // Azul para botones principales/enlaces
 $secondary-color: #6c757d; // Gris para botones secundarios

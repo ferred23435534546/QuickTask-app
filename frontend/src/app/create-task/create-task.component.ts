@@ -19,6 +19,16 @@ export class CreateTaskComponent {
   successMessage: string | null = null;
   errorMessage: string | null = null;
 
+  // Lista de capitales de provincia de España
+  cities: string[] = [
+    'Álava', 'Albacete', 'Alicante', 'Almería', 'Ávila', 'Badajoz', 'Barcelona', 'Burgos', 'Cáceres', 'Cádiz',
+    'Castellón', 'Ciudad Real', 'Córdoba', 'La Coruña', 'Cuenca', 'Gerona', 'Granada', 'Guadalajara', 'Guipúzcoa',
+    'Huelva', 'Huesca', 'Islas Baleares', 'Jaén', 'León', 'Lérida', 'Lugo', 'Madrid', 'Málaga', 'Murcia',
+    'Navarra', 'Orense', 'Asturias', 'Palencia', 'Las Palmas', 'Pontevedra', 'La Rioja', 'Salamanca', 'Segovia',
+    'Sevilla', 'Soria', 'Tarragona', 'Santa Cruz de Tenerife', 'Teruel', 'Toledo', 'Valencia', 'Valladolid',
+    'Vizcaya', 'Zamora', 'Zaragoza'
+  ];
+
   constructor(private fb: FormBuilder, private taskService: TaskService) {
     this.initForm();
   }

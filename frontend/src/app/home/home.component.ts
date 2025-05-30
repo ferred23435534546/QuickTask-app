@@ -21,6 +21,7 @@ import { AuthService } from '../services/auth.service'; // Importa tu AuthServic
 export class HomeComponent implements OnInit {
   // ... (tus propiedades existentes: tasks, isLoading, etc.)
   isSearchVisible: boolean = false; // Ejemplo, ya la tienes
+  userRole: string | null = null;
 
   constructor(
     private taskService: TaskService,
@@ -32,7 +33,17 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     // ... tu ngOnInit actual
-    this.loadTasks(); // loadTasks no necesita protección aquí si la página es visible por defecto
+    this.loadTasks();
+    // Obtener el rol del usuario desde localStorage (ajusta la clave si es diferente)
+    const userData = localStorage.getItem('currentUser');
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        this.userRole = user.role;
+      } catch (e) {
+        this.userRole = null;
+      }
+    }
   }
 
   // Método privado para encapsular la lógica de chequeo y redirección
@@ -164,5 +175,9 @@ export class HomeComponent implements OnInit {
       pagesArray.push(i);
     }
     return pagesArray;
+  }
+
+  isWorker(): boolean {
+    return this.userRole === 'worker';
   }
 }

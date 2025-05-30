@@ -96,7 +96,7 @@ app.post('/api/auth/register', (async (req: Request, res: Response) => {
 
     // --- PASO 7: Enviar respuesta ---
     res.status(201).json({
-      message: 'User registered successfully!',
+      message: 'Usuario registrado con éxito.',
       userId: newUser.id
     });
 
@@ -464,14 +464,7 @@ app.get('/api/tasks/:id', (async (req: Request, res: Response) => {
         {
           model: User,
           as: 'user',
-          attributes: ['id', 'name', 'email', 'role'],
-          include: [
-            {
-              model: Profile,
-              as: 'profile',
-              attributes: ['profile_picture_url', 'avg_rating', 'rating_count']
-            }
-          ]
+          attributes: ['id', 'name', 'email', 'role']
         }
       ]
     });

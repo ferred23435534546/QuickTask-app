@@ -15,6 +15,7 @@ export class TaskDetailComponent implements OnInit {
   task: any = null;
   isLoading = true;
   errorMessage: string | null = null;
+  isClosed = false;
 
   constructor(private route: ActivatedRoute, private taskService: TaskService) {}
 
@@ -35,5 +36,9 @@ export class TaskDetailComponent implements OnInit {
 
   goBack() {
     window.history.back();
+  }
+
+  onSelectTask() {
+    this.isClosed = true;
   }
 } 

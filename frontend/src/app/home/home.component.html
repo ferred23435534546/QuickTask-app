@@ -19,8 +19,6 @@
       <a routerLink="/">Inicio</a>
       <a routerLink="/login">Login</a>
       <a routerLink="/edit-profile" class="profile-link" title="Perfil" aria-label="Perfil de usuario"></a>
-      <a (click)="navigateToHome()" style="cursor: pointer;">Inicio</a>
-      <a routerLink="/login">login</a>
       <a (click)="navigateToEditProfile()" class="profile-link" title="Perfil" aria-label="Perfil de usuario" style="cursor: pointer;">
         <i class="fas fa-user-circle profile-icon"></i>
       </a>
@@ -50,7 +48,7 @@
             <button class="search-button" (click)="onSearch()">Buscar</button>
           </section>
 
-      <section class="post-task-section card">
+      <section class="post-task-section card" *ngIf="isWorker()">
         <h3>Publicar Tarea</h3>
         <p>Describe la tarea que necesitas con un presupuesto</p>
         <button class="get-started-button" (click)="navigateToCreateTask()">Comenzar</button>
