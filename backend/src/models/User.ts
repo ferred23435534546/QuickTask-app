@@ -12,6 +12,8 @@ export interface UserAttributes {
   name: string;
   role: 'client' | 'worker' | 'both' | 'admin';
   is_active: boolean;
+  phone?: string | null; // <-- ADDED J
+  location?: string | null; // <-- ADDED J
   createdAt?: Date; // Añadido por Sequelize, es opcional en la interfaz
   updatedAt?: Date; // Añadido por Sequelize, es opcional en la interfaz
 }
@@ -26,7 +28,9 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public email!: string;
   public password_hash!: string;
   public name!: string;
-  public role!: 'client' | 'worker' | 'both' | 'admin';
+  public role!: 'client' | 'worker';
+  public phone!: string | null; // <-- ADDED J
+  public location!: string | null; // <-- ADDED J
   public is_active!: boolean;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -64,6 +68,14 @@ User.init(
       validate: {
         isEmail: true, // Validación básica de formato email
       },
+    },
+    phone: { // <-- ADDED J
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    location: { // <-- ADDED J
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     password_hash: {
       type: DataTypes.STRING(255),
