@@ -1,83 +1,56 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valorar Tarea</title>
-    <link rel="stylesheet" href="task-board.component.scss">
-</head>
-<body>
-    <main>
-        <section id="formulario-valoracion">
-            <h2>Por favor, valora la tarea:</h2>
-            <form id="form-valoracion-tarea">
-                <div class="campo-formulario">
-                    <label for="tarea-id">ID de la Tarea:</label>
-                    <input type="text" id="tarea-id" name="tarea-id" placeholder="Introduce el ID de la tarea">
-                    <button type="button" id="buscar-tarea-btn" class="boton-azul">Buscar Tarea</button>
-                    <div id="error-tarea-id" class="error-message"></div>
+<main>
+    <section id="formulario-valoracion">
+        <h2>Por favor, valora la tarea:</h2>
+        <form (ngSubmit)="enviarValoracion()" #valoracionForm="ngForm">
+            <div class="campo-formulario">
+                <label for="tarea-nombre">Nombre de la Tarea:</label> <input type="text" id="tarea-nombre" name="tarea-nombre" placeholder="Introduce el nombre de la tarea" [(ngModel)]="tareaNombre" required>
+                <button type="button" id="buscar-tarea-btn" class="boton-azul" (click)="buscarTarea()">Buscar Tarea</button>
+                <div *ngIf="errorTareaNombre" class="error-message">{{ errorTareaNombre }}</div>
+            </div>
+
+            <div id="tarea-info" [class.hidden]="!tareaEncontrada">
+                <p><strong>Nombre de la Tarea:</strong> <span>{{ tareaEncontrada?.nombre }}</span></p>
+                <p><strong>Descripción:</strong> <span>{{ tareaEncontrada?.descripcion }}</span></p>
+                <p><strong>Fecha Límite:</strong> <span>{{ tareaEncontrada?.fechaLimite }}</span></p>
+            </div>
+
+            <div class="campo-formulario">
+                <label>Puntuación (1-5):</label>
+                <div class="rating">
+                    <input type="radio" id="star5" name="puntuacion" value="5" [(ngModel)]="puntuacion" required /><label for="star5" title="Excelente">★</label>
+                    <input type="radio" id="star4" name="puntuacion" value="4" [(ngModel)]="puntuacion" /><label for="star4" title="Bien">★</label>
+                    <input type="radio" id="star3" name="puntuacion" value="3" [(ngModel)]="puntuacion" /><label for="star3" title="Regular">★</label>
+                    <input type="radio" id="star2" name="puntuacion" value="2" [(ngModel)]="puntuacion" /><label for="star2" title="Mal">★</label>
+                    <input type="radio" id="star1" name="puntuacion" value="1" [(ngModel)]="puntuacion" /><label for="star1" title="Muy Mal">★</label>
                 </div>
+                <div *ngIf="errorPuntuacion" class="error-message">{{ errorPuntuacion }}</div>
+            </div>
 
-                <div id="tarea-info">
-                    <p><strong>Nombre de la Tarea:</strong> <span id="nombre-tarea"></span></p>
-                    <p><strong>Descripción:</strong> <span id="descripcion-tarea"></span></p>
-                    <p><strong>Fecha Límite:</strong> <span id="fecha-limite-tarea"></span></p>
-                </div>
+            <div class="campo-formulario">
+                <label for="comentarios">Comentarios Adicionales (opcional):</label>
+                <textarea id="comentarios" name="comentarios" rows="5" placeholder="¿Algún comentario sobre la tarea?" [(ngModel)]="comentarios"></textarea>
+            </div>
 
-                <div class="campo-formulario">
-                    <label>Puntuación (1-5):</label>
-                    <div class="rating">
-                        <input type="radio" id="star5" name="puntuacion" value="5" /><label for="star5" title="Excelente">★</label>
-                        <input type="radio" id="star4" name="puntuacion" value="4" /><label for="star4" title="Bien">★</label>
-                        <input type="radio" id="star3" name="puntuacion" value="3" /><label for="star3" title="Regular">★</label>
-                        <input type="radio" id="star2" name="puntuacion" value="2" /><label for="star2" title="Mal">★</label>
-                        <input type="radio" id="star1" name="puntuacion" value="1" /><label for="star1" title="Muy Mal">★</label>
-                    </div>
-                    <div id="error-puntuacion" class="error-message"></div>
-                </div>
+            <div class="campo-formulario">
+                <label>Valoración por Aspectos (opcional):</label><br>
+                <input type="checkbox" id="completo" name="aspecto-completo" value="completo" (change)="onCheckboxChange($event)">
+                <label for="completo">Completado según lo esperado</label><br>
+                <input type="checkbox" id="tiempo" name="aspecto-tiempo" value="tiempo" (change)="onCheckboxChange($event)">
+                <label for="tiempo">Realizado a tiempo</label><br>
+                <input type="checkbox" id="calidad" name="aspecto-calidad" value="calidad" (change)="onCheckboxChange($event)">
+                <label for="calidad">Buena calidad</label><br>
+            </div>
 
-                <div class="campo-formulario">
-                    <label for="comentarios">Comentarios Adicionales (opcional):</label>
-                    <textarea id="comentarios" name="comentarios" rows="5" placeholder="¿Algún comentario sobre la tarea?"></textarea>
-                </div>
+            <button type="submit" class="boton-azul">Enviar Valoración</button>
+            <a href="home.component.html" class="boton-dos">Volver</a>
+        </form>
 
-                <div class="campo-formulario">
-                    <label>Valoración por Aspectos (opcional):</label><br>
-                    <input type="checkbox" id="completo" name="aspecto-completo" value="completo">
-                    <label for="completo">Completado según lo esperado</label><br>
-                    <input type="checkbox" id="tiempo" name="aspecto-tiempo" value="tiempo">
-                    <label for="tiempo">Realizado a tiempo</label><br>
-                    <input type="checkbox" id="calidad" name="aspecto-calidad" value="calidad">
-                    <label for="calidad">Buena calidad</label><br>
-                </div>
+        <div *ngIf="mensajeValoracion" [ngClass]="{'success-message': esExitoMensaje, 'error-message': !esExitoMensaje}">
+            {{ mensajeValoracion }}
+        </div>
+    </section>
+</main>
 
-                <button type="submit" class="boton-azul">Enviar Valoración</button>
-                <button type="button" onclick="window.history.back()" class="boton-dos">Volver</button>
-            </form>
-
-            <div id="mensaje-valoracion"></div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 QuickTask. Todos los derechos reservados.</p>
-    </footer>
-
-    <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const formularioValoracion = document.getElementById('form-valoracion-tarea');
-
-        if (formularioValoracion) {
-            console.log('¡Formulario encontrado! Intentando añadir listener...');
-            formularioValoracion.addEventListener('submit', function(e) {
-                e.preventDefault();
-                console.log('¡El submit ha sido capturado! La página NO debería recargarse.');
-                alert('Formulario enviado (simulado)'); // Un alert para confirmación visual
-            });
-        } else {
-            console.error('ERROR CRÍTICO: El formulario con ID "form-valoracion-tarea" NO FUE ENCONTRADO al cargar el DOM.');
-        }
-    });
-    </script>   
-</body>
-</html>
+<footer>
+    <p>&copy; 2025 QuickTask. Todos los derechos reservados.</p>
+</footer>
