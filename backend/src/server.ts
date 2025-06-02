@@ -464,14 +464,7 @@ app.get('/api/tasks/:id', (async (req: Request, res: Response) => {
         {
           model: User,
           as: 'user',
-          attributes: ['id', 'name', 'email', 'role'],
-          include: [
-            {
-              model: Profile,
-              as: 'profile',
-              attributes: ['profile_picture_url', 'avg_rating', 'rating_count']
-            }
-          ]
+          attributes: ['id', 'name', 'email', 'role']
         }
       ]
     });

@@ -15,7 +15,7 @@
   <div class="task-detail-container" *ngIf="task">
     <div class="task-header card">
       <h1>{{task.title}}</h1>
-      <span class="status-badge" [class]="task.status">{{task.status === 'open' ? 'Abierta' : 'Cerrada'}}</span>
+      <span class="status-badge" [ngClass]="{ 'cerrado': isClosed }">{{ isClosed ? 'Cerrado' : (task.status === 'open' ? 'Abierta' : 'Cerrada') }}</span>
     </div>
 
     <div class="task-info-section card">
@@ -42,24 +42,8 @@
       <p>{{task.description}}</p>
     </div>
 
-    <div class="action-buttons card">
-      <button class="apply-button">Postularme</button>
-      <button class="contact-button">Contactar</button>
-      <button class="board-button" routerLink="/task-board">Valorar tarea</button>
-      <button class="back-button" routerLink="/">Volver</button>
-    <div class="task-owner card" *ngIf="task?.user">
-      <h3>Cliente</h3>
-      <div class="owner-info">
-        <img *ngIf="task.user.profile?.profile_picture_url" [src]="task.user.profile.profile_picture_url" alt="Foto de perfil" class="profile-pic">
-        <span><strong>Nombre:</strong> {{task.user.name}}</span><br>
-        <span><strong>Email:</strong> {{task.user.email}}</span>
-        <span *ngIf="task.user.profile?.avg_rating"><strong>Valoración:</strong> {{task.user.profile.avg_rating}}/5</span>
-        <span *ngIf="task.user.tasksCount !== undefined"><strong>Ofertas publicadas:</strong> {{task.user.tasksCount}}</span>
-      </div>
-    </div>
-
     <div class="task-actions card">
-      <button class="btn primary">Postularme</button>
+      <button class="btn primary" (click)="onSelectTask()" [disabled]="isClosed">Seleccionar</button>
       <button class="btn secondary">Contactar</button>
       <button class="btn" (click)="goBack()">Volver</button>
     </div>
