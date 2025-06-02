@@ -331,7 +331,16 @@ button {
     white-space: nowrap; // Evita que "View" se parta
     align-self: center; // Centra el botón verticalmente si el texto es largo
   }
+  .button {
+    background-color: white;
+    color: $secondary-color;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    white-space: nowrap; // Evita que "View" se parta
+    align-self: center; // Centra el botón verticalmente si el texto es largo
+  }
 }
+
 
 // --- Media Query Básica para Responsive ---
 @media (max-width: 768px) {

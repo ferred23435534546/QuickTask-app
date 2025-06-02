@@ -3,8 +3,10 @@
         <h2>Por favor, valora la tarea:</h2>
         <form (ngSubmit)="enviarValoracion()" #valoracionForm="ngForm">
             <div class="campo-formulario">
-                <label for="tarea-nombre">Nombre de la Tarea:</label> <input type="text" id="tarea-nombre" name="tarea-nombre" placeholder="Introduce el nombre de la tarea" [(ngModel)]="tareaNombre" required>
-                <button type="button" id="buscar-tarea-btn" class="boton-azul" (click)="buscarTarea()">Buscar Tarea</button>
+                <label for="tarea-nombre">Nombre de la Tarea:</label>
+                <div class="input-con-boton"> <input type="text" id="tarea-nombre" name="tarea-nombre" placeholder="Introduce el nombre de la tarea" [(ngModel)]="tareaNombre" required>
+                    <button type="button" id="buscar-tarea-btn" class="boton-azul" (click)="buscarTarea()">Buscar Tarea</button>
+                </div>
                 <div *ngIf="errorTareaNombre" class="error-message">{{ errorTareaNombre }}</div>
             </div>
 
@@ -41,11 +43,13 @@
                 <label for="calidad">Buena calidad</label><br>
             </div>
 
-            <button type="submit" class="boton-azul">Enviar Valoración</button>
-            <a href="home.component.html" class="boton-dos">Volver</a>
+            <div class="button-wrapper"> <button type="submit" class="boton-azul">Enviar Valoración</button>
+                <a href="home.component.html" class="boton-dos">Volver</a>
+            </div>
         </form>
 
-        <div *ngIf="mensajeValoracion" [ngClass]="{'success-message': esExitoMensaje, 'error-message': !esExitoMensaje}">
+        <div *ngIf="mensajeValoracion">
+            <span *ngIf="esExitoMensaje" class="message-icon">&#10003;</span>
             {{ mensajeValoracion }}
         </div>
     </section>

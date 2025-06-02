@@ -81,6 +81,7 @@
             </div>
           </div>
           <button class="view-button" (click)="navigateToTaskDetail(task.id)">Ver</button>
+          <button class="button" routerLink="/task-board">Valorar</button>
         </div>
 
         <div *ngIf="!isLoading && tasks.length === 0" class="no-tasks-message" style="text-align:center; color:#888; margin:2rem 0; font-size:1.2rem;">
