@@ -126,8 +126,17 @@ export class EditProfileComponent implements OnInit {
                         }
                     }
 
-                    // No recargamos el perfil inmediatamente para conservar los cambios visualmente
-                    //this.loadUserProfile();
+                    // ACTUALIZAR currentUser en localStorage si existe
+                    const currentUserStr = localStorage.getItem('currentUser');
+                    if (currentUserStr) {
+                        try {
+                            const currentUser = JSON.parse(currentUserStr);
+                            currentUser.role = formData.role;
+                            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        } catch (e) {
+                            // Si hay error, no hacemos nada
+                        }
+                    }
                 },
                 error: (errorResponse: HttpErrorResponse) => {
                     console.error('Error al actualizar el perfil:', errorResponse);
