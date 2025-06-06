@@ -14,8 +14,20 @@ import { TaskService } from '../services/task.service';
 })
 export class CreateTaskComponent {
   taskForm!: FormGroup;
-  categories = Object.values(TaskCategory);
-  urgencyLevels = Object.values(TaskUrgency);
+  categories = [
+    { label: 'Limpieza', value: TaskCategory.Limpieza },
+    { label: 'Jardinería', value: TaskCategory.Jardineria },
+    { label: 'Entrega', value: TaskCategory.Entrega },
+    { label: 'Mudanza', value: TaskCategory.Mudanza },
+    { label: 'Traducción', value: TaskCategory.Traduccion },
+    { label: 'Otros', value: TaskCategory.Otros }
+  ];
+  urgencyLevels = [
+    { label: 'Baja', value: TaskUrgency.Baja },
+    { label: 'Media', value: TaskUrgency.Media },
+    { label: 'Alta', value: TaskUrgency.Alta },
+    { label: 'Inmediata', value: TaskUrgency.Inmediata }
+  ];
   successMessage: string | null = null;
   errorMessage: string | null = null;
 

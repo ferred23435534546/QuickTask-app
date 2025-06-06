@@ -28,8 +28,8 @@
           <label for="category">Categoría *</label>
           <select id="category" formControlName="category">
             <option value="">Selecciona una categoría</option>
-            <option *ngFor="let category of categories" [value]="category">
-              {{category}}
+            <option *ngFor="let category of categories" [value]="category.value">
+              {{category.label}}
             </option>
           </select>
           <div *ngIf="taskForm.get('category')?.touched && taskForm.get('category')?.invalid" class="error-message">
@@ -69,8 +69,8 @@
           <label for="urgency">Nivel de urgencia *</label>
           <select id="urgency" formControlName="urgency">
             <option value="">Selecciona la urgencia</option>
-            <option *ngFor="let level of urgencyLevels" [value]="level">
-              {{level}}
+            <option *ngFor="let level of urgencyLevels" [value]="level.value">
+              {{level.label}}
             </option>
           </select>
           <div *ngIf="taskForm.get('urgency')?.touched && taskForm.get('urgency')?.invalid" class="error-message">
@@ -108,5 +108,6 @@
         * Los campos marcados con asterisco son obligatorios
       </p>
     </form>
+    <button class="get-started-button" routerLink="/">Volver</button>
   </div>
 </div> 
