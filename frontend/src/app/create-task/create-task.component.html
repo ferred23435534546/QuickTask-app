@@ -66,25 +66,19 @@
         </div>
 
         <div class="form-group half">
-          <label for="urgency">Nivel de urgencia *</label>
+          <label for="urgency">Nivel de urgencia</label>
           <select id="urgency" formControlName="urgency">
             <option value="">Selecciona la urgencia</option>
             <option *ngFor="let level of urgencyLevels" [value]="level.value">
               {{level.label}}
             </option>
           </select>
-          <div *ngIf="taskForm.get('urgency')?.touched && taskForm.get('urgency')?.invalid" class="error-message">
-            <span *ngIf="taskForm.get('urgency')?.errors?.['required']">El nivel de urgencia es obligatorio</span>
-          </div>
         </div>
       </div>
 
       <div class="form-group">
-        <label for="dateNeeded">Fecha necesaria *</label>
+        <label for="dateNeeded">Fecha necesaria</label>
         <input type="date" id="dateNeeded" formControlName="dateNeeded">
-        <div *ngIf="taskForm.get('dateNeeded')?.touched && taskForm.get('dateNeeded')?.invalid" class="error-message">
-          <span *ngIf="taskForm.get('dateNeeded')?.errors?.['required']">La fecha es obligatoria</span>
-        </div>
       </div>
 
       <div class="form-group">

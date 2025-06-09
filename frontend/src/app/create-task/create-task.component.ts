@@ -55,9 +55,9 @@ export class CreateTaskComponent {
         amount: ['', [Validators.required, Validators.min(0)]],
         currency: ['EUR', Validators.required]
       }),
-      dateNeeded: ['', Validators.required],
+      dateNeeded: [''],
       requirements: [''],
-      urgency: ['', Validators.required]
+      urgency: ['']
     });
   }
 

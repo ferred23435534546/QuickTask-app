@@ -90,18 +90,13 @@
 
         <div class="pagination">
           <button class="page-button" [class.active]="currentPage === 1" (click)="onPageChange(1)" [disabled]="isLoading">1</button>
-          <button *ngFor="let page of pages.slice(1, pages.length -1 )" 
+          <button *ngFor="let page of pages" 
                   class="page-button" 
                   [class.active]="currentPage === page" 
                   (click)="onPageChange(page)"
                   [disabled]="isLoading">
             {{page}}
           </button>
-          <ng-container *ngIf="totalPages > pages[pages.length -1] && totalPages > 1">
-            <button class="page-button" disabled>...</button>
-            <button class="page-button" (click)="onPageChange(totalPages)" [disabled]="isLoading">{{totalPages}}</button>
-          </ng-container>
-          
           <button class="page-button next" [disabled]="currentPage === totalPages || isLoading" (click)="onPageChange(currentPage + 1)">
             <i class="fas fa-chevron-right"></i>
           </button>
