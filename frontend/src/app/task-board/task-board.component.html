@@ -1,57 +1,60 @@
 <main>
     <section id="formulario-valoracion">
         <h2>Por favor, valora la tarea:</h2>
-        <form (ngSubmit)="enviarValoracion()" #valoracionForm="ngForm">
+        <form #valoracionForm="ngForm">
             <div class="campo-formulario">
                 <label for="tarea-nombre">Nombre de la Tarea:</label>
-                <div class="input-con-boton"> <input type="text" id="tarea-nombre" name="tarea-nombre" placeholder="Introduce el nombre de la tarea" [(ngModel)]="tareaNombre" required>
+                <div class="input-con-boton">
+                    <input type="text" id="tarea-nombre" name="tarea-nombre" placeholder="Introduce el nombre de la tarea" [(ngModel)]="tareaNombre" required>
                     <button type="button" id="buscar-tarea-btn" class="boton-azul" (click)="buscarTarea()">Buscar Tarea</button>
                 </div>
                 <div *ngIf="errorTareaNombre" class="error-message">{{ errorTareaNombre }}</div>
             </div>
 
-            <div id="tarea-info" [class.hidden]="!tareaEncontrada">
-                <p><strong>Nombre de la Tarea:</strong> <span>{{ tareaEncontrada?.nombre }}</span></p>
-                <p><strong>Descripción:</strong> <span>{{ tareaEncontrada?.descripcion }}</span></p>
-                <p><strong>Fecha Límite:</strong> <span>{{ tareaEncontrada?.fechaLimite }}</span></p>
-            </div>
+            <div id="tarea-info" *ngIf="tareaEncontrada">
+                <p><strong>Nombre de la Tarea: </strong> <span>{{ tareaEncontrada?.nombre }}</span></p>
+                <p><strong>Descripción: </strong> <span>{{ tareaEncontrada?.descripcion }}</span></p>
+                <p><strong>Fecha Límite: </strong> <span>{{ tareaEncontrada?.fechaLimite }}</span></p>
+                <p><strong>Presupuesto: </strong> <span>{{tareaEncontrada?.presupuesto }}</span></p>
 
-            <div class="campo-formulario">
-                <label>Puntuación (1-5):</label>
-                <div class="rating">
-                    <input type="radio" id="star5" name="puntuacion" value="5" [(ngModel)]="puntuacion" required /><label for="star5" title="Excelente">★</label>
-                    <input type="radio" id="star4" name="puntuacion" value="4" [(ngModel)]="puntuacion" /><label for="star4" title="Bien">★</label>
-                    <input type="radio" id="star3" name="puntuacion" value="3" [(ngModel)]="puntuacion" /><label for="star3" title="Regular">★</label>
-                    <input type="radio" id="star2" name="puntuacion" value="2" [(ngModel)]="puntuacion" /><label for="star2" title="Mal">★</label>
-                    <input type="radio" id="star1" name="puntuacion" value="1" [(ngModel)]="puntuacion" /><label for="star1" title="Muy Mal">★</label>
+                <div class="campo-formulario">
+                    <label>Puntuación (1-5):</label>
+                    <div class="rating">
+                        <input type="radio" id="star5" name="puntuacion" value="5" [(ngModel)]="puntuacion" required /><label for="star5" title="Excelente">★</label>
+                        <input type="radio" id="star4" name="puntuacion" value="4" [(ngModel)]="puntuacion" /><label for="star4" title="Bien">★</label>
+                        <input type="radio" id="star3" name="puntuacion" value="3" [(ngModel)]="puntuacion" /><label for="star3" title="Regular">★</label>
+                        <input type="radio" id="star2" name="puntuacion" value="2" [(ngModel)]="puntuacion" /><label for="star2" title="Mal">★</label>
+                        <input type="radio" id="star1" name="puntuacion" value="1" [(ngModel)]="puntuacion" /><label for="star1" title="Muy Mal">★</label>
+                    </div>
+                    <div *ngIf="errorPuntuacion" class="error-message">{{ errorPuntuacion }}</div>
                 </div>
-                <div *ngIf="errorPuntuacion" class="error-message">{{ errorPuntuacion }}</div>
-            </div>
 
-            <div class="campo-formulario">
-                <label for="comentarios">Comentarios Adicionales (opcional):</label>
-                <textarea id="comentarios" name="comentarios" rows="5" placeholder="¿Algún comentario sobre la tarea?" [(ngModel)]="comentarios"></textarea>
-            </div>
+                <div class="campo-formulario">
+                    <label for="comentarios">Comentarios Adicionales: </label>
+                    <textarea id="comentarios" name="comentarios" rows="5" placeholder="¿Algún comentario sobre la tarea?" [(ngModel)]="comentarios"></textarea>
+                </div>
 
-            <div class="campo-formulario">
-                <label>Valoración por Aspectos (opcional):</label><br>
-                <input type="checkbox" id="completo" name="aspecto-completo" value="completo" (change)="onCheckboxChange($event)">
-                <label for="completo">Completado según lo esperado</label><br>
-                <input type="checkbox" id="tiempo" name="aspecto-tiempo" value="tiempo" (change)="onCheckboxChange($event)">
-                <label for="tiempo">Realizado a tiempo</label><br>
-                <input type="checkbox" id="calidad" name="aspecto-calidad" value="calidad" (change)="onCheckboxChange($event)">
-                <label for="calidad">Buena calidad</label><br>
-            </div>
+                <div class="campo-formulario">
+                    <label>Valoración por Aspectos: </label><br>
+                    <input type="checkbox" id="completo" name="aspecto-completo" value="completo" (change)="onCheckboxChange($event)">
+                    <label for="completo">Completado según lo esperado</label><br>
+                    <input type="checkbox" id="tiempo" name="aspecto-tiempo" value="tiempo" (change)="onCheckboxChange($event)">
+                    <label for="tiempo">Realizado a tiempo</label><br>
+                    <input type="checkbox" id="calidad" name="aspecto-calidad" value="calidad" (change)="onCheckboxChange($event)">
+                    <label for="calidad">Buena calidad</label><br>
+                </div>
 
-            <div class="button-wrapper"> <button type="submit" class="boton-azul">Enviar Valoración</button>
+                <button type="submit" class="boton-azul" (click)="enviarValoracion()">Enviar Valoración</button>
                 <a href="home.component.html" class="boton-dos">Volver</a>
             </div>
-        </form>
 
-        <div *ngIf="mensajeValoracion">
-            <span *ngIf="esExitoMensaje" class="message-icon">&#10003;</span>
-            {{ mensajeValoracion }}
-        </div>
+            <div *ngIf="mensajeValoracion"
+                 [ngClass]="{'success-message': esExitoMensaje, 'error-message': !esExitoMensaje}"
+                 class="message-box">
+                {{ mensajeValoracion }}
+            </div>
+
+        </form>
     </section>
 </main>
 

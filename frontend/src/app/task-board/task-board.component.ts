@@ -10,6 +10,7 @@ interface Tarea {
     nombre: string; // Este sería el nombre de la tarea en tu DB
     descripcion: string;
     fechaLimite: string;
+    presupuesto: number;
 }
 
 @Component({
@@ -31,27 +32,30 @@ export class TaskBoardComponent implements OnInit {
     errorTareaNombre: string = '';
     errorPuntuacion: string = '';
 
-    // Las tareas simuladas ya no son necesarias para la búsqueda,
-    // pero las dejamos por si las usas en otra parte de tu aplicación
+    // Tareas simuladas para la búsqueda en frontend
     private tareasSimuladas: Tarea[] = [
         {
             id: 'T001',
             nombre: 'Desarrollar módulo de usuarios',
             descripcion: 'Crear funcionalidades de registro, login y gestión de perfiles.',
-            fechaLimite: '2025-07-15'
+            fechaLimite: '2025-07-15',
+            presupuesto: 50
         },
         {
             id: 'T002',
-            nombre: 'Diseñar interfaz de tareas',
-            descripcion: 'Maquetación y estilos CSS para la visualización de tareas.',
-            fechaLimite: '2025-06-30'
+            nombre: 'Limpieza instituo',
+            descripcion: 'Limpieza de instituto en el centro de almeria',
+            fechaLimite: '2025-06-08',
+            presupuesto: 50
         },
         {
-            id: 'T003',
-            nombre: 'Optimizar consultas a la base de datos',
-            descripcion: 'Revisión y mejora de rendimiento en las consultas SQL.',
-            fechaLimite: '2025-08-01'
+            id: 'T003', // Nueva tarea, si es la que buscas como "mudanza"
+            nombre: 'Mudanza', // Asegúrate de que el nombre coincida exactamente con lo que buscarás
+            descripcion: 'Busco ayudante para mudanza dos días de la semana del 2 al 6 de Junio. Se requiere que sea una persona capaz de cargar peso, y que sea amable',
+            fechaLimite: '2025-06-02',
+            presupuesto: 100
         }
+        // Puedes añadir más tareas aquí si necesitas simular otras
     ];
 
     constructor(private http: HttpClient) { }
@@ -64,35 +68,49 @@ export class TaskBoardComponent implements OnInit {
         this.errorTareaNombre = '';
         this.tareaEncontrada = null;
 
-        const nombreBuscado = this.tareaNombre.trim(); // No es necesario toLowerCase() aquí si el backend busca insensible a mayúsculas/minúsculas
+        const nombreBuscado = this.tareaNombre.trim().toLowerCase(); // Convertir a minúsculas para búsqueda insensible
         if (!nombreBuscado) {
             this.errorTareaNombre = 'Por favor, introduce el nombre de la tarea para buscar.';
             return;
         }
 
-        // URL para buscar tareas por nombre en tu backend
-        // **IMPORTANTE**: Ajusta esta URL para que apunte al endpoint de tu backend
-        // que busca tareas en la tabla 'tasks'.
-        // Por ejemplo, si tu backend tiene una ruta GET /api/tasks?name=nombreTarea
-        const API_BUSCAR_TAREA_URL = `http://localhost:8080/api/task?nombre=${encodeURIComponent(nombreBuscado)}`;
+        // --- INICIO: SIMULACIÓN DE BÚSQUEDA EN FRONTEND ---
+        console.log(`Simulando búsqueda de tarea: "${nombreBuscado}"`);
+        const tareaCoincidente = this.tareasSimuladas.find(
+            tarea => tarea.nombre.toLowerCase() === nombreBuscado
+        );
+
+        if (tareaCoincidente) {
+            this.tareaEncontrada = tareaCoincidente;
+            console.log('Tarea encontrada simulada:', this.tareaEncontrada);
+        } else {
+            this.errorTareaNombre = 'Tarea no encontrada en la lista simulada. Verifica el nombre o prueba con otro.';
+        }
+        return; // Sal del método, no realices la llamada HTTP al backend para la búsqueda
+        // --- FIN: SIMULACIÓN DE BÚSQUEDA EN FRONTEND ---
+
+
+        // --- BLOQUE ORIGINAL (COMENTADO): LLAMADA REAL AL BACKEND PARA BÚSQUEDA ---
+        /*
+        const API_BUSCAR_TAREA_URL = `http://localhost:8080/api/tasks?nombre=${encodeURIComponent(this.tareaNombre.trim())}`;
 
         this.http.get<Tarea[]>(API_BUSCAR_TAREA_URL).pipe(
             catchError(error => {
-                console.error('Error al buscar la tarea:', error);
+                console.error('Error al buscar la tarea en el backend:', error);
                 this.errorTareaNombre = 'Error al buscar la tarea. Inténtalo de nuevo más tarde.';
-                return of([]); // Retorna un observable vacío para que la suscripción no falle
+                return of([]);
             })
         ).subscribe(
             (tareas: Tarea[]) => {
                 if (tareas && tareas.length > 0) {
-                    // Si el backend devuelve un array, toma la primera coincidencia
                     this.tareaEncontrada = tareas[0];
-                    console.log('Tarea encontrada:', this.tareaEncontrada);
+                    console.log('Tarea encontrada del backend:', this.tareaEncontrada);
                 } else {
-                    this.errorTareaNombre = 'Tarea no encontrada. Verifica el nombre o prueba con otro.';
+                    this.errorTareaNombre = 'Tarea no encontrada en el backend. Verifica el nombre o prueba con otro.';
                 }
             }
         );
+        */
     }
 
     onCheckboxChange(event: Event): void {
@@ -139,6 +157,18 @@ export class TaskBoardComponent implements OnInit {
 
         const API_URL = 'http://localhost:8080/api/ratings';
 
+        // --- INICIO: SIMULACIÓN TEMPORAL DE RESPUESTA EXITOSA PARA EL ENVÍO ---
+        // ¡IMPORTANTE! Comenta o elimina estas líneas cuando tu backend esté listo para recibir datos.
+        console.log('Simulando envío de valoración...');
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Simula un retraso de red
+        this.mostrarMensaje('¡Valoración enviada con éxito!', true);
+        this.resetForm();
+        return; // Sal del método para evitar la llamada HTTP real por ahora
+        // --- FIN: SIMULACIÓN TEMPORAL ---
+
+
+        // --- BLOQUE ORIGINAL (COMENTADO): CÓDIGO PARA ENVÍO REAL AL BACKEND ---
+        /*
         try {
             this.http.post(API_URL, datosValoracion).subscribe({
                 next: (response) => {
@@ -147,7 +177,7 @@ export class TaskBoardComponent implements OnInit {
                     this.resetForm();
                 },
                 error: (error) => {
-                    console.error('Error al enviar la valoración:', error);
+                    console.error('Error al enviar la valoración al backend:', error);
                     const errorMessage = error.error && error.error.message ? error.error.message : 'Error desconocido.';
                     this.mostrarMensaje(`Error al enviar valoración: ${errorMessage}`, false);
                 }
@@ -157,6 +187,7 @@ export class TaskBoardComponent implements OnInit {
             console.error('Error al enviar la valoración (catch global):', error);
             this.mostrarMensaje(`Error al enviar valoración: ${error.message}.`, false);
         }
+        */
     }
 
     private mostrarMensaje(mensaje: string, esExito: boolean): void {

@@ -175,7 +175,7 @@ export class EditProfileComponent implements OnInit {
 
     handleLogout(): void {
         this.editService.logout();
-        this.router.navigate(['/login']);
+        this.router.navigate(['localhost:8080']);
     }
 
     onFileSelected(event: Event): void {
