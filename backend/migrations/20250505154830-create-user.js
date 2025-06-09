@@ -453,7 +453,7 @@ module.exports = {
       },
       urgency: {
         type: Sequelize.STRING(50),
-        allowNull: false
+        allowNull: true
       },
       requirements: {
         type: Sequelize.TEXT,
@@ -461,7 +461,7 @@ module.exports = {
       },
       dateNeeded: {
         type: Sequelize.DATEONLY, // Usar DATEONLY para el tipo DATE de SQL
-        allowNull: false
+        allowNull: true
       },
       status: {
         type: Sequelize.STRING(50),

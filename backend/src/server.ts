@@ -389,7 +389,7 @@ app.post('/api/tasks', (async (req: Request, res: Response) => {
     } = req.body;
 
     // Validación básica
-    if (!title || !description || !category || !location || !budget || !urgency || !dateNeeded || !status || !userId) {
+    if (!title || !description || !category || !location || !budget || !status || !userId) {
       return res.status(400).json({ message: 'Faltan campos obligatorios para crear la tarea.' });
     }
 

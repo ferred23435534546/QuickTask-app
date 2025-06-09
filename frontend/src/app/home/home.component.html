@@ -89,7 +89,6 @@
         </div>
 
         <div class="pagination">
-          <button class="page-button" [class.active]="currentPage === 1" (click)="onPageChange(1)" [disabled]="isLoading">1</button>
           <button *ngFor="let page of pages" 
                   class="page-button" 
                   [class.active]="currentPage === page" 

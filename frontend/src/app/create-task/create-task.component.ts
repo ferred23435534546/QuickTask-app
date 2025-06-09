@@ -74,9 +74,9 @@ export class CreateTaskComponent {
         category: formValue.category,
         location: formValue.location,
         budget: formValue.budget.amount, // Solo el número
-        urgency: formValue.urgency,
+        urgency: formValue.urgency || null,
         requirements: formValue.requirements,
-        dateNeeded: formValue.dateNeeded,
+        dateNeeded: formValue.dateNeeded || null,
         status: 'open' as 'open',
         userId: 1 // TODO: Reemplazar por el usuario real autenticado
       };

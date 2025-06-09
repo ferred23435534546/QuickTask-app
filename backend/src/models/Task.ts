@@ -64,7 +64,7 @@ Task.init({
   },
   urgency: {
     type: DataTypes.STRING(50),
-    allowNull: false,
+    allowNull: true,
   },
   requirements: {
     type: DataTypes.TEXT,
@@ -72,7 +72,7 @@ Task.init({
   },
   dateNeeded: {
     type: DataTypes.DATEONLY,
-    allowNull: false,
+    allowNull: true,
   },
   status: {
     type: DataTypes.STRING(50),
