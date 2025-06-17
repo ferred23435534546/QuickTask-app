@@ -39,6 +39,6 @@ docker-compose up
 - Responsive design
 - Docker containerization
 
-## Author
-- Fernando
+## Team
+Developed by QuickTask Team
 
