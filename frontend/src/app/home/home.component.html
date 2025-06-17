@@ -75,7 +75,7 @@
             <h4>{{task.title}}</h4>
             <p>{{task.description}}</p>
             <div class="badges">
-              <span class="badge category-badge">Categoría: {{task.category}}</span>
+              <span class="badge category-badge">Categoría: {{getCategoryEs(task.category)}}</span>
               <span class="badge location-badge">Ubicación: {{task.location}}</span>
               <span class="badge budget-badge" *ngIf="task.budget">Presupuesto: {{task.budget}}€</span>
             </div>

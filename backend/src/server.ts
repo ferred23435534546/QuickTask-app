@@ -331,10 +331,10 @@ app.get('/api/tasks', async (req: Request, res: Response) => {
     if (category) {
       where.category = category;
     }
-    if (nombreBuscado) { // <--- CAMBIO: Usa 'nombreBuscado'
+    if (nombreBuscado) {
       console.log(`Backend (GET /api/tasks): Buscando por nombre: "${nombreBuscado}"`);
-      where.title = { // <--- VERIFICA ESTO: ¿Tu columna se llama 'title' o 'nombre' en la DB?
-        [Op.iLike]: `%${nombreBuscado}%` // Búsqueda insensible a mayúsculas/minúsculas
+      where.title = {
+        [Op.iLike]: `%${nombreBuscado}%`
       };
       // Si también quieres buscar en la descripción, puedes usar un OR:
       // where[Op.or] = [
@@ -342,6 +342,29 @@ app.get('/api/tasks', async (req: Request, res: Response) => {
       //   { description: { [Op.iLike]: `%${nombreBuscado}%` } }
       // ];
     }
+
+    // --- FILTRO PARA EXCLUIR TAREAS CON TEXTO NO DESEADO (SPAM O RELLENO) ---
+    // Ahora excluye cualquier letra repetida 4 veces o más (más estricto)
+    const spamPatterns = [
+      'dfddfddgggdgdgdgdgd',
+      'd{4,}', // 4 o más letras d seguidas
+      'f{4,}', // 4 o más letras f seguidas
+      'g{4,}', // 4 o más letras g seguidas
+      's{4,}', // 4 o más letras s seguidas
+      'x{4,}', // 4 o más letras x seguidas
+      'o{4,}', // 4 o más letras o seguidas
+      '([a-zA-Z])\\1{3,}', // cualquier letra repetida 4 veces o más
+    ];
+    const spamRegex = spamPatterns.join('|');
+    where[Op.and] = [
+      ...(where[Op.and] || []),
+      {
+        title: { [Op.notRegexp]: spamRegex },
+      },
+      {
+        description: { [Op.notRegexp]: spamRegex },
+      }
+    ];
 
     // Contar el total de tareas filtradas
     const totalCount = await Task.count({ where });

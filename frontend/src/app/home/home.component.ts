@@ -23,6 +23,16 @@ export class HomeComponent implements OnInit {
   isSearchVisible: boolean = false; // Ejemplo, ya la tienes
   userRole: string | null = null;
 
+  // Diccionario de traducción de categorías
+  categoryTranslations: { [key: string]: string } = {
+    cleaning: 'Limpieza',
+    gardening: 'Jardinería',
+    delivery: 'Entrega',
+    moving: 'Mudanza',
+    translation: 'Traducción',
+    other: 'Otros',
+  };
+
   constructor(
     private taskService: TaskService,
     private authService: AuthService, // Inyectado
@@ -179,5 +189,9 @@ export class HomeComponent implements OnInit {
 
   isWorker(): boolean {
     return this.userRole === 'worker';
+  }
+
+  getCategoryEs(category: string): string {
+    return this.categoryTranslations[category] || category;
   }
 }
