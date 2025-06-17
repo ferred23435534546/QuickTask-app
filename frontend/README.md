@@ -1,6 +1,37 @@
-# QuicktaskFrontend
+# QuickTask Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
+## Overview
+Angular-based frontend for the QuickTask application. Provides a modern and responsive user interface for task management.
+
+## Features
+- Responsive design
+- Real-time task updates
+- User authentication
+- Task creation and management interface
+- Profile management
+
+## Development
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start development server:
+```bash
+ng serve
+```
+
+## Structure
+- `/src/app/components` - Reusable UI components
+- `/src/app/services` - API services and business logic
+- `/src/app/models` - Data models and interfaces
+- `/src/app/pages` - Main application pages
+
+## Technologies
+- Angular 16+
+- TypeScript
+- Bootstrap
+- SCSS
 
 ## Development server
 
